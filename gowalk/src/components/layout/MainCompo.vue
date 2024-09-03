@@ -2,6 +2,7 @@
     <main class="main-content">
         <!-- 메인 콘텐츠 -->
         <p>Main content goes here...</p>
+        <router-view></router-view>
     </main>
 </template>
 
