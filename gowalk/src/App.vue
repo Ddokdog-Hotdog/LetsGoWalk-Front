@@ -3,7 +3,7 @@
         <div class="app-container">
             <div class="content-wrapper">
                 <topCompo />
-                <mainCompo />
+                <router-view></router-view>
                 <bottomCompo />
             </div>
         </div>
@@ -12,14 +12,12 @@
 
 <script>
 import topCompo from '@/components/layout/TopCompo.vue';
-import mainCompo from '@/components/layout/MainCompo.vue';
 import bottomCompo from '@/components/layout/BottomCompo.vue';
 
 export default {
     name: 'App',
     components: {
         topCompo,
-        mainCompo,
         bottomCompo,
     },
 };

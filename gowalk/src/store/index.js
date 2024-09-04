@@ -1,58 +1,38 @@
-<<<<<<< HEAD
-// src/store/index.js
 import Vue from 'vue';
 import Vuex from 'vuex';
 import axios from 'axios';
-=======
-import Vue from 'vue';
-import Vuex from 'vuex';
->>>>>>> d79b165c19c6c6afcf56f27b71de81fe37d1769f
+import quests from '@/router/questRoute';
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-<<<<<<< HEAD
-  state: {
-    accessToken: null, // JWT 액세스 토큰 저장소
-  },
-  mutations: {
-    setAccessToken(state, token) {
-      state.accessToken = token; // JWT 토큰 저장
+    modules: {
+        quests,
     },
-  },
-  actions: {
-    login({ commit }, payload) {
-      // 백엔드에 로그인 요청
-      return axios.post('/api/login', payload).then(response => {
-        const token = response.data.accessToken;
-        commit('setAccessToken', token); // Vuex에 토큰 저장
-        localStorage.setItem('accessToken', token); // localStorage에 토큰 저장 (페이지 새로고침 시에도 유지)
-      });
-    },
-    logout({ commit }) {
-      commit('setAccessToken', null); // Vuex의 토큰 제거
-      localStorage.removeItem('accessToken'); // localStorage의 토큰 제거
-    },
-  },
-  getters: {
-    isAuthenticated: state => !!state.accessToken, // 로그인 여부 확인
-    getAccessToken: state => state.accessToken, // 액세스 토큰 가져오기
-  },
-=======
     state: {
-        user: {
-            email: '', // 로그인한 사용자 이메일
-        },
+        accessToken: null, // JWT 액세스 토큰 저장소
     },
     mutations: {
-        setUserEmail(state, email) {
-            state.user.email = email;
+        setAccessToken(state, token) {
+            state.accessToken = token; // JWT 토큰 저장
         },
     },
     actions: {
-        setUserEmail({ commit }, email) {
-            commit('setUserEmail', email);
+        login({ commit }, payload) {
+            // 백엔드에 로그인 요청
+            return axios.post('/api/login', payload).then((response) => {
+                const token = response.data.accessToken;
+                commit('setAccessToken', token); // Vuex에 토큰 저장
+                localStorage.setItem('accessToken', token); // localStorage에 토큰 저장 (페이지 새로고침 시에도 유지)
+            });
+        },
+        logout({ commit }) {
+            commit('setAccessToken', null); // Vuex의 토큰 제거
+            localStorage.removeItem('accessToken'); // localStorage의 토큰 제거
         },
     },
->>>>>>> d79b165c19c6c6afcf56f27b71de81fe37d1769f
+    getters: {
+        isAuthenticated: (state) => !!state.accessToken, // 로그인 여부 확인
+        getAccessToken: (state) => state.accessToken, // 액세스 토큰 가져오기
+    },
 });
