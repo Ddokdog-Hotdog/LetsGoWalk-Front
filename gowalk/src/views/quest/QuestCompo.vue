@@ -1,7 +1,6 @@
 <template>
     <div>
-        <h1>MyPage Compo</h1>
-        <div></div>
+        <h1>Quest Compo</h1>
     </div>
 </template>
 
