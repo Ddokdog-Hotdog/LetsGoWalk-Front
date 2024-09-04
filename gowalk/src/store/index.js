@@ -1,11 +1,17 @@
+<<<<<<< HEAD
 // src/store/index.js
 import Vue from 'vue';
 import Vuex from 'vuex';
 import axios from 'axios';
+=======
+import Vue from 'vue';
+import Vuex from 'vuex';
+>>>>>>> d79b165c19c6c6afcf56f27b71de81fe37d1769f
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
+<<<<<<< HEAD
   state: {
     accessToken: null, // JWT 액세스 토큰 저장소
   },
@@ -32,4 +38,21 @@ export default new Vuex.Store({
     isAuthenticated: state => !!state.accessToken, // 로그인 여부 확인
     getAccessToken: state => state.accessToken, // 액세스 토큰 가져오기
   },
+=======
+    state: {
+        user: {
+            email: '', // 로그인한 사용자 이메일
+        },
+    },
+    mutations: {
+        setUserEmail(state, email) {
+            state.user.email = email;
+        },
+    },
+    actions: {
+        setUserEmail({ commit }, email) {
+            commit('setUserEmail', email);
+        },
+    },
+>>>>>>> d79b165c19c6c6afcf56f27b71de81fe37d1769f
 });
