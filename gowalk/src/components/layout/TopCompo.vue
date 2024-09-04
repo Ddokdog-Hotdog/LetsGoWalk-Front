@@ -1,7 +1,9 @@
 <template>
     <nav class="top-nav">
         <div>
-            <img class="mainlogo" :src="logoLogoSrc" alt="mainLogo" />
+            <router-link to="/">
+                <img class="mainlogo" :src="logoLogoSrc" alt="mainLogo" />
+            </router-link>
         </div>
         <div class="top-nav-right">
             <img class="notification" :src="notificationSrc" alt="notification" />
