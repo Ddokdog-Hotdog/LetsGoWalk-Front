@@ -1,14 +1,18 @@
 <template>
-    <div>
-        <div class="postListCompo">
+    <div class="post-list-compo">
+        <div>
             <img :src="postListProfileSrc" alt="Dog" class="postListCompoProfile"/>
-            <div class="postListCompoDetail">
-                <h2>오산안 인중이요~</h2>
+        </div>
+        <div class="post-list-compo-detail">
+            <h3>오산완 인중이요~</h3>
+            <div class="post-list-compo-detail-info">
                 <div>
                     <span>작성자닉네임 </span>
-                    <span>⏱23분 전 </span>
-                    <span>💙 23 </span>
-                    <span><span>댓글수: </span> 1</span>
+                </div>
+                <div>
+                    <span>⏱</span><span>분 전 </span>
+                    <span>💙</span><span> 23 </span>
+                    <span><img :src="commentSrc"> </span><span> 1</span>
                 </div>
             </div>
         </div>
@@ -19,7 +23,8 @@
 export default {
     data() {
         return {
-            postListProfileSrc: require("@/assets/postListCompo/postListProfile.png")
+            postListProfileSrc: require("@/assets/postListCompo/postListProfile.png"),
+            commentSrc: require("@/assets/postListCompo/comment.png"),
         }
     }
 
@@ -27,24 +32,26 @@ export default {
 </script>
 
 <style scoped>
-.postListCompo{
+.post-list-compo{
     display: flex;
-    align-items: center;
-    margin: 0 0 0 3vw;
+    margin: 2%;
+    width: 100%;
+    height: 65px;
 }
-.postListCompoProfile{
-    width: 13vw;
-    height: 7vh;
-}
-.postListCompoDetail{
+.post-list-compo-detail {
     text-align: left;
-    margin: 0 0 0 3vw;
-    
+    margin: 0 0 0 10px;
+    width: 75%;
+    align-content: center;
 }
-.postListCompoDetail h2 {
-    
+.post-list-compo-detail h3 {
+    font-weight: 400;
 }
-.postListCompoDetail span{
+.post-list-compo-detail span {
     color: #7f7f7f;
+}
+.post-list-compo-detail-info{
+    display: flex;
+    justify-content: space-between;
 }
 </style>
