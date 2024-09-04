@@ -1,9 +1,20 @@
 <template>
     <div>
-        
+        <post-list-compo/>
     </div>
 </template>
 
 <script>
-export default {};
+import PostListCompo from "./PostListCompo.vue";
+
+export default {
+    components: {
+        PostListCompo,
+    },
+    data() {
+        return {
+            name: "PostCompo",
+        }
+    }
+};
 </script>

@@ -1,8 +1,13 @@
 <template>
     <nav class="top-nav">
-        <img class="mainlogo" :src="logoLogoSrc" alt="mainLogo">
-        <img class="notification" :src="notificationSrc" alt="notification">
-        <img class="myPage" :src="myPageSrc" alt="myPage">
+        <div>
+            <img class="mainlogo" :src="logoLogoSrc" alt="mainLogo">
+        </div>
+        <div class="top-nav-right">
+            <img class="notification" :src="notificationSrc" alt="notification">
+            <img class="myPage" :src="myPageSrc" alt="myPage">
+        </div>
+        
     </nav>
 </template>
 
@@ -20,28 +25,28 @@ export default {
 
 <style scoped>
 .top-nav {
-    /* position: fixed; */
-    position: absolute;
+    position: fixed;
+    display: flex;
     top: 0;
-    left: 0;
     width: 100%;
-    height: 55px; /* 높이 설정 */
+    max-width: 600px;
+    margin: auto;
+    height: 55px;
     background-color: white;
     color: white;
     display: flex;
     align-items: center;
-    /* justify-content: center; */
+    justify-content:space-between;
     z-index: 10;
 }
+.top-nav-right{
+    display: flex;
+}
+.top-nav-right img{
+    margin: 0 20px 0 0;
+}
 .mainlogo {
-    width: 17vw;
-    height: 4vh;
-    margin-left: 3vw;
-}
-.notification {
-    margin: 0 0 0 60vw;
-}
-.myPage {
-    margin: 0 0 0 3vw;
+    width: 32%;
+    margin: 0 0 0 2vw;
 }
 </style>
