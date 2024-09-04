@@ -1,12 +1,13 @@
-import Vue from 'vue';
-import App from './App.vue';
+import Vue from "vue";
+import App from "./App.vue";
 
-import router from './router/index';
-import store from './store/index';
+import router from "./router/index";
+import store from "./store/index";
 
 // vuetify
-import Vuetify from 'vuetify';
-import 'vuetify/dist/vuetify.min.css';
+import Vuetify from "vuetify";
+import "vuetify/dist/vuetify.min.css";
+
 
 Vue.use(Vuetify);
 
@@ -17,4 +18,4 @@ new Vue({
     store,
     vuetify: new Vuetify(),
     render: (h) => h(App),
-}).$mount('#app');
+}).$mount("#app");
