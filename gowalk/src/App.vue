@@ -44,6 +44,7 @@ body {
 .app-container {
     width: 100%;
     max-width: 600px; /* 모바일 화면에 맞는 최대 너비 */
+    height: 100%;
     min-height: 100vh;
     flex-direction: column;
 
@@ -62,5 +63,6 @@ body {
     /*padding: 0 16px;  좌우 여백 설정 */
     box-sizing: border-box;
     width: 100%;
+    height: 100%;
 }
 </style>

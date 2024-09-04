@@ -6,7 +6,9 @@
             </router-link>
         </div>
         <div class="top-nav-right">
-            <img class="notification" :src="notificationSrc" alt="notification" />
+            <router-link to="/notification">
+                <img class="notification" :src="notificationSrc" alt="notification" />
+            </router-link>
             <router-link to="/mypage">
                 <img class="myPage" :src="myPageSrc" alt="myPage" />
             </router-link>
