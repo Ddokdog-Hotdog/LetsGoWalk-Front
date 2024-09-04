@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>Post compo</h1>
+        <h1>shop test compo</h1>
     </div>
 </template>
 
@@ -8,4 +8,4 @@
 export default {};
 </script>
 
-<style scoped></style>
+<style></style>
