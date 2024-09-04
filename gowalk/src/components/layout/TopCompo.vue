@@ -1,8 +1,8 @@
 <template>
     <nav class="top-nav">
-        <a href="/"><img class="mainlogo" :src="logoLogoSrc" alt="mainLogo"></a>
-        <a href="/notification"><img class="notification" :src="notificationSrc" alt="notification"></a>
-        <a href="/mypage"><img class="myPage" :src="myPageSrc" alt="myPage"></a>
+        <img class="mainlogo" :src="logoLogoSrc" alt="mainLogo">
+        <img class="notification" :src="notificationSrc" alt="notification">
+        <img class="myPage" :src="myPageSrc" alt="myPage">
     </nav>
 </template>
 
@@ -34,18 +34,14 @@ export default {
     z-index: 10;
 }
 .mainlogo {
-    width: 87px;
-    height: 22px;
+    width: 17vw;
+    height: 4vh;
     margin-left: 3vw;
 }
 .notification {
-    margin: 0 0 0 57vw;
+    margin: 0 0 0 60vw;
 }
 .myPage {
     margin: 0 0 0 3vw;
-}
-a {
-    margin: 1vh 0 0 0;
-    align-items: center;
 }
 </style>
