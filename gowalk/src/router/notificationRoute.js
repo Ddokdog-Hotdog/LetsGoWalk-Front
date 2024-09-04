@@ -1,4 +1,4 @@
-import NotificationCompo from '@/views/mypage/MyPageCompo';
+import NotificationCompo from '@/views/notification/NotificationCompo.vue';
 
 export default [
     {

@@ -22,5 +22,7 @@ export default {};
     padding: 5px;
     padding-bottom: 40px; /* 하단 네비게이션 바 높이만큼 마진 추가 */
     /*하단 네비게이션 바 높이만큼 마진 추가 */
+
+    height: 100%;
 }
 </style>
