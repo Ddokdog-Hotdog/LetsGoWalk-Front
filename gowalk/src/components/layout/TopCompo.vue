@@ -37,6 +37,9 @@ export default {
     max-width: 600px;
     margin: auto;
     height: 55px;
+    max-width: 600px;
+    margin: auto;
+    height: 55px;
     background-color: white;
     color: white;
     display: flex;
