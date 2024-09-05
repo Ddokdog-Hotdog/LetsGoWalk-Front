@@ -1,37 +1,39 @@
 <template>
     <div class="card">
-        <div class="stats-container">
-            <div class="stat">
-                <div class="stat-label">오늘의 산책 시간</div>
-                <div class="stat-value">
-                    <span class="number">{{ walkTimeHours }}</span>
-                    <span class="unit">h</span>
-                    <span class="number">{{ walkTimeMinutes }}</span>
-                    <span class="unit">m</span>
+        <template v-if="hasData">
+            <div class="stats-container">
+                <div class="stat">
+                    <div class="stat-label">오늘의 산책 시간</div>
+                    <div class="stat-value">
+                        <span class="number">{{ walkTimeHours }}</span>
+                        <span class="unit">h</span>
+                        <span class="number">{{ walkTimeMinutes }}</span>
+                        <span class="unit">m</span>
+                    </div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">오늘의 산책 거리</div>
+                    <div class="stat-value">
+                        <span class="number">{{ dailyWalkDistance }}</span>
+                        <span class="unit">Km</span>
+                    </div>
                 </div>
             </div>
-            <div class="stat">
-                <div class="stat-label">오늘의 산책 거리</div>
-                <div class="stat-value">
-                    <span class="number">{{ dailyWalkDistance }}</span>
-                    <span class="unit">Km</span>
+            <hr class="divider" />
+            <transition name="slide-fade">
+                <div v-if="showCalories" class="dog-calories">
+                    <div v-for="(calories, name) in dogCalories" :key="name" class="dog-calorie-item">
+                        <span>{{ name }}가 {{ Math.round(calories) }}</span>
+                        <span class="unit">KCAL</span>
+                        <span> 를 소비했어요</span>
+                    </div>
                 </div>
-            </div>
-        </div>
-        <hr class="divider" />
-        <transition name="slide-fade">
-            <div v-if="showCalories" class="dog-calories">
-                <div v-for="(calories, name) in dogCalories" :key="name" class="dog-calorie-item">
-                    <span>{{ name }}가 {{ Math.round(calories) }}</span>
-                    <span class="unit">KCAL</span>
-                    <span> 를 소비했어요</span>
-                </div>
-            </div>
-        </transition>
-        <button @click="toggleCalories" class="toggle-button">
-            {{ showCalories ? "▲" : "▼" }}
-        </button>
-        <div v-if="!hasData" class="no-data">오늘 아직 산책을 안했어요 :(</div>
+            </transition>
+            <button @click="toggleCalories" class="toggle-button">
+                {{ showCalories ? "▲" : "▼" }}
+            </button>
+        </template>
+        <div v-else class="no-data">오늘 아직 산책을 안했어요 :(</div>
     </div>
 </template>
 
@@ -172,6 +174,7 @@ export default {
     font-size: 1rem;
     color: #666;
     margin-top: 15px;
+    margin-bottom: 3vh;
 }
 
 .slide-fade-enter-active,

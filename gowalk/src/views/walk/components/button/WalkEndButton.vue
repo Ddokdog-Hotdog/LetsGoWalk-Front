@@ -8,14 +8,14 @@
             :class="{ 'button-pressed': isPressed }"
             class="action-button"
         >
-            산책가까
+            산책종료
         </button>
     </div>
 </template>
 
 <script>
 export default {
-    name: "WalkStartButton",
+    name: "WalkEndButton",
     data() {
         return {
             isPressed: false,
@@ -38,12 +38,11 @@ export default {
 }
 
 .action-button {
-    background-color: #3cbc83;
+    background-color: #ffffff;
     border: none;
-    color: white;
+    color: #3cbc83;
     padding: 5px 0px;
     text-align: center;
-    text-decoration: none;
     display: inline-block;
     font-size: 30px;
     font-weight: bold;

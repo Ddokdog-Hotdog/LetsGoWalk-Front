@@ -1,12 +1,13 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
+import Vue from "vue";
+import Vuex from "vuex";
+import walkStore from "@/store/walkStore";
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
     state: {
         user: {
-            email: '', // 로그인한 사용자 이메일
+            email: "", // 로그인한 사용자 이메일
         },
     },
     mutations: {
@@ -16,7 +17,10 @@ export default new Vuex.Store({
     },
     actions: {
         setUserEmail({ commit }, email) {
-            commit('setUserEmail', email);
+            commit("setUserEmail", email);
         },
+    },
+    modules: {
+        walkStore,
     },
 });
