@@ -33,10 +33,6 @@ export const getUserLocation = (successCallback, errorCallback) => {
 };
 
 export const createMarker = (position, markerImage, map) => {
-    console.log("위치:", position);
-    console.log("마커 이미지:", markerImage);
-    console.log("지도:", map);
-
     const markerPosition = new kakao.maps.LatLng(position[0], position[1]);
     const marker = new kakao.maps.Marker({
         position: markerPosition,

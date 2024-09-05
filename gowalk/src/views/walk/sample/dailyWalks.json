@@ -1,0 +1,737 @@
+{
+    "date": "2024-09-02T11:30:03.378+00:00",
+    "walks": [
+        {
+            "walkId": 21,
+            "startTime": "2024-09-02T00:29:08.000+00:00",
+            "endTime": "2024-09-02T00:29:24.000+00:00",
+            "duration": 160,
+            "distance": 141,
+            "route": [
+                {
+                    "recordTime": "2023-01-01T12:00:00.000+00:00",
+                    "location": {
+                        "x": 126.978,
+                        "y": 37.5665,
+                        "type": "Point",
+                        "coordinates": [
+                            126.978,
+                            37.5665
+                        ]
+                    }
+                },
+                {
+                    "recordTime": "2023-01-01T12:01:00.000+00:00",
+                    "location": {
+                        "x": 126.9781,
+                        "y": 37.5666,
+                        "type": "Point",
+                        "coordinates": [
+                            126.9781,
+                            37.5666
+                        ]
+                    }
+                },
+                {
+                    "recordTime": "2023-01-01T12:02:00.000+00:00",
+                    "location": {
+                        "x": 126.9782,
+                        "y": 37.5667,
+                        "type": "Point",
+                        "coordinates": [
+                            126.9782,
+                            37.5667
+                        ]
+                    }
+                },
+                {
+                    "recordTime": "2023-01-01T12:03:00.000+00:00",
+                    "location": {
+                        "x": 126.9783,
+                        "y": 37.5668,
+                        "type": "Point",
+                        "coordinates": [
+                            126.9783,
+                            37.5668
+                        ]
+                    }
+                },
+                {
+                    "recordTime": "2023-01-01T12:04:00.000+00:00",
+                    "location": {
+                        "x": 126.9784,
+                        "y": 37.5669,
+                        "type": "Point",
+                        "coordinates": [
+                            126.9784,
+                            37.5669
+                        ]
+                    }
+                },
+                {
+                    "recordTime": "2023-01-01T12:05:00.000+00:00",
+                    "location": {
+                        "x": 126.9785,
+                        "y": 37.567,
+                        "type": "Point",
+                        "coordinates": [
+                            126.9785,
+                            37.567
+                        ]
+                    }
+                },
+                {
+                    "recordTime": "2023-01-01T12:06:00.000+00:00",
+                    "location": {
+                        "x": 126.9786,
+                        "y": 37.5671,
+                        "type": "Point",
+                        "coordinates": [
+                            126.9786,
+                            37.5671
+                        ]
+                    }
+                },
+                {
+                    "recordTime": "2023-01-01T12:07:00.000+00:00",
+                    "location": {
+                        "x": 126.9787,
+                        "y": 37.5672,
+                        "type": "Point",
+                        "coordinates": [
+                            126.9787,
+                            37.5672
+                        ]
+                    }
+                },
+                {
+                    "recordTime": "2023-01-01T12:08:00.000+00:00",
+                    "location": {
+                        "x": 126.9788,
+                        "y": 37.5673,
+                        "type": "Point",
+                        "coordinates": [
+                            126.9788,
+                            37.5673
+                        ]
+                    }
+                },
+                {
+                    "recordTime": "2023-01-01T12:09:00.000+00:00",
+                    "location": {
+                        "x": 126.9789,
+                        "y": 37.5674,
+                        "type": "Point",
+                        "coordinates": [
+                            126.9789,
+                            37.5674
+                        ]
+                    }
+                },
+                {
+                    "recordTime": "2024-09-02T00:29:23.524+00:00",
+                    "location": {
+                        "x": 126.968,
+                        "y": 37.6665,
+                        "type": "Point",
+                        "coordinates": [
+                            126.968,
+                            37.6665
+                        ]
+                    }
+                }
+            ],
+            "dogs": [
+                {
+                    "pet": {
+                        "petId": 2,
+                        "breedId": 2,
+                        "breedName": "비숑 프리제",
+                        "name": "테스트강아지",
+                        "dateOfBirth": "2024-01-15",
+                        "gender": "Male",
+                        "weight": 10.5,
+                        "neutering": true,
+                        "profileImageUrl": "http://example.com/image.jpg"
+                    },
+                    "caloriesBurned": 4.4415
+                },
+                {
+                    "pet": {
+                        "petId": 1,
+                        "breedId": 98,
+                        "breedName": "바라크 드 오베르뉴",
+                        "name": "수정한 테스트강아지2",
+                        "dateOfBirth": "2024-01-15",
+                        "gender": "Male",
+                        "weight": 10.5,
+                        "neutering": true,
+                        "profileImageUrl": "수정한이미지ur2l"
+                    },
+                    "caloriesBurned": 4.4415
+                }
+            ]
+        },
+        {
+            "walkId": 22,
+            "startTime": "2024-09-02T01:35:38.000+00:00",
+            "endTime": "2024-09-02T01:35:53.000+00:00",
+            "duration": 15,
+            "distance": 282,
+            "route": [
+                {
+                    "recordTime": "2023-01-01T12:00:00.000+00:00",
+                    "location": {
+                        "x": 126.978,
+                        "y": 37.5665,
+                        "type": "Point",
+                        "coordinates": [
+                            126.978,
+                            37.5665
+                        ]
+                    }
+                },
+                {
+                    "recordTime": "2023-01-01T12:00:00.000+00:00",
+                    "location": {
+                        "x": 126.978,
+                        "y": 37.5665,
+                        "type": "Point",
+                        "coordinates": [
+                            126.978,
+                            37.5665
+                        ]
+                    }
+                },
+                {
+                    "recordTime": "2023-01-01T12:01:00.000+00:00",
+                    "location": {
+                        "x": 126.9781,
+                        "y": 37.5666,
+                        "type": "Point",
+                        "coordinates": [
+                            126.9781,
+                            37.5666
+                        ]
+                    }
+                },
+                {
+                    "recordTime": "2023-01-01T12:01:00.000+00:00",
+                    "location": {
+                        "x": 126.9781,
+                        "y": 37.5666,
+                        "type": "Point",
+                        "coordinates": [
+                            126.9781,
+                            37.5666
+                        ]
+                    }
+                },
+                {
+                    "recordTime": "2023-01-01T12:02:00.000+00:00",
+                    "location": {
+                        "x": 126.9782,
+                        "y": 37.5667,
+                        "type": "Point",
+                        "coordinates": [
+                            126.9782,
+                            37.5667
+                        ]
+                    }
+                },
+                {
+                    "recordTime": "2023-01-01T12:02:00.000+00:00",
+                    "location": {
+                        "x": 126.9782,
+                        "y": 37.5667,
+                        "type": "Point",
+                        "coordinates": [
+                            126.9782,
+                            37.5667
+                        ]
+                    }
+                },
+                {
+                    "recordTime": "2023-01-01T12:03:00.000+00:00",
+                    "location": {
+                        "x": 126.9783,
+                        "y": 37.5668,
+                        "type": "Point",
+                        "coordinates": [
+                            126.9783,
+                            37.5668
+                        ]
+                    }
+                },
+                {
+                    "recordTime": "2023-01-01T12:03:00.000+00:00",
+                    "location": {
+                        "x": 126.9783,
+                        "y": 37.5668,
+                        "type": "Point",
+                        "coordinates": [
+                            126.9783,
+                            37.5668
+                        ]
+                    }
+                },
+                {
+                    "recordTime": "2023-01-01T12:04:00.000+00:00",
+                    "location": {
+                        "x": 126.9784,
+                        "y": 37.5669,
+                        "type": "Point",
+                        "coordinates": [
+                            126.9784,
+                            37.5669
+                        ]
+                    }
+                },
+                {
+                    "recordTime": "2023-01-01T12:04:00.000+00:00",
+                    "location": {
+                        "x": 126.9784,
+                        "y": 37.5669,
+                        "type": "Point",
+                        "coordinates": [
+                            126.9784,
+                            37.5669
+                        ]
+                    }
+                },
+                {
+                    "recordTime": "2023-01-01T12:05:00.000+00:00",
+                    "location": {
+                        "x": 126.9785,
+                        "y": 37.567,
+                        "type": "Point",
+                        "coordinates": [
+                            126.9785,
+                            37.567
+                        ]
+                    }
+                },
+                {
+                    "recordTime": "2023-01-01T12:05:00.000+00:00",
+                    "location": {
+                        "x": 126.9785,
+                        "y": 37.567,
+                        "type": "Point",
+                        "coordinates": [
+                            126.9785,
+                            37.567
+                        ]
+                    }
+                },
+                {
+                    "recordTime": "2023-01-01T12:06:00.000+00:00",
+                    "location": {
+                        "x": 126.9786,
+                        "y": 37.5671,
+                        "type": "Point",
+                        "coordinates": [
+                            126.9786,
+                            37.5671
+                        ]
+                    }
+                },
+                {
+                    "recordTime": "2023-01-01T12:06:00.000+00:00",
+                    "location": {
+                        "x": 126.9786,
+                        "y": 37.5671,
+                        "type": "Point",
+                        "coordinates": [
+                            126.9786,
+                            37.5671
+                        ]
+                    }
+                },
+                {
+                    "recordTime": "2023-01-01T12:07:00.000+00:00",
+                    "location": {
+                        "x": 126.9787,
+                        "y": 37.5672,
+                        "type": "Point",
+                        "coordinates": [
+                            126.9787,
+                            37.5672
+                        ]
+                    }
+                },
+                {
+                    "recordTime": "2023-01-01T12:07:00.000+00:00",
+                    "location": {
+                        "x": 126.9787,
+                        "y": 37.5672,
+                        "type": "Point",
+                        "coordinates": [
+                            126.9787,
+                            37.5672
+                        ]
+                    }
+                },
+                {
+                    "recordTime": "2023-01-01T12:08:00.000+00:00",
+                    "location": {
+                        "x": 126.9788,
+                        "y": 37.5673,
+                        "type": "Point",
+                        "coordinates": [
+                            126.9788,
+                            37.5673
+                        ]
+                    }
+                },
+                {
+                    "recordTime": "2023-01-01T12:08:00.000+00:00",
+                    "location": {
+                        "x": 126.9788,
+                        "y": 37.5673,
+                        "type": "Point",
+                        "coordinates": [
+                            126.9788,
+                            37.5673
+                        ]
+                    }
+                },
+                {
+                    "recordTime": "2023-01-01T12:09:00.000+00:00",
+                    "location": {
+                        "x": 126.9789,
+                        "y": 37.5674,
+                        "type": "Point",
+                        "coordinates": [
+                            126.9789,
+                            37.5674
+                        ]
+                    }
+                },
+                {
+                    "recordTime": "2023-01-01T12:09:00.000+00:00",
+                    "location": {
+                        "x": 126.9789,
+                        "y": 37.5674,
+                        "type": "Point",
+                        "coordinates": [
+                            126.9789,
+                            37.5674
+                        ]
+                    }
+                },
+                {
+                    "recordTime": "2024-09-02T01:35:52.896+00:00",
+                    "location": {
+                        "x": 126.968,
+                        "y": 37.6665,
+                        "type": "Point",
+                        "coordinates": [
+                            126.968,
+                            37.6665
+                        ]
+                    }
+                }
+            ],
+            "dogs": [
+                {
+                    "pet": {
+                        "petId": 2,
+                        "breedId": 2,
+                        "breedName": "비숑 프리제",
+                        "name": "테스트강아지",
+                        "dateOfBirth": "2024-01-15",
+                        "gender": "Male",
+                        "weight": 10.5,
+                        "neutering": true,
+                        "profileImageUrl": "http://example.com/image.jpg"
+                    },
+                    "caloriesBurned": 8.883
+                },
+                {
+                    "pet": {
+                        "petId": 1,
+                        "breedId": 98,
+                        "breedName": "바라크 드 오베르뉴",
+                        "name": "수정한 테스트강아지2",
+                        "dateOfBirth": "2024-01-15",
+                        "gender": "Male",
+                        "weight": 10.5,
+                        "neutering": true,
+                        "profileImageUrl": "수정한이미지ur2l"
+                    },
+                    "caloriesBurned": 8.883
+                }
+            ]
+        },
+        {
+            "walkId": 42,
+            "startTime": "2024-09-02T06:11:01.000+00:00",
+            "endTime": "2024-09-02T06:11:12.000+00:00",
+            "duration": 11,
+            "distance": 222453,
+            "route": [
+                {
+                    "recordTime": "2023-01-01T12:01:00.000+00:00",
+                    "location": {
+                        "x": 126.9781,
+                        "y": 37.5666,
+                        "type": "Point",
+                        "coordinates": [
+                            126.9781,
+                            37.5666
+                        ]
+                    }
+                },
+                {
+                    "recordTime": "2023-01-01T12:02:00.000+00:00",
+                    "location": {
+                        "x": 126.9782,
+                        "y": 37.5667,
+                        "type": "Point",
+                        "coordinates": [
+                            126.9782,
+                            37.5667
+                        ]
+                    }
+                },
+                {
+                    "recordTime": "2023-01-01T12:03:00.000+00:00",
+                    "location": {
+                        "x": 126.9783,
+                        "y": 37.5668,
+                        "type": "Point",
+                        "coordinates": [
+                            126.9783,
+                            37.5668
+                        ]
+                    }
+                },
+                {
+                    "recordTime": "2023-01-01T12:04:00.000+00:00",
+                    "location": {
+                        "x": 126.9784,
+                        "y": 37.5669,
+                        "type": "Point",
+                        "coordinates": [
+                            126.9784,
+                            37.5669
+                        ]
+                    }
+                },
+                {
+                    "recordTime": "2023-01-01T12:05:00.000+00:00",
+                    "location": {
+                        "x": 126.9785,
+                        "y": 37.567,
+                        "type": "Point",
+                        "coordinates": [
+                            126.9785,
+                            37.567
+                        ]
+                    }
+                },
+                {
+                    "recordTime": "2023-01-01T12:06:00.000+00:00",
+                    "location": {
+                        "x": 126.9786,
+                        "y": 37.5669,
+                        "type": "Point",
+                        "coordinates": [
+                            126.9786,
+                            37.5669
+                        ]
+                    }
+                },
+                {
+                    "recordTime": "2023-01-01T12:06:00.000+00:00",
+                    "location": {
+                        "x": 124.9786,
+                        "y": 37.5669,
+                        "type": "Point",
+                        "coordinates": [
+                            124.9786,
+                            37.5669
+                        ]
+                    }
+                },
+                {
+                    "recordTime": "2024-09-02T06:11:12.560+00:00",
+                    "location": {
+                        "x": 126.968,
+                        "y": 37.6665,
+                        "type": "Point",
+                        "coordinates": [
+                            126.968,
+                            37.6665
+                        ]
+                    }
+                }
+            ],
+            "dogs": [
+                {
+                    "pet": {
+                        "petId": 1,
+                        "breedId": 98,
+                        "breedName": "바라크 드 오베르뉴",
+                        "name": "수정한 테스트강아지2",
+                        "dateOfBirth": "2024-01-15",
+                        "gender": "Male",
+                        "weight": 10.5,
+                        "neutering": true,
+                        "profileImageUrl": "수정한이미지ur2l"
+                    },
+                    "caloriesBurned": 7007.2695
+                },
+                {
+                    "pet": {
+                        "petId": 2,
+                        "breedId": 2,
+                        "breedName": "비숑 프리제",
+                        "name": "테스트강아지",
+                        "dateOfBirth": "2024-01-15",
+                        "gender": "Male",
+                        "weight": 10.5,
+                        "neutering": true,
+                        "profileImageUrl": "http://example.com/image.jpg"
+                    },
+                    "caloriesBurned": 7007.2695
+                }
+            ]
+        },
+        {
+            "walkId": 43,
+            "startTime": "2024-09-02T06:25:26.000+00:00",
+            "endTime": "2024-09-02T06:25:42.000+00:00",
+            "duration": 16,
+            "distance": 222453,
+            "route": [
+                {
+                    "recordTime": "2023-01-01T12:01:00.000+00:00",
+                    "location": {
+                        "x": 126.9781,
+                        "y": 37.5666,
+                        "type": "Point",
+                        "coordinates": [
+                            126.9781,
+                            37.5666
+                        ]
+                    }
+                },
+                {
+                    "recordTime": "2023-01-01T12:02:00.000+00:00",
+                    "location": {
+                        "x": 126.9782,
+                        "y": 37.5667,
+                        "type": "Point",
+                        "coordinates": [
+                            126.9782,
+                            37.5667
+                        ]
+                    }
+                },
+                {
+                    "recordTime": "2023-01-01T12:03:00.000+00:00",
+                    "location": {
+                        "x": 126.9783,
+                        "y": 37.5668,
+                        "type": "Point",
+                        "coordinates": [
+                            126.9783,
+                            37.5668
+                        ]
+                    }
+                },
+                {
+                    "recordTime": "2023-01-01T12:04:00.000+00:00",
+                    "location": {
+                        "x": 126.9784,
+                        "y": 37.5669,
+                        "type": "Point",
+                        "coordinates": [
+                            126.9784,
+                            37.5669
+                        ]
+                    }
+                },
+                {
+                    "recordTime": "2023-01-01T12:05:00.000+00:00",
+                    "location": {
+                        "x": 126.9785,
+                        "y": 37.567,
+                        "type": "Point",
+                        "coordinates": [
+                            126.9785,
+                            37.567
+                        ]
+                    }
+                },
+                {
+                    "recordTime": "2023-01-01T12:06:00.000+00:00",
+                    "location": {
+                        "x": 126.9786,
+                        "y": 37.5669,
+                        "type": "Point",
+                        "coordinates": [
+                            126.9786,
+                            37.5669
+                        ]
+                    }
+                },
+                {
+                    "recordTime": "2023-01-01T12:06:00.000+00:00",
+                    "location": {
+                        "x": 124.9786,
+                        "y": 37.5669,
+                        "type": "Point",
+                        "coordinates": [
+                            124.9786,
+                            37.5669
+                        ]
+                    }
+                },
+                {
+                    "recordTime": "2024-09-02T06:25:41.683+00:00",
+                    "location": {
+                        "x": 126.968,
+                        "y": 37.6665,
+                        "type": "Point",
+                        "coordinates": [
+                            126.968,
+                            37.6665
+                        ]
+                    }
+                }
+            ],
+            "dogs": [
+                {
+                    "pet": {
+                        "petId": 1,
+                        "breedId": 98,
+                        "breedName": "바라크 드 오베르뉴",
+                        "name": "수정한 테스트강아지2",
+                        "dateOfBirth": "2024-01-15",
+                        "gender": "Male",
+                        "weight": 10.5,
+                        "neutering": true,
+                        "profileImageUrl": "수정한이미지ur2l"
+                    },
+                    "caloriesBurned": 7007.2695
+                },
+                {
+                    "pet": {
+                        "petId": 2,
+                        "breedId": 2,
+                        "breedName": "비숑 프리제",
+                        "name": "테스트강아지",
+                        "dateOfBirth": "2024-01-15",
+                        "gender": "Male",
+                        "weight": 10.5,
+                        "neutering": true,
+                        "profileImageUrl": "http://example.com/image.jpg"
+                    },
+                    "caloriesBurned": 7007.2695
+                }
+            ]
+        }
+    ]
+}

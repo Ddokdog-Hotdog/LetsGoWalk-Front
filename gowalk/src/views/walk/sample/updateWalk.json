@@ -1,0 +1,34 @@
+{
+    "walkId": 22,
+    "totalDistance": 423,
+    "dogs": [
+        {
+            "pet": {
+                "petId": 2,
+                "breedId": 2,
+                "breedName": "비숑 프리제",
+                "name": "테스트강아지",
+                "dateOfBirth": "2024-01-15",
+                "gender": "Male",
+                "weight": 10.5,
+                "neutering": true,
+                "profileImageUrl": "http://example.com/image.jpg"
+            },
+            "caloriesBurned": 13.3245
+        },
+        {
+            "pet": {
+                "petId": 1,
+                "breedId": 98,
+                "breedName": "바라크 드 오베르뉴",
+                "name": "수정한 테스트강아지2",
+                "dateOfBirth": "2024-01-15",
+                "gender": "Male",
+                "weight": 10.5,
+                "neutering": true,
+                "profileImageUrl": "수정한이미지ur2l"
+            },
+            "caloriesBurned": 13.3245
+        }
+    ]
+}
