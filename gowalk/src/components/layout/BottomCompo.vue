@@ -47,7 +47,7 @@ export default {
                     iconSrc: require("@/assets/icon/post-icon.png"),
                     iconActiveSrc: require("@/assets/icon/now-post-icon.png"),
                     text: "커뮤니티",
-                    routerLink: "/post",
+                    routerLink: "/post/1",
                 },
                 {
                     path: "/shop",

@@ -1,13 +1,15 @@
 <template>
     <div class="shop">
         <div class="product-list">
-            <div class="product-item" v-for="product in products" :key="product.id">
+            <div class="product-item" v-for="product in products" :key="product.id" @click="goToProduct(product.id)">
                 <div class="product-image-container">
                     <img :src="product.image" alt="Product Image" class="product-image" />
+
                     <div v-if="product.isBest" class="best-icon">BEST</div>
                     <!-- 좋아요(찜) 버튼 -->
-                    <div class="heart-icon" :class="{ liked: product.liked }" @click="toggleLike(product)">♥</div>
+                    <div class="heart-icon" :class="{ liked: product.liked }" @click.stop="toggleLike(product)">♥</div>
                 </div>
+
                 <div class="product-info">
                     <p class="product-seller">{{ product.seller }}</p>
                     <h3 class="product-name">{{ product.name }}</h3>
@@ -113,6 +115,9 @@ export default {
         toggleLike(product) {
             product.liked = !product.liked; // 좋아요 상태를 토글합니다.
         },
+        goToProduct(productId) {
+            this.$router.push(`/shop/item/${productId}`);
+        },
     },
     filters: {
         currency(value) {
@@ -143,6 +148,7 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    cursor: pointer;
 }
 
 .product-image-container {
