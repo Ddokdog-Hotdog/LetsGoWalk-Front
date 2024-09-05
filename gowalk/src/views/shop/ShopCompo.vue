@@ -30,79 +30,79 @@
 
 <script>
 export default {
-    name: 'ProductList',
+    name: "ProductList",
     data() {
         return {
             products: [
                 {
                     id: 1,
-                    name: 'Product 1',
-                    seller: 'Seller A',
+                    name: "Product 1",
+                    seller: "Seller A",
                     price: 29900,
-                    image: 'https://via.placeholder.com/300x300',
+                    image: "https://via.placeholder.com/300x300",
                     isBest: true,
                     liked: false, // 좋아요 상태 추가
                 },
                 {
                     id: 2,
-                    name: 'Product 2',
-                    seller: 'Seller B',
+                    name: "Product 2",
+                    seller: "Seller B",
                     price: 49900,
-                    image: 'https://via.placeholder.com/300x300',
+                    image: "https://via.placeholder.com/300x300",
                     isBest: false,
                     liked: false,
                 },
                 {
                     id: 3,
-                    name: 'Product 3',
-                    seller: 'Seller C',
+                    name: "Product 3",
+                    seller: "Seller C",
                     price: 19900,
-                    image: 'https://via.placeholder.com/300x300',
+                    image: "https://via.placeholder.com/300x300",
                     isBest: true,
                     liked: false,
                 },
                 {
                     id: 4,
-                    name: 'Product 4',
-                    seller: 'Seller D',
+                    name: "Product 4",
+                    seller: "Seller D",
                     price: 39900,
-                    image: 'https://via.placeholder.com/300x300',
+                    image: "https://via.placeholder.com/300x300",
                     isBest: false,
                     liked: false,
                 },
                 {
                     id: 4,
-                    name: 'Product 4',
-                    seller: 'Seller D',
+                    name: "Product 4",
+                    seller: "Seller D",
                     price: 39900,
-                    image: 'https://via.placeholder.com/300x300',
+                    image: "https://via.placeholder.com/300x300",
                     isBest: false,
                     liked: false,
                 },
                 {
                     id: 4,
-                    name: 'Product 4',
-                    seller: 'Seller D',
+                    name: "Product 4",
+                    seller: "Seller D",
                     price: 39900,
-                    image: 'https://via.placeholder.com/300x300',
+                    image: "https://via.placeholder.com/300x300",
                     isBest: false,
                     liked: false,
                 },
                 {
                     id: 4,
-                    name: 'Product 4',
-                    seller: 'Seller D',
+                    name: "Product 4",
+                    seller: "Seller D",
                     price: 39900,
-                    image: 'https://via.placeholder.com/300x300',
+                    image: "https://via.placeholder.com/300x300",
                     isBest: false,
                     liked: false,
                 },
                 {
                     id: 4,
-                    name: 'Product 4',
-                    seller: 'Seller D',
+                    name: "Product 4",
+                    seller: "Seller D",
                     price: 39900,
-                    image: 'https://via.placeholder.com/300x300',
+                    image: "https://via.placeholder.com/300x300",
                     isBest: false,
                     liked: false,
                 },
@@ -116,13 +116,17 @@ export default {
     },
     filters: {
         currency(value) {
-            return new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(value);
+            return new Intl.NumberFormat("ko-KR", { style: "currency", currency: "KRW" }).format(value);
         },
     },
 };
 </script>
 
 <style scoped>
+.shop {
+    padding-bottom: 68px;
+    padding-top: 20px;
+}
 .product-list {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
