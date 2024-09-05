@@ -1,8 +1,8 @@
 <template>
-    <div>
+    <div class="postList">
         <div class="post-list-compo" v-for="post in posts" :key="post.nickname">
             <div>
-                <img :src="postListProfileSrc" alt="Dog" class="postListCompoProfile"/>
+                <img :src="postListProfileSrc" alt="Dog" class="postListCompoProfile" />
             </div>
             <div class="post-list-compo-detail">
                 <h3>{{ post.title }}</h3>
@@ -11,9 +11,9 @@
                         <span>{{ post.nickname }}</span>
                     </div>
                     <div>
-                        <span>⏱</span><span>{{ post.timeAgo}}분 전 </span>
-                        <span>💙</span><span>{{ post.goods }}</span>
-                        <span><img :src="commentSrc"> </span><span>{{ post.comments }}</span>
+                        <span>⏱</span><span>{{ post.timeAgo }}분 전 </span> <span>💙</span
+                        ><span>{{ post.goods }}</span> <span><img :src="commentSrc" /> </span
+                        ><span>{{ post.comments }}</span>
                     </div>
                 </div>
             </div>
@@ -30,112 +30,111 @@ export default {
             postCreateButtonSrc: require("@/assets/postListCompo/createPost.png"),
             posts: [
                 {
-                title: "강아지와 산책",
-                nickname: "doglover123",
-                timeAgo: 30,
-                goods: 85,
-                comments: 12
-            },
-            {
-                title: "강아지와 산책",
-                nickname: "doglover123",
-                timeAgo: 30,
-                goods: 85,
-                comments: 12
-            },
-            {
-                title: "강아지와 산책",
-                nickname: "doglover123",
-                timeAgo: 30,
-                goods: 85,
-                comments: 12
-            },
-            {
-                title: "강아지와 산책",
-                nickname: "doglover123",
-                timeAgo: 30,
-                goods: 85,
-                comments: 12
-            },
-            {
-                title: "강아지와 산책",
-                nickname: "doglover123",
-                timeAgo: 30,
-                goods: 85,
-                comments: 12
-            },
-            {
-                title: "강아지와 산책",
-                nickname: "doglover123",
-                timeAgo: 30,
-                goods: 85,
-                comments: 12
-            },
-            {
-                title: "강아지와 산책",
-                nickname: "doglover123",
-                timeAgo: 30,
-                goods: 85,
-                comments: 12
-            },
-            {
-                title: "강아지와 산책",
-                nickname: "doglover123",
-                timeAgo: 30,
-                goods: 85,
-                comments: 12
-            },
-            {
-                title: "강아지와 산책",
-                nickname: "doglover123",
-                timeAgo: 30,
-                goods: 85,
-                comments: 12
-            },
-            {
-                title: "강아지와 산책",
-                nickname: "doglover123",
-                timeAgo: 30,
-                goods: 85,
-                comments: 12
-            },
-            {
-                title: "강아지와 산책",
-                nickname: "doglover123",
-                timeAgo: 30,
-                goods: 85,
-                comments: 12
-            },
-            {
-                title: "강아지와 산책",
-                nickname: "doglover123",
-                timeAgo: 30,
-                goods: 85,
-                comments: 12
-            },
-            {
-                title: "강아지와 산책",
-                nickname: "doglover123",
-                timeAgo: 30,
-                goods: 85,
-                comments: 12
-            },
-            {
-                title: "강아지와 산책",
-                nickname: "doglover123",
-                timeAgo: 30,
-                goods: 85,
-                comments: 12
-            },
-            ]
-        }
-    }
-
-}
+                    title: "강아지와 산책",
+                    nickname: "doglover123",
+                    timeAgo: 30,
+                    goods: 85,
+                    comments: 12,
+                },
+                {
+                    title: "강아지와 산책",
+                    nickname: "doglover123",
+                    timeAgo: 30,
+                    goods: 85,
+                    comments: 12,
+                },
+                {
+                    title: "강아지와 산책",
+                    nickname: "doglover123",
+                    timeAgo: 30,
+                    goods: 85,
+                    comments: 12,
+                },
+                {
+                    title: "강아지와 산책",
+                    nickname: "doglover123",
+                    timeAgo: 30,
+                    goods: 85,
+                    comments: 12,
+                },
+                {
+                    title: "강아지와 산책",
+                    nickname: "doglover123",
+                    timeAgo: 30,
+                    goods: 85,
+                    comments: 12,
+                },
+                {
+                    title: "강아지와 산책",
+                    nickname: "doglover123",
+                    timeAgo: 30,
+                    goods: 85,
+                    comments: 12,
+                },
+                {
+                    title: "강아지와 산책",
+                    nickname: "doglover123",
+                    timeAgo: 30,
+                    goods: 85,
+                    comments: 12,
+                },
+                {
+                    title: "강아지와 산책",
+                    nickname: "doglover123",
+                    timeAgo: 30,
+                    goods: 85,
+                    comments: 12,
+                },
+                {
+                    title: "강아지와 산책",
+                    nickname: "doglover123",
+                    timeAgo: 30,
+                    goods: 85,
+                    comments: 12,
+                },
+                {
+                    title: "강아지와 산책",
+                    nickname: "doglover123",
+                    timeAgo: 30,
+                    goods: 85,
+                    comments: 12,
+                },
+                {
+                    title: "강아지와 산책",
+                    nickname: "doglover123",
+                    timeAgo: 30,
+                    goods: 85,
+                    comments: 12,
+                },
+                {
+                    title: "강아지와 산책",
+                    nickname: "doglover123",
+                    timeAgo: 30,
+                    goods: 85,
+                    comments: 12,
+                },
+                {
+                    title: "강아지와 산책",
+                    nickname: "doglover123",
+                    timeAgo: 30,
+                    goods: 85,
+                    comments: 12,
+                },
+                {
+                    title: "강아지와 산책",
+                    nickname: "doglover123",
+                    timeAgo: 30,
+                    goods: 85,
+                    comments: 12,
+                },
+            ],
+        };
+    },
+};
 </script>
 
 <style scoped>
-.post-list-compo{
+.post-list-compo {
     display: flex;
     position: relative;
     margin: 2%;
@@ -154,7 +153,7 @@ export default {
 .post-list-compo-detail span {
     color: #7f7f7f;
 }
-.post-list-compo-detail-info{
+.post-list-compo-detail-info {
     display: flex;
     justify-content: space-between;
 }

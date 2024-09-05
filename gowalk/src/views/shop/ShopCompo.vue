@@ -128,6 +128,10 @@ export default {
 </script>
 
 <style scoped>
+.shop {
+    padding-bottom: 68px;
+    padding-top: 25px;
+}
 .product-list {
     display: grid;
     grid-template-columns: repeat(2, 1fr);

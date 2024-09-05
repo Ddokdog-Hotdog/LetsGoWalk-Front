@@ -17,44 +17,44 @@
 
 <script>
 export default {
-    name: 'BottomNav',
+    name: "BottomNav",
     data() {
         return {
             menuItems: [
                 {
-                    path: '/home',
-                    iconSrc: require('@/assets/icon/home-icon.png'),
-                    iconActiveSrc: require('@/assets/icon/now-home-icon.png'),
-                    text: '홈',
-                    routerLink: '/',
+                    path: "/home",
+                    iconSrc: require("@/assets/icon/home-icon.png"),
+                    iconActiveSrc: require("@/assets/icon/now-home-icon.png"),
+                    text: "홈",
+                    routerLink: "/",
                 },
                 {
-                    path: '/walk',
-                    iconSrc: require('@/assets/icon/walk-icon.png'),
-                    iconActiveSrc: require('@/assets/icon/now-walk-icon.png'),
-                    text: '산책',
-                    routerLink: '/walk',
+                    path: "/walk",
+                    iconSrc: require("@/assets/icon/walk-icon.png"),
+                    iconActiveSrc: require("@/assets/icon/now-walk-icon.png"),
+                    text: "산책",
+                    routerLink: "/walk",
                 },
                 {
-                    path: '/quest',
-                    iconSrc: require('@/assets/icon/quest-icon.png'),
-                    iconActiveSrc: require('@/assets/icon/now-quest-icon.png'),
-                    text: '퀘스트',
-                    routerLink: '/quest',
+                    path: "/quest",
+                    iconSrc: require("@/assets/icon/quest-icon.png"),
+                    iconActiveSrc: require("@/assets/icon/now-quest-icon.png"),
+                    text: "퀘스트",
+                    routerLink: "/quest",
                 },
                 {
-                    path: '/post',
-                    iconSrc: require('@/assets/icon/post-icon.png'),
-                    iconActiveSrc: require('@/assets/icon/now-post-icon.png'),
-                    text: '커뮤니티',
-                    routerLink: '/post/1',
+                    path: "/post",
+                    iconSrc: require("@/assets/icon/post-icon.png"),
+                    iconActiveSrc: require("@/assets/icon/now-post-icon.png"),
+                    text: "커뮤니티",
+                    routerLink: "/post/1",
                 },
                 {
-                    path: '/shop',
-                    iconSrc: require('@/assets/icon/shop-icon.png'),
-                    iconActiveSrc: require('@/assets/icon/now-shop-icon.png'),
-                    text: '산책용품',
-                    routerLink: '/shop',
+                    path: "/shop",
+                    iconSrc: require("@/assets/icon/shop-icon.png"),
+                    iconActiveSrc: require("@/assets/icon/now-shop-icon.png"),
+                    text: "산책용품",
+                    routerLink: "/shop",
                 },
             ],
         };
@@ -63,7 +63,7 @@ export default {
     methods: {
         getIconSrc(item) {
             // 현재 경로가 아이템의 경로로 시작하는지 확인하여 아이콘을 변경
-            if (this.$route.path === '/' && item.path === '/home') return item.iconActiveSrc;
+            if (this.$route.path === "/" && item.path === "/home") return item.iconActiveSrc;
             return this.$route.path.startsWith(item.path) ? item.iconActiveSrc : item.iconSrc;
         },
     },
@@ -77,9 +77,8 @@ export default {
     bottom: 0;
     width: 100%;
     max-width: 600px;
-    height: 67px; /* 높이 설정 */
+    height: 72px; /* 높이 설정 */
     background-color: white;
-    border-top: 1px solid #ddd; /* 상단 경계선 추가 */
     color: black;
     display: flex;
     align-items: center;
@@ -123,6 +122,7 @@ export default {
 }
 .row {
     display: flex;
+    padding: 5px 0;
 }
 .container-fluid {
     margin-top: 5px;
