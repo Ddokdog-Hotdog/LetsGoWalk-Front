@@ -12,6 +12,8 @@ import postRoute from "./postRoute";
 import shopRoute from "./shopRoute";
 import walkRoute from "./walkRoute";
 
+import store from "@/store";
+
 Vue.use(VueRouter);
 
 const routes = [
@@ -36,6 +38,32 @@ const routes = [
         path: "/login",
         name: "login",
         component: () => import(/* webpackChunkName: "login" */ "../views/login/LoginCompo.vue"),
+    },
+    {
+        path: "/auth/success",
+        name: "AuthSuccess",
+        component: MainCompo,
+        beforeEnter: (to, from, next) => {
+            const token = to.query.accessToken;
+            if (token) {
+                store.commit("setAccessToken", token);
+                localStorage.setItem("accessToken", token);
+            }
+            next("/");
+        },
+    },
+    {
+        path: "/auth/register",
+        name: "AuthRegister",
+        component: () => import(/* webpackChunkName: "register" */ "../views/mypage/ProfileCompo.vue"),
+        beforeEnter: (to, from, next) => {
+            const token = to.query.accessToken;
+            if (token) {
+                store.commit("setAccessToken", token);
+                localStorage.setItem("accessToken", token);
+            }
+            next();
+        },
     },
 ];
 
