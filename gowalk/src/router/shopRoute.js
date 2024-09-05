@@ -1,6 +1,7 @@
 import ShopCompo from "@/views/shop/ShopCompo";
 import ShopDetailCompo from "@/views/shop/ShopDetailCompo";
 import ShopTestCompo from "@/views/shop/ShopTestCompo";
+import ShopDetailTestCompo from "@/views/shop/ShopDetailTestCompo";
 
 export default [
     {
@@ -13,6 +14,11 @@ export default [
         path: "/shop/item/:id",
         component: ShopDetailCompo,
         props: true,
+    },
+    {
+        name: "ShopDetailTestCompo",
+        path: "/shop/item/",
+        component: ShopDetailTestCompo,
     },
     {
         name: "ShopTestCompo",
