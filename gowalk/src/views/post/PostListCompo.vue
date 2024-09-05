@@ -18,11 +18,6 @@
                 </div>
             </div>
         </div>
-        <!-- <router-link to="/write">
-            <div class="post-create-btn">
-                <img class="createPost" :src="postCreateButtonSrc">
-            </div>
-        </router-link> -->
     </div>
 </template>
 
