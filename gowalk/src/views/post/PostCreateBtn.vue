@@ -1,5 +1,5 @@
 <template>
-    <router-link to="/write">
+    <router-link to="/post/write">
         <div class="post-create-btn">
             <img class="createPost" :src="postCreateButtonSrc">
         </div>
