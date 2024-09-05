@@ -4,7 +4,7 @@
             <div class="content-wrapper">
                 <topCompo />
                 <mainCompo />
-                <bottomCompo />
+                <bottomCompo v-if="!$route.meta.hideBottom" />
             </div>
         </div>
     </v-app>
