@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>Walk Compo</h1>
+        <!-- <h1>Walk Compo</h1> -->
         <WalkMainPage />
     </div>
 </template>
