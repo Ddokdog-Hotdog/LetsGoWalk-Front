@@ -2,43 +2,36 @@
     <div class="map-wrapper">
         <KakaoMap class="kakao-map" />
         <div class="overlay-container">
-            <TodayExerciseCard :walks="Walks" class="overlay-card" />
-            <WalkStartButton @button-clicked="onButtonClick" class="overlay-button" />
+            <ExerciseCard :walk="walk" class="overlay-card" />
+            <WalkEndButton @button-clicked="onButtonClick" class="overlay-button" />
         </div>
     </div>
 </template>
 
 <script>
 import KakaoMap from "@/views/walk/components/KakaoMap.vue";
-import WalkStartButton from "@/views/walk/components/button/WalkStartButton.vue";
-import TodayExerciseCard from "@/views/walk/components/cards/TodayExerciseCard.vue";
-import { mapActions } from "vuex";
+import WalkEndButton from "@/views/walk/components/button/WalkEndButton.vue";
+import ExerciseCard from "@/views/walk/components/cards/ExerciseCard.vue";
 
+import walkData from "@/views/walk/sample/updateWalk.json";
 export default {
-    name: "WalkMainPage",
+    name: "WalkTrackingPage",
     components: {
         KakaoMap,
-        TodayExerciseCard,
-        WalkStartButton,
+        ExerciseCard,
+        WalkEndButton,
     },
-    computed: {
-        Walks() {
-            return this.$store.getters["walkStore/dailyWalks"];
-        },
-    },
-    async created() {
-        const now = new Date();
-        const today = {
-            memberId: 123,
-            year: now.getFullYear(),
-            month: now.getMonth() + 1,
-            day: 2,
+    data() {
+        return {
+            walk: null,
+            route: [],
+            dogs: [],
         };
-
-        this.fetchDailyWalks(today);
+    },
+    created() {
+        this.walk = walkData;
     },
     methods: {
-        ...mapActions("walkStore", ["fetchDailyWalks"]),
         onButtonClick() {
             //산책 시작버튼 누르면 산책중 페이지로 이동
             console.log("버튼 클릭");

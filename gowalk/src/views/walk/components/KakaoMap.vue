@@ -1,10 +1,6 @@
 <template>
     <div>
         <div id="map"></div>
-        <div class="button-group">
-            <button @click="changeSize(0)">Hide</button>
-            <button @click="changeSize(400)">show</button>
-        </div>
     </div>
 </template>
 
@@ -16,7 +12,7 @@ import {
     markerImages,
     createMarker,
 } from "@/views/walk/util/kakaoMap";
-import { defaultPosition } from "./util/config";
+import { defaultPosition } from "@/views/walk/util/config";
 import { toRaw } from "vue";
 export default {
     name: "KakaoMap",
@@ -34,7 +30,6 @@ export default {
                 (position) => {
                     const lat = position.coords.latitude;
                     const lng = position.coords.longitude;
-                    console.log("산책 페이지 현재 좌표: " + lat + ", " + lng);
                     this.map = initializeMap("map", lat, lng);
 
                     createMarker([lat, lng], markerImages.cafe(), this.map);
@@ -58,14 +53,6 @@ export default {
 <style scoped>
 #map {
     width: 100%;
-    height: 400px;
-}
-
-.button-group {
-    margin: 10px 0px;
-}
-
-button {
-    margin: 0 3px;
+    height: 100%;
 }
 </style>
