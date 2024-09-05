@@ -130,7 +130,7 @@ export default {
 <style scoped>
 .shop {
     padding-bottom: 68px;
-    padding-top: 20px;
+    padding-top: 25px;
 }
 .product-list {
     display: grid;

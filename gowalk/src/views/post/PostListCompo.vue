@@ -134,9 +134,6 @@ export default {
 </script>
 
 <style scoped>
-.postList {
-    margin-bottom: 120px;
-}
 .post-list-compo {
     display: flex;
     position: relative;
