@@ -20,7 +20,7 @@
             <!-- 고정 버튼들 -->
         </div>
         <div class="btn">
-            <button class="floating-button button1">
+            <button class="floating-button button1" @click="goCart()">
                 <img :src="require('@/assets/icon/cart-icon.png')" alt="Button 1 Icon" />
             </button>
             <button class="floating-button button2">
@@ -117,6 +117,9 @@ export default {
         },
         goToProduct(productId) {
             this.$router.push(`/shop/item/${productId}`);
+        },
+        goCart() {
+            this.$router.push(`/shop/cart`);
         },
     },
     filters: {
