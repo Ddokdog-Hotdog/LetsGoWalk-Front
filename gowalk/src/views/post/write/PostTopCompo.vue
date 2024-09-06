@@ -17,7 +17,7 @@ export default {
     justify-content: space-between;
 }
 .post-top-compo div{
-    margin: 0 10px 0 10px;
+    margin: 10px 10px 0 10px;
     font-weight: 700;
 }
 </style>

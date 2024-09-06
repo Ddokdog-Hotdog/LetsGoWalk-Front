@@ -1,14 +1,15 @@
-import Vue from "vue";
-import Vuex from "vuex";
+import quests from "@/router/questRoute";
 import walkStore from "@/store/walkStore";
 import axios from "axios";
-import quests from "@/router/questRoute";
+import Vue from "vue";
+import Vuex from "vuex";
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
     modules: {
         quests,
+        walkStore,
     },
     state: {
         accessToken: localStorage.getItem("accessToken") || null, // JWT 액세스 토큰 초기화
@@ -40,8 +41,5 @@ export default new Vuex.Store({
     getters: {
         isAuthenticated: (state) => !!state.accessToken, // 로그인 여부 확인
         getAccessToken: (state) => state.accessToken, // 액세스 토큰 가져오기
-    },
-    modules: {
-        walkStore,
     },
 });

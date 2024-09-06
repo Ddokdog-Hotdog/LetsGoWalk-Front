@@ -15,7 +15,7 @@ export default {
                 return "상품 상세 페이지";
             } else if (path === "/shop") {
                 return "쇼핑몰";
-            } else if (path === "/post") {
+            } else if (path === "/post/1") {
                 return "커뮤니티";
             }
             return "페이지";
