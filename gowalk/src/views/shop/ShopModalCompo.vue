@@ -2,10 +2,10 @@
     <modalCompo :isVisible="isModalVisible" @close="isModalVisible = false">
         <div class="modal-body">
             <!-- 판매업체 -->
-            <p class="seller">{{ seller }}</p>
+            <p class="seller">{{ VENDOR }}</p>
 
             <!-- 상품명 -->
-            <h3 class="product-name">{{ name }}</h3>
+            <h3 class="product-name">{{ NAME }}</h3>
 
             <!-- 가격 및 수량 조절 -->
             <div class="price-quantity">
@@ -56,11 +56,11 @@ export default {
             type: Boolean,
             default: false,
         },
-        id: Number,
-        name: String,
-        seller: String,
-        price: Number,
-        image: String,
+        PRODUCTID: Number,
+        NAME: String,
+        VENDOR: String,
+        PRICE: Number,
+        THUMBNAILIMAGE: String,
     },
     data() {
         return {
@@ -73,7 +73,7 @@ export default {
     computed: {
         // 수량에 따른 총 가격 계산
         totalPrice() {
-            return this.price * this.quantity;
+            return this.PRICE * this.quantity;
         },
     },
     methods: {
@@ -130,12 +130,12 @@ export default {
             this.$router.push({
                 path: "/shop/cart",
                 query: {
-                    id: this.id,
-                    seller: this.seller,
-                    name: this.name,
-                    price: this.price,
+                    PRODUCTID: this.PRODUCTID,
+                    VENDOR: this.VENDOR,
+                    NAME: this.NAME,
+                    PRICE: this.PRICE,
                     quantity: this.quantity,
-                    image: this.image,
+                    THUMBNAILIMAGE: this.THUMBNAILIMAGE,
                 },
             });
         },
