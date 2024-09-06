@@ -19,6 +19,8 @@ export default {
                 return "쇼핑몰";
             } else if (path === "/post/1") {
                 return "커뮤니티";
+            } else if (path === "/notification"){
+                return "알림";
             }
             return "페이지";
         },

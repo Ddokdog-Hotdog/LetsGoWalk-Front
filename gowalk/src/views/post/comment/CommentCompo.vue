@@ -11,7 +11,7 @@ import CommentInputCompo from "./CommentInputCompo.vue"
 import CommentListCompo from "./CommentListCompo.vue"
 import CommentTopCompo from "./CommentTopCompo.vue"
 export default {
-    components: { 
+    components: {
         CommentTopCompo,
         CommentListCompo,
         CommentInputCompo,
