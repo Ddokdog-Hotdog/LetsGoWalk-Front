@@ -15,7 +15,7 @@
         <p class="center-text message">{{ message }}</p>
 
         <!-- 버튼 -->
-        <button class="completion-button" @click="handleClick">{{ buttonText }}</button>
+        <button class="completion-button" @click="handleClick">{{ isError ? errorText : buttonText }}</button>
     </div>
 </template>
 
@@ -30,11 +30,23 @@ export default {
             type: String,
             default: "메인으로 가기",
         },
+        isError: {
+            type: Boolean,
+            default: false,
+        },
+        errorText: {
+            type: String,
+            default: "장바구니로 돌아가기",
+        },
     },
     methods: {
         handleClick() {
             // 버튼 클릭 시 동작
-            this.$router.push("/"); // 메인 페이지로 이동
+            if (this.isError) {
+                this.$router.push("/shop/cart"); // 장바구니 페이지로 이동
+            } else {
+                this.$router.push("/"); // 메인 페이지로 이동
+            }
         },
     },
 };
