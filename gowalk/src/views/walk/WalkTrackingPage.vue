@@ -3,7 +3,7 @@
         <KakaoMap class="kakao-map" />
         <div class="overlay-container">
             <ExerciseCard :walk="walk" class="overlay-card" />
-            <WalkEndButton @button-clicked="onButtonClick" class="overlay-button" />
+            <WalkEndButton @button-clicked="walkEnd" class="overlay-button" />
         </div>
     </div>
 </template>
@@ -14,6 +14,8 @@ import WalkEndButton from "@/views/walk/components/button/WalkEndButton.vue";
 import ExerciseCard from "@/views/walk/components/cards/ExerciseCard.vue";
 
 import walkData from "@/views/walk/sample/updateWalk.json";
+import { mapActions } from "vuex";
+// import { mapGetters, mapActions } from 'vuex';
 export default {
     name: "WalkTrackingPage",
     components: {
@@ -24,7 +26,6 @@ export default {
     data() {
         return {
             walk: null,
-            route: [],
             dogs: [],
         };
     },
@@ -32,9 +33,9 @@ export default {
         this.walk = walkData;
     },
     methods: {
-        onButtonClick() {
-            //산책 시작버튼 누르면 산책중 페이지로 이동
-            console.log("버튼 클릭");
+        ...mapActions("walkStore", ["stopWalk"]),
+        walkEnd() {
+            this.stopWalk();
         },
     },
 };

@@ -67,7 +67,17 @@ const routes = [
     },
 ];
 
-export default new VueRouter({
+const router = new VueRouter({
     mode: "history",
     routes,
 });
+
+router.beforeEach((to, from, next) => {
+    const isWalking = store.getters["walkStore/isWalking"];
+    if (isWalking) {
+        store.dispatch("walkStore/startTracking");
+    }
+    next();
+});
+
+export default router;
