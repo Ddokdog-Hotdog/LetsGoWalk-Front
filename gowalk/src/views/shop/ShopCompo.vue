@@ -1,7 +1,12 @@
 <template>
     <div class="shop">
         <div class="product-list">
-            <div class="product-item" v-for="product in products" :key="product.id" @click="goToProduct(product.id)">
+            <div
+                class="product-item"
+                v-for="product in nowLike === false ? products : likeProducts"
+                :key="product.id"
+                @click="goToProduct(product.id)"
+            >
                 <div class="product-image-container">
                     <img :src="product.image" alt="Product Image" class="product-image" />
 
@@ -20,19 +25,32 @@
             <!-- 고정 버튼들 -->
         </div>
         <div class="btn">
-            <button class="floating-button button1">
+            <button class="floating-button button1" @click="goCart()">
                 <img :src="require('@/assets/icon/cart-icon.png')" alt="Button 1 Icon" />
             </button>
-            <button class="floating-button button2">
-                <img :src="require('@/assets/icon/heart-icon.png')" alt="Button 2 Icon" />
+            <button class="floating-button button2" @click="seeLike()">
+                <img
+                    :src="
+                        nowLike === false
+                            ? require('@/assets/icon/heart-icon.png')
+                            : require('@/assets/icon/heart-active-icon.png')
+                    "
+                    alt="Button 2 Icon"
+                />
             </button>
         </div>
+        <button @click="simulateApiCall">API 요청</button>
+        <!-- 스피너 컴포넌트 -->
+        <spinnerCompo :isVisible="loading" />
     </div>
 </template>
 
 <script>
+import spinnerCompo from "@/components/layout/SpinnerCompo.vue"; // 스피너 컴포넌트 import
+
 export default {
     name: "ProductList",
+
     data() {
         return {
             products: [
@@ -109,6 +127,84 @@ export default {
                     liked: false,
                 },
             ],
+            likeProducts: [
+                {
+                    id: 1,
+                    name: "Product 1",
+                    seller: "Seller A",
+                    price: 29900,
+                    image: "https://via.placeholder.com/300x300",
+
+                    liked: true, // 좋아요 상태 추가
+                },
+                {
+                    id: 2,
+                    name: "Product 2",
+                    seller: "Seller B",
+                    price: 49900,
+                    image: "https://via.placeholder.com/300x300",
+
+                    liked: true,
+                },
+                {
+                    id: 3,
+                    name: "Product 3",
+                    seller: "Seller C",
+                    price: 19900,
+                    image: "https://via.placeholder.com/300x300",
+
+                    liked: true,
+                },
+                {
+                    id: 4,
+                    name: "Product 4",
+                    seller: "Seller D",
+                    price: 39900,
+                    image: "https://via.placeholder.com/300x300",
+
+                    liked: true,
+                },
+                {
+                    id: 4,
+                    name: "Product 4",
+                    seller: "Seller D",
+                    price: 39900,
+                    image: "https://via.placeholder.com/300x300",
+
+                    liked: true,
+                },
+                {
+                    id: 4,
+                    name: "Product 4",
+                    seller: "Seller D",
+                    price: 39900,
+                    image: "https://via.placeholder.com/300x300",
+
+                    liked: true,
+                },
+                {
+                    id: 4,
+                    name: "Product 4",
+                    seller: "Seller D",
+                    price: 39900,
+                    image: "https://via.placeholder.com/300x300",
+
+                    liked: true,
+                },
+                {
+                    id: 4,
+                    name: "Product 4",
+                    seller: "Seller D",
+                    price: 39900,
+                    image: "https://via.placeholder.com/300x300",
+
+                    liked: true,
+                },
+            ],
+            nowLike: false, // 현재 좋아요 상품만을 보는지 체크해주는 변수
+            likePage: 0, // 좋아요 상품 목록 페이지
+            page: 0, // 일반 상품 목록 페이지
+            loading: false, // 스피너 표시 여부
         };
     },
     methods: {
@@ -118,11 +214,29 @@ export default {
         goToProduct(productId) {
             this.$router.push(`/shop/item/${productId}`);
         },
+        goCart() {
+            this.$router.push(`/shop/cart`);
+        },
+        seeLike() {
+            this.nowLike = !this.nowLike;
+        },
+        // 2초 지연 함수 (API 요청 시뮬레이션)
+        simulateApiCall() {
+            this.loading = true; // API 요청 시작 시 스피너 표시
+
+            // 2초 후 스피너를 숨기고 작업 완료
+            setTimeout(() => {
+                this.loading = false;
+            }, 2000);
+        },
     },
     filters: {
         currency(value) {
             return new Intl.NumberFormat("ko-KR", { style: "currency", currency: "KRW" }).format(value);
         },
+    },
+    components: {
+        spinnerCompo,
     },
 };
 </script>

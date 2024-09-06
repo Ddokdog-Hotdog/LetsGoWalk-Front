@@ -1,7 +1,7 @@
 <template>
     <div>
-        <backButtonCompo />
         <div class="product-detail">
+            <backButtonCompo />
             <!-- 상품 상세 이미지 -->
             <div class="product-image-container">
                 <img :src="data.image" alt="Product Image" class="product-image" />
@@ -46,12 +46,14 @@
         <shopModalCompo ref="shopModal" :seller="data.seller" :name="data.name" :price="data.price">
             <!-- 모달에 들어갈 내용 -->
         </shopModalCompo>
+
+        <!-- <confirmModalCompo ref="confirmModal" :message="`정말로 구매하시겠습니까?`"></confirmModalCompo> -->
     </div>
 </template>
 
 <script>
-import backButtonCompo from "@/components/layout/BackCompo.vue";
 import shopModalCompo from "@/views/shop/ShopModalCompo.vue";
+import backButtonCompo from "@/components/layout/BackCompo.vue";
 
 export default {
     props: {
@@ -74,8 +76,9 @@ export default {
         };
     },
     components: {
-        backButtonCompo,
         shopModalCompo,
+        backButtonCompo,
+        // confirmModalCompo,
     },
     methods: {
         toggleLike() {
@@ -97,6 +100,8 @@ export default {
 <style scoped>
 .product-detail {
     padding: 16px;
+    padding-bottom: 100px;
+    padding-top: 30px;
 }
 
 .product-image-container {
@@ -104,6 +109,7 @@ export default {
     height: 500px;
     overflow: hidden;
     position: relative;
+    padding-top: 10px;
 }
 
 .product-image {

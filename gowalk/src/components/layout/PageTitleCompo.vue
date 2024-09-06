@@ -13,6 +13,8 @@ export default {
             console.log(path);
             if (path.includes("/shop/item")) {
                 return "상품 상세 페이지";
+            } else if (path.includes("/shop/cart")) {
+                return "장바구니 페이지";
             } else if (path === "/shop") {
                 return "쇼핑몰";
             } else if (path === "/post/1") {
