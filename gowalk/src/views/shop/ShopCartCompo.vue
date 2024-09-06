@@ -71,7 +71,7 @@
                 <span>포인트</span>
                 <div class="point-container">
                     <input v-model="points" type="text" placeholder="포인트 입력" class="points-input" />
-                    <button @click="useAllPoints">전액 사용</button>
+                    <button @click="useAllPoints" id="points-use">전액 사용</button>
                 </div>
             </div>
             <p class="right-align">현재 보유 포인트: {{ currentPoints }}P</p>
@@ -84,8 +84,16 @@
             </div>
         </div>
 
+        <!-- ConfirmModalCompo 추가 -->
+        <confirmModalCompo
+            :isVisible="isConfirmModalVisible"
+            @close="isConfirmModalVisible = false"
+            @confirm="handlePurchaseConfirmation"
+            :message="`정말로 구매하시겠습니까?`"
+        />
+
         <!-- 구매하기 버튼 -->
-        <button class="buy-button">
+        <button class="buy-button" @click="showConfirmModal">
             <img :src="require('@/assets/icon/kakao-icon.png')" alt="Kakao Icon" />
             pay 결제
         </button>
@@ -94,10 +102,12 @@
 
 <script>
 import backButtonCompo from "@/components/layout/BackCompo.vue";
+import confirmModalCompo from "@/components/layout/ConfirmModalCompo.vue";
 
 export default {
     components: {
         backButtonCompo,
+        confirmModalCompo,
     },
     data() {
         return {
@@ -126,6 +136,7 @@ export default {
             },
             points: 0,
             currentPoints: 5000,
+            isConfirmModalVisible: false, // 모달 표시 여부
         };
     },
     computed: {
@@ -161,11 +172,30 @@ export default {
             this.points = this.currentPoints;
         },
         updatePoints() {
+            if (isNaN(this.points)) {
+                console.log("NaN 발생");
+                this.points = 0;
+            }
             if (this.points > this.currentPoints) {
                 this.points = this.currentPoints;
             } else if (this.points < 0) {
                 this.points = 0;
             }
+        },
+        showConfirmModal() {
+            console.log("카카오페이 결제 클릭");
+            this.isConfirmModalVisible = true; // 모달 표시
+        },
+        handlePurchaseConfirmation(confirmed) {
+            if (confirmed) {
+                // 사용자가 구매를 확정했을 때 실행할 로직
+                this.proceedWithPayment();
+            }
+        },
+        proceedWithPayment() {
+            // 결제 로직을 여기에 작성
+            console.log("구매 완료 프로세스 진행");
+            // 예: 서버로 결제 요청 보내기, 페이지 이동 등
         },
     },
     watch: {
@@ -186,6 +216,8 @@ export default {
 .cart-page {
     padding: 16px;
     background-color: #f5f5f5;
+    margin-top: 15px;
+    padding-bottom: 100px;
 }
 
 .select-all {
@@ -331,7 +363,7 @@ hr {
 .buy-button {
     width: 100%;
     padding: 16px;
-    background-color: yellow;
+    background-color: #f7e600;
     color: black;
     border: none;
     border-radius: 50px;
@@ -348,8 +380,16 @@ input {
     border: 1px solid #ddd; /* 기본 input 테두리 */
     border-radius: 5px;
     height: 45px;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 .shipping-info > input {
     width: 100%;
+}
+#points-use {
+    border: 1px solid #ddd;
+    border-radius: 15px;
+    font-size: 15px;
+    background-color: rgba(0, 0, 0, 0.09);
 }
 </style>
