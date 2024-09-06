@@ -13,7 +13,6 @@ import {
     createMarker,
 } from "@/views/walk/util/kakaoMap";
 import { defaultPosition } from "@/views/walk/util/config";
-import { toRaw } from "vue";
 import { mapMutations } from "vuex";
 export default {
     name: "KakaoMap",
@@ -42,12 +41,6 @@ export default {
                     this.map = initializeMap("map", defaultPosition[0], defaultPosition[1]); // 기본 위치로 지도 초기화
                 }
             );
-        },
-        changeSize(size) {
-            const container = document.getElementById("map");
-            container.style.width = "100%"; // 너비는 고정
-            container.style.height = `${size}px`; // 높이만 변경
-            toRaw(this.map).relayout(); // 지도 크기 재조정
         },
     },
 };

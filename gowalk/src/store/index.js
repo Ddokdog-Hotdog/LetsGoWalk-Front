@@ -10,7 +10,6 @@ export default new Vuex.Store({
     modules: {
         walkStore,
         quests,
-        walkStore,
     },
     state: {
         accessToken: localStorage.getItem("accessToken") || null, // JWT 액세스 토큰 초기화

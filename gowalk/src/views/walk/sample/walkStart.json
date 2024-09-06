@@ -1,0 +1,28 @@
+{
+    "walkId": 61,
+    "dogs": [
+        {
+            "petId": 1,
+            "breedId": 98,
+            "breedName": "바라크 드 오베르뉴",
+            "name": "수정한 테스트강아지2",
+            "dateOfBirth": "2024-01-15",
+            "gender": "Male",
+            "weight": 10.5,
+            "neutering": true,
+            "profileImageUrl": "수정한이미지ur2l"
+        },
+        {
+            "petId": 2,
+            "breedId": 2,
+            "breedName": "비숑 프리제",
+            "name": "테스트강아지",
+            "dateOfBirth": "2024-01-15",
+            "gender": "Male",
+            "weight": 10.5,
+            "neutering": true,
+            "profileImageUrl": "http://example.com/image.jpg"
+        }
+    ],
+    "startTime": "2024-09-06T00:48:31.032+00:00"
+}

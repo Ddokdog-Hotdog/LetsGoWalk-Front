@@ -1,6 +1,6 @@
+/* global kakao */
 import { kakaoApiKey } from "@/views/walk/util/config";
 
-/* global kakao */
 export const loadKakaoMapScript = (callback) => {
     if (window.kakao && window.kakao.maps) {
         callback();

@@ -54,7 +54,7 @@ export default {
             memberId: 0,
             year: now.getFullYear(),
             month: now.getMonth() + 1,
-            day: 2,
+            day: now.getDate(),
         };
 
         this.fetchDailyWalks(today);
