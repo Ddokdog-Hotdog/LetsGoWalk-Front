@@ -196,11 +196,52 @@ export default {
             // 결제 로직을 여기에 작성
             console.log("구매 완료 프로세스 진행");
             // 예: 서버로 결제 요청 보내기, 페이지 이동 등
+
+            // 결제 성공 페이지로 이동
+            this.$router.push("/shop/payment/complete");
+
+            // 결제 실패 페이지로 이동
+            // this.$router.push("/shop/payment/error");
+        },
+        replaceProductFromQuery() {
+            // query에서 넘어온 값을 이용해 새로운 상품 데이터 만들기
+            const newProduct = {
+                id: Number(this.$route.query.id), // 고유 id 생성
+                seller: this.$route.query.seller,
+                name: this.$route.query.name,
+                price: Number(this.$route.query.price),
+                image: this.$route.query.image, // 기본 이미지
+                quantity: Number(this.$route.query.quantity),
+                checked: true,
+            };
+
+            // cartProducts 배열에 상품을 추가
+            this.cartProducts = [newProduct];
+
+            console.log(this.cartProducts);
         },
     },
     watch: {
         points: "updatePoints",
+        // $route.query가 변경될 때 실행
+        "$route.query": {
+            immediate: true, // 컴포넌트가 처음 로드될 때도 실행
+            handler(newQuery) {
+                // shopModalCompo로부터 데이터를 넘겨받았는지 확인
+                if (
+                    newQuery.id &&
+                    newQuery.seller &&
+                    newQuery.name &&
+                    newQuery.price &&
+                    newQuery.image &&
+                    newQuery.quantity
+                ) {
+                    this.replaceProductFromQuery();
+                }
+            },
+        },
     },
+
     filters: {
         currency(value) {
             return new Intl.NumberFormat("ko-KR", {
@@ -209,6 +250,10 @@ export default {
             }).format(value);
         },
     },
+    // created() {
+    //     // 넘어온 query 데이터를 cartProducts에 대체
+    //     this.replaceProductFromQuery();
+    // },
 };
 </script>
 

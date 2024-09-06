@@ -43,7 +43,14 @@
             </div>
         </div>
 
-        <shopModalCompo ref="shopModal" :seller="data.seller" :name="data.name" :price="data.price">
+        <shopModalCompo
+            ref="shopModal"
+            :id="data.id"
+            :name="data.name"
+            :seller="data.seller"
+            :price="data.price"
+            :image="data.image"
+        >
             <!-- 모달에 들어갈 내용 -->
         </shopModalCompo>
 
