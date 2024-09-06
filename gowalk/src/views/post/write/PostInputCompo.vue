@@ -19,12 +19,9 @@
                 </div>
             </div>
         </div>
-
         <div class="post-input-compo-text-textarea">
             <textarea placeholder="내용을 입력해주세요."/>
         </div>
-        
-        
     </div>
 </template>
 
@@ -64,6 +61,7 @@ export default {
 <style scoped>
 .post-input-compo {
     display: block;
+    margin: 10px;
 }
 .post-input-compo-text-input input{
     width: 100%;
@@ -84,6 +82,7 @@ export default {
     border-radius: 10px;
     resize: none;
     padding: 10px;
+    min-height: 400px;
 }
 .uploaded-image{
     width: 80px;

@@ -17,7 +17,7 @@ export default {
                 return "장바구니 페이지";
             } else if (path === "/shop") {
                 return "쇼핑몰";
-            } else if (path === "/post") {
+            } else if (path === "/post/1") {
                 return "커뮤니티";
             }
             return "페이지";

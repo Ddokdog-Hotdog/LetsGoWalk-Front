@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import PostListCompo from "./PostListCompo.vue";
+import PostListCompo from "./read/PostListCompo.vue";
 import TypeCompo from "@/components/layout/TypeCompo.vue";
 import PostCreateBtn from "@/views/post/PostCreateBtn.vue";
 
@@ -31,5 +31,6 @@ export default {
 .post-compo {
     padding-bottom: 68px;
     padding-top: 25px;
+    overflow-y: auto;
 }
 </style>

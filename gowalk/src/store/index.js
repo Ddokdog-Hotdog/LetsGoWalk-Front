@@ -1,8 +1,8 @@
-import Vue from "vue";
-import Vuex from "vuex";
+import quests from "@/router/questRoute";
 import walkStore from "@/store/walkStore";
 import axios from "axios";
-import quests from "@/router/questRoute";
+import Vue from "vue";
+import Vuex from "vuex";
 
 Vue.use(Vuex);
 
@@ -10,6 +10,7 @@ export default new Vuex.Store({
     modules: {
         walkStore,
         quests,
+        walkStore,
     },
     state: {
         accessToken: localStorage.getItem("accessToken") || null, // JWT 액세스 토큰 초기화
