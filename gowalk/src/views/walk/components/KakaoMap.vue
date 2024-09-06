@@ -14,6 +14,7 @@ import {
 } from "@/views/walk/util/kakaoMap";
 import { defaultPosition } from "@/views/walk/util/config";
 import { toRaw } from "vue";
+import { mapMutations } from "vuex";
 export default {
     name: "KakaoMap",
     data() {
@@ -25,6 +26,7 @@ export default {
         loadKakaoMapScript(this.initMapWithUserLocation);
     },
     methods: {
+        ...mapMutations("walkStore", ["setCurLocation"]),
         initMapWithUserLocation() {
             getUserLocation(
                 (position) => {
@@ -33,6 +35,8 @@ export default {
                     this.map = initializeMap("map", lat, lng);
 
                     createMarker([lat, lng], markerImages.cafe(), this.map);
+                    console.log(`카카오맵 초기화 현재위치: ${lat}, ${lng} `);
+                    this.setCurLocation({ lat, lng });
                 },
                 () => {
                     console.error("위치 정보를 가져올 수 없습니다.");

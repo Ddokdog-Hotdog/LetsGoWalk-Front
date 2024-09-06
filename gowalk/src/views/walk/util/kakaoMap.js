@@ -74,3 +74,16 @@ export const markerImages = {
         return new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
     },
 };
+
+export const drawPolyline = (path, map) => {
+    const polyline = new kakao.maps.Polyline({
+        path: path.map((coord) => new kakao.maps.LatLng(coord[0], coord[1])),
+        strokeWeight: 5,
+        strokeColor: "#FF0000",
+        strokeOpacity: 0.7,
+        strokeStyle: "solid",
+    });
+
+    polyline.setMap(map);
+    return polyline;
+};
