@@ -26,11 +26,13 @@
                 </button>
             </div>
         </div>
+        <!-- <confirmModalCompo ref="confirmModal" :message="`정말로 구매하시겠습니까?`"></confirmModalCompo> -->
     </modalCompo>
 </template>
 
 <script>
 import modalCompo from "@/components/layout/ModalCompo.vue";
+// import confirmModalCompo from "@/components/layout/ConfirmModalCompo.vue";
 
 export default {
     name: "shopModalCompo",
@@ -72,6 +74,7 @@ export default {
     },
     components: {
         modalCompo,
+        // confirmModalCompo,
     },
     filters: {
         currency(value) {
@@ -159,7 +162,7 @@ export default {
 }
 
 .buy-button {
-    background-color: yellow;
+    background-color: #f7e600;
     color: black;
 }
 </style>
