@@ -25,13 +25,13 @@
                     class="checkbox-img product-checkbox"
                     alt="select product"
                 />
-                <img :src="product.image" alt="product image" class="product-image" />
+                <img :src="product.THUMBNAILIMAGE" alt="product image" class="product-image" />
             </div>
 
             <div class="cart-item-info">
                 <!-- 상품명 및 가격 -->
-                <p class="product-name">{{ product.name }}</p>
-                <p class="product-price">{{ product.price | currency }}</p>
+                <p class="product-name">{{ product.NAME }}</p>
+                <p class="product-price">{{ product.PRICE | currency }}</p>
             </div>
             <div class="quantity-control">
                 <!-- 수량 조절 -->
@@ -142,7 +142,7 @@ export default {
     computed: {
         totalPrice() {
             return this.cartProducts.reduce((total, product) => {
-                return total + (product.checked ? product.price * product.quantity : 0);
+                return total + (product.checked ? product.PRICE * product.quantity : 0);
             }, 0);
         },
         finalPrice() {
@@ -206,11 +206,11 @@ export default {
         replaceProductFromQuery() {
             // query에서 넘어온 값을 이용해 새로운 상품 데이터 만들기
             const newProduct = {
-                id: Number(this.$route.query.id), // 고유 id 생성
-                seller: this.$route.query.seller,
-                name: this.$route.query.name,
-                price: Number(this.$route.query.price),
-                image: this.$route.query.image, // 기본 이미지
+                PRODUCTID: Number(this.$route.query.PRODUCTID), // 고유 id 생성
+                VENDOR: this.$route.query.VENDOR,
+                NAME: this.$route.query.NAME,
+                PRICE: Number(this.$route.query.PRICE),
+                THUMBNAILIMAGE: this.$route.query.THUMBNAILIMAGE, // 기본 이미지
                 quantity: Number(this.$route.query.quantity),
                 checked: true,
             };
@@ -229,11 +229,11 @@ export default {
             handler(newQuery) {
                 // shopModalCompo로부터 데이터를 넘겨받았는지 확인
                 if (
-                    newQuery.id &&
-                    newQuery.seller &&
-                    newQuery.name &&
-                    newQuery.price &&
-                    newQuery.image &&
+                    newQuery.PRODUCTID &&
+                    newQuery.VENDOR &&
+                    newQuery.NAME &&
+                    newQuery.PRICE &&
+                    newQuery.THUMBNAILIMAGE &&
                     newQuery.quantity
                 ) {
                     this.replaceProductFromQuery();
@@ -302,7 +302,7 @@ export default {
 .product-image {
     width: 100px;
     height: 100px;
-    object-fit: cover;
+    object-fit: contain;
     margin-left: 48px; /* Checkbox 크기만큼 왼쪽 여백 */
 }
 

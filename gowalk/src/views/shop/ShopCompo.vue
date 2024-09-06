@@ -4,21 +4,27 @@
             <div
                 class="product-item"
                 v-for="product in nowLike === false ? products : likeProducts"
-                :key="product.id"
-                @click="goToProduct(product.id)"
+                :key="product.PRODUCTID"
+                @click="goToProduct(product.PRODUCTID)"
             >
                 <div class="product-image-container">
-                    <img :src="product.image" alt="Product Image" class="product-image" />
+                    <img :src="product.THUMBNAILIMAGE" alt="Product Image" class="product-image" />
 
                     <div v-if="product.isBest" class="best-icon">BEST</div>
                     <!-- 좋아요(찜) 버튼 -->
-                    <div class="heart-icon" :class="{ liked: product.liked }" @click.stop="toggleLike(product)">♥</div>
+                    <div
+                        class="heart-icon"
+                        :class="{ liked: product.ISLIKE === 'N' ? false : true }"
+                        @click.stop="toggleLike(product)"
+                    >
+                        ♥
+                    </div>
                 </div>
 
                 <div class="product-info">
-                    <p class="product-seller">{{ product.seller }}</p>
-                    <h3 class="product-name">{{ product.name }}</h3>
-                    <p class="product-price">{{ product.price | currency }}</p>
+                    <p class="product-seller">{{ product.VENDOR }}</p>
+                    <h3 class="product-name">{{ product.NAME }}</h3>
+                    <p class="product-price">{{ product.PRICE | currency }}</p>
                 </div>
             </div>
 
@@ -47,6 +53,7 @@
 
 <script>
 import spinnerCompo from "@/components/layout/SpinnerCompo.vue"; // 스피너 컴포넌트 import
+import { shopApiRequest } from "@/views/shop/util/shopApi";
 
 export default {
     name: "ProductList",
@@ -207,6 +214,16 @@ export default {
             loading: false, // 스피너 표시 여부
         };
     },
+    mounted: function () {
+        // 일반 상품 조회
+        shopApiRequest.getItemList(this.page).then((response) => {
+            // data = response.data;
+
+            console.log(response.data);
+            this.products = response.data.itemList;
+            this.page++;
+        });
+    },
     methods: {
         toggleLike(product) {
             product.liked = !product.liked; // 좋아요 상태를 토글합니다.
@@ -277,7 +294,7 @@ export default {
     left: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover; /* 이미지가 꽉 차도록 */
+    object-fit: contain; /* 이미지가 꽉 차도록 */
 }
 
 .best-icon {

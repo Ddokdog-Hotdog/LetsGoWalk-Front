@@ -4,14 +4,14 @@
             <backButtonCompo />
             <!-- 상품 상세 이미지 -->
             <div class="product-image-container">
-                <img :src="data.image" alt="Product Image" class="product-image" />
+                <img :src="data.THUMBNAILIMAGE" alt="Product Image" class="product-image" />
             </div>
 
             <!-- 상품 정보 -->
             <div class="product-info">
-                <p class="product-seller">{{ data.seller }}</p>
-                <h1 class="product-name">{{ data.name }}</h1>
-                <p class="product-price">{{ data.price | currency }}</p>
+                <p class="product-seller">{{ data.VENDOR }}</p>
+                <h1 class="product-name">{{ data.NAME }}</h1>
+                <p class="product-price">{{ data.PRICE | currency }}</p>
             </div>
 
             <!-- 구분선 -->
@@ -20,7 +20,7 @@
             <!-- 상품 상세 정보 -->
             <div class="detail-info">
                 <h2 class="info-title">상품정보</h2>
-                <img :src="data.detailImage" alt="Detail Image" class="detail-image" />
+                <img :src="data.DETAILIMAGE" alt="Detail Image" class="detail-image" />
             </div>
 
             <hr />
@@ -45,11 +45,11 @@
 
         <shopModalCompo
             ref="shopModal"
-            :id="data.id"
-            :name="data.name"
-            :seller="data.seller"
-            :price="data.price"
-            :image="data.image"
+            :PRODUCTID="data.PRODUCTID"
+            :NAME="data.NAME"
+            :VENDOR="data.VENDOR"
+            :PRICE="data.PRICE"
+            :THUMBNAILIMAGE="data.THUMBNAILIMAGE"
         >
             <!-- 모달에 들어갈 내용 -->
         </shopModalCompo>
@@ -61,6 +61,7 @@
 <script>
 import shopModalCompo from "@/views/shop/ShopModalCompo.vue";
 import backButtonCompo from "@/components/layout/BackCompo.vue";
+import { shopApiRequest } from "@/views/shop/util/shopApi";
 
 export default {
     props: {
@@ -101,6 +102,13 @@ export default {
             return new Intl.NumberFormat("ko-KR", { style: "currency", currency: "KRW" }).format(value);
         },
     },
+    mounted: function () {
+        // 상품 상세페이지
+        shopApiRequest.getItemDetail(this.id).then((response) => {
+            console.log(response.data);
+            this.data = response.data.itemDetail;
+        });
+    },
 };
 </script>
 
@@ -122,7 +130,7 @@ export default {
 .product-image {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
 }
 
 .product-info {
@@ -160,7 +168,7 @@ export default {
 .detail-image {
     width: 100%;
     height: 500px;
-    object-fit: cover;
+    object-fit: contain;
 }
 
 .action-buttons {
