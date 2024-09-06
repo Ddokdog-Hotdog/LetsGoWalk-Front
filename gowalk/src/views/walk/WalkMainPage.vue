@@ -43,8 +43,12 @@ export default {
         curLocation() {
             return this.$store.getters["walkStore/getCurLocation"];
         },
+        isWalking() {
+            return this.$store.getters["walkStore/isWalking"];
+        },
     },
     async created() {
+        this.isWalking && this.$router.push("/walk/onwalk");
         const now = new Date();
         const today = {
             memberId: 0,

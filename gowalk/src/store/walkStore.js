@@ -18,6 +18,7 @@ const state = {
         interval: 2000, // 경로 저장간격
         dogs: [],
     },
+    trackingInterval: null,
 };
 
 const mutations = {
@@ -46,6 +47,9 @@ const mutations = {
         state.walks.curLocation.lat = lat;
         state.walks.curLocation.lng = lng;
     },
+    setTrackingInterval(state, interval) {
+        state.trackingInterval = interval;
+    },
 };
 
 const actions = {
@@ -54,27 +58,34 @@ const actions = {
         commit("setDailyWalks", response.data.walks);
     },
     startTracking({ commit, state, dispatch }) {
+        if (state.trackingInterval) {
+            clearInterval(state.trackingInterval);
+        }
         const trackingInterval = setInterval(() => {
-            if (state.walks.isWalking) {
-                navigator.geolocation.getCurrentPosition((position) => {
-                    const point = {
-                        recordTime: new Date().toISOString(),
-                        location: {
-                            type: "Point",
-                            coordinates: [position.coords.longitude, position.coords.latitude],
-                        },
-                    };
-                    commit("addToRoute", point);
-
-                    if (state.walks.tmpRoute.length >= 20) {
-                        dispatch("sendRoute");
-                        commit("clearTmpRoute");
-                    }
-                });
-            } else {
-                clearInterval(trackingInterval); // 산책이 종료되면 트래킹 중지
+            if (!state.walks.isWalking) {
+                clearInterval(state.trackingInterval);
+                commit("setTrackingInterval", null);
+                return;
             }
-        }, state.walks.interval); //interval 시간마다 반복
+
+            navigator.geolocation.getCurrentPosition((position) => {
+                const point = {
+                    recordTime: new Date().toISOString(),
+                    location: {
+                        type: "Point",
+                        coordinates: [position.coords.longitude, position.coords.latitude],
+                    },
+                };
+                commit("addToRoute", point);
+
+                if (state.walks.tmpRoute.length >= 20) {
+                    dispatch("sendRoute");
+                    commit("clearTmpRoute");
+                }
+            });
+        }, state.walks.interval);
+
+        commit("setTrackingInterval", trackingInterval);
     },
     async sendRoute({ state }) {
         const update = {
@@ -82,9 +93,10 @@ const actions = {
             walkId: state.walks.walkId,
             walkPaths: state.walks.tmpRoute,
         };
+        console.log("경로 보내기...", state.walks.tmpRoute);
         const response = await walkUpdate(update);
-        console.log(response.data);
-        state.walks.total;
+        state.walks.distance = response.data.totalDistance;
+        state.walks.dogs = response.data.dogs;
     },
     startWalk({ commit, dispatch }, initWalk) {
         commit("startWalk", initWalk);

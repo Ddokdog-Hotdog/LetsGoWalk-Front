@@ -39,7 +39,6 @@ export default {
                     this.setCurLocation({ lat, lng });
                 },
                 () => {
-                    console.error("위치 정보를 가져올 수 없습니다.");
                     this.map = initializeMap("map", defaultPosition[0], defaultPosition[1]); // 기본 위치로 지도 초기화
                 }
             );
