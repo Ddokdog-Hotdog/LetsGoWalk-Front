@@ -81,7 +81,7 @@ export const drawPolyline = (path, map) => {
     const polyline = new kakao.maps.Polyline({
         path: path.map((point) => new kakao.maps.LatLng(point.location.coordinates[1], point.location.coordinates[0])),
         strokeWeight: 5,
-        strokeColor: "#FF0000",
+        strokeColor: "699BF7",
         strokeOpacity: 0.7,
         strokeStyle: "solid",
     });
