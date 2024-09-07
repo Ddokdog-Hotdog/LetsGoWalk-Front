@@ -1,23 +1,15 @@
 <template>
     <div class="map-wrapper">
+        <WalkMenuCompo />
         <WalkCalendar @date-selected="testcal" class="overlay-card" />
         <KakaoMap class="kakao-map" />
-        <div class="overlay-container">
-            <WalkStartButton @button-clicked="walkStartButtonClick" class="overlay-button" />
-            <PetSelectionModal
-                :is-visible="selectModalVisible"
-                @close="closeSelectModal"
-                @start-walk="vaildAndstartWalk"
-            />
-        </div>
     </div>
 </template>
 
 <script>
 import WalkCalendar from "@/views/walk/components/WalkCalendar.vue";
 import KakaoMap from "@/views/walk/components/KakaoMap.vue";
-import WalkStartButton from "@/views/walk/components/button/WalkStartButton.vue";
-import PetSelectionModal from "@/views/walk/components/modal/PetSelectionModal.vue";
+import WalkMenuCompo from "@/views/walk/components/WalkMenuCompo.vue";
 import { walkStart } from "@/views/walk/util/walkApi";
 import { mapActions, mapGetters } from "vuex";
 
@@ -25,9 +17,8 @@ export default {
     name: "WalkSummaryPage",
     components: {
         KakaoMap,
-        WalkStartButton,
-        PetSelectionModal,
         WalkCalendar,
+        WalkMenuCompo,
     },
     data() {
         return {

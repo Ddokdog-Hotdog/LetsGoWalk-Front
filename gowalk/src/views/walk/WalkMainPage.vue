@@ -1,5 +1,6 @@
 <template>
     <div class="map-wrapper">
+        <WalkMenuCompo class="menu-compo" />
         <KakaoMap class="kakao-map" />
         <div class="overlay-container">
             <TodayExerciseCard class="overlay-card" />
@@ -18,6 +19,7 @@ import KakaoMap from "@/views/walk/components/KakaoMap.vue";
 import WalkStartButton from "@/views/walk/components/button/WalkStartButton.vue";
 import TodayExerciseCard from "@/views/walk/components/cards/TodayExerciseCard.vue";
 import PetSelectionModal from "@/views/walk/components/modal/PetSelectionModal.vue";
+import WalkMenuCompo from "@/views/walk/components/WalkMenuCompo.vue";
 import { walkStart } from "@/views/walk/util/walkApi";
 import { mapActions, mapGetters } from "vuex";
 
@@ -28,6 +30,7 @@ export default {
         TodayExerciseCard,
         WalkStartButton,
         PetSelectionModal,
+        WalkMenuCompo,
     },
     data() {
         return {
@@ -96,7 +99,7 @@ export default {
 
 .overlay-card {
     position: absolute;
-    top: 20px;
+    top: 50px;
     left: 50%;
     transform: translateX(-50%);
     width: 90%;
@@ -112,5 +115,9 @@ export default {
     width: 90%;
     z-index: 10;
     pointer-events: auto;
+}
+.menu-compo {
+    position: relative;
+    z-index: 20; /* 메뉴바를 TodayExerciseCard보다 위에 표시 */
 }
 </style>

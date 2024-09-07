@@ -31,7 +31,7 @@
                         @click="selectDate(date)"
                     >
                         <span class="date-number">{{ date.getDate() }}</span>
-                        <span v-if="hasWalk" class="paw-icon">🐾</span>
+                        <img v-if="hasWalk" :src="calendarDayOfWalk" alt="Walk Image" class="paw-icon" />
                     </div>
                 </div>
             </div>
@@ -40,6 +40,7 @@
 </template>
 
 <script>
+import calendarDayOfWalk from "@/assets/icon/calendar-walkday.png";
 export default {
     data() {
         return {
@@ -50,6 +51,7 @@ export default {
             touchEndX: 0,
             translateX: 0,
             selectedDate: null,
+            calendarDayOfWalk,
         };
     },
     computed: {
@@ -195,6 +197,8 @@ export default {
 }
 .has-walk .paw-icon {
     position: absolute;
+    width: 50%;
+    height: 50%;
     bottom: 5px;
     right: 5px;
     font-size: 1.2em;
