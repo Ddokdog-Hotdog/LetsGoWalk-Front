@@ -1,6 +1,6 @@
 <template>
     <div class="map-wrapper">
-        <KakaoMap class="kakao-map" />
+        <KakaoMap :enable-polyline="true" class="kakao-map" />
         <div class="overlay-container">
             <ExerciseCard :walk="walk" class="overlay-card" />
             <WalkEndButton @button-clicked="toggleConfirmMoal" class="overlay-button" />

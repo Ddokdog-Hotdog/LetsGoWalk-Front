@@ -1,5 +1,5 @@
 import { dailyWalk, walkUpdate, walkEnd } from "@/views/walk/util/walkApi";
-import { startTracking as trackingModule } from "@/store/modules/tracking";
+import { startTracking as trackingModule, startWalk as startModule } from "@/store/modules/tracking";
 
 const state = {
     monthlyWalk: [],
@@ -11,7 +11,6 @@ const state = {
         },
         walkId: null,
         dogs: [],
-        duration: 0,
         distance: 0,
         route: [],
         tmpRoute: [],
@@ -32,10 +31,7 @@ const mutations = {
         console.log("좌표저장:", state.walks.tmpRoute);
     },
     startWalk(state, initWalk) {
-        state.walks.walkId = initWalk.walkId;
-        state.walks.dogs = initWalk.dogs;
-        state.walks.startTime = initWalk.startTime;
-        state.walks.isWalking = true;
+        startModule(state, initWalk);
     },
     stopWalk(state) {
         state.walks.isWalking = false;
@@ -43,8 +39,12 @@ const mutations = {
     },
     updateWalk(state, { response, time }) {
         console.log("경로 보내기...", state.walks.tmpRoute);
-        state.walks.distance = response.data.totalDistance;
-        state.walks.dogs = response.data.dogs;
+        console.log(response);
+        state.walks.distance = response.totalDistance;
+        state.walks.dogs = response.dogs.map((dog) => ({
+            pet: dog.pet,
+            caloriesBurned: dog.caloriesBurned,
+        }));
         state.walks.tmpRoute = [];
         state.lastRequestTime = time;
     },
@@ -79,7 +79,7 @@ const actions = {
             walkPaths: state.walks.tmpRoute,
         };
         const response = await walkUpdate(update);
-        commit("updateWalk", response, new Date().getTime());
+        commit("updateWalk", { response: response.data, time: new Date().getTime() });
     },
     startWalk({ commit, dispatch }, initWalk) {
         commit("startWalk", initWalk);
@@ -104,8 +104,6 @@ const getters = {
     isWalking: (state) => state.walks.isWalking,
     route: (state) => state.walks.route,
     getCurLocation: (state) => state.walks.curLocation,
-    getDistance: (state) => state.walks.distance,
-    getDogs: (state) => state.walks.dogs,
 };
 
 export default {

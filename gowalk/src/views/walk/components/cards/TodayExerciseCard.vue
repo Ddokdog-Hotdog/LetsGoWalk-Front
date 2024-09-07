@@ -38,20 +38,18 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
 export default {
     name: "ExerciseStatsCard",
-    props: {
-        walks: {
-            type: Array,
-            required: true,
-        },
-    },
     data() {
         return {
             showCalories: false,
         };
     },
     computed: {
+        walks() {
+            return this.$store.getters["walkStore/dailyWalks"];
+        },
         hasData() {
             return this.walks.length > 0;
         },
@@ -84,7 +82,18 @@ export default {
             return calories;
         },
     },
+    async created() {
+        const now = new Date();
+        const today = {
+            memberId: 0,
+            year: now.getFullYear(),
+            month: now.getMonth() + 1,
+            day: now.getDate(),
+        };
+        this.fetchDailyWalks(today);
+    },
     methods: {
+        ...mapActions("walkStore", ["fetchDailyWalks"]),
         toggleCalories() {
             this.showCalories = !this.showCalories;
         },

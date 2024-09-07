@@ -8,11 +8,16 @@ export const startTracking = (commit, state, dispatch) => {
                 return;
             }
 
+            const lat = position.coords.latitude;
+            const lng = position.coords.longitude;
+            state.walks.curLocation.lat = lat;
+            state.walks.curLocation.lng = lng;
+
             const point = {
                 recordTime: new Date().toISOString(),
                 location: {
                     type: "Point",
-                    coordinates: [position.coords.longitude, position.coords.latitude],
+                    coordinates: [lng, lat],
                 },
             };
 
@@ -36,4 +41,24 @@ export const startTracking = (commit, state, dispatch) => {
     );
 
     commit("setTrackingWatcher", watcherId);
+};
+
+export const startWalk = (state, initWalk) => {
+    state.walks.walkId = initWalk.walkId;
+    state.walks.dogs = initWalk.dogs.map((dog) => ({
+        pet: {
+            petId: dog.petId,
+            breedId: dog.breedId,
+            breedName: dog.breedName,
+            name: dog.name,
+            dateOfBirth: dog.dateOfBirth,
+            gender: dog.gender,
+            weight: dog.weight,
+            neutering: dog.neutering,
+            profileImageUrl: dog.profileImageUrl,
+        },
+        caloriesBurned: 0,
+    }));
+    state.walks.startTime = initWalk.startTime;
+    state.walks.isWalking = true;
 };

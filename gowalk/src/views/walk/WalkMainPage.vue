@@ -2,12 +2,11 @@
     <div class="map-wrapper">
         <KakaoMap class="kakao-map" />
         <div class="overlay-container">
-            <TodayExerciseCard :walks="Walks" class="overlay-card" />
-            <WalkStartButton @button-clicked="onButtonClick" class="overlay-button" />
+            <TodayExerciseCard class="overlay-card" />
+            <WalkStartButton @button-clicked="walkStartButtonClick" class="overlay-button" />
             <PetSelectionModal
-                :is-visible="isModalVisible"
-                :pets="pets"
-                @close="closeModal"
+                :is-visible="selectModalVisible"
+                @close="closeSelectModal"
                 @start-walk="vaildAndstartWalk"
             />
         </div>
@@ -19,7 +18,7 @@ import KakaoMap from "@/views/walk/components/KakaoMap.vue";
 import WalkStartButton from "@/views/walk/components/button/WalkStartButton.vue";
 import TodayExerciseCard from "@/views/walk/components/cards/TodayExerciseCard.vue";
 import PetSelectionModal from "@/views/walk/components/modal/PetSelectionModal.vue";
-import { getMyPets, walkStart } from "@/views/walk/util/walkApi";
+import { walkStart } from "@/views/walk/util/walkApi";
 import { mapActions, mapGetters } from "vuex";
 
 export default {
@@ -32,14 +31,10 @@ export default {
     },
     data() {
         return {
-            isModalVisible: false,
-            pets: [],
+            selectModalVisible: false,
         };
     },
     computed: {
-        Walks() {
-            return this.$store.getters["walkStore/dailyWalks"];
-        },
         curLocation() {
             return this.$store.getters["walkStore/getCurLocation"];
         },
@@ -49,28 +44,15 @@ export default {
     },
     async created() {
         this.isWalking && this.$router.push("/walk/onwalk");
-        const now = new Date();
-        const today = {
-            memberId: 0,
-            year: now.getFullYear(),
-            month: now.getMonth() + 1,
-            day: now.getDate(),
-        };
-
-        this.fetchDailyWalks(today);
-        this.fetchPets();
     },
     methods: {
-        ...mapActions("walkStore", ["startWalk", "fetchDailyWalks"]),
+        ...mapActions("walkStore", ["startWalk"]),
         ...mapGetters("walkStore", ["getCurLocation"]),
-        async fetchPets() {
-            this.pets = await getMyPets();
+        walkStartButtonClick() {
+            this.selectModalVisible = true;
         },
-        onButtonClick() {
-            this.isModalVisible = true;
-        },
-        closeModal() {
-            this.isModalVisible = false;
+        closeSelectModal() {
+            this.selectModalVisible = false;
             this.selectedPets = [];
         },
         async vaildAndstartWalk(selectedPets) {
