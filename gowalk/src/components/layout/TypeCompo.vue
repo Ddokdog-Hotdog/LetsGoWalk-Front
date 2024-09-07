@@ -1,32 +1,54 @@
 <template>
     <div class="type-compo">
-        <div v-for="item in items" :key="item.id" :class="{ 'selected': selectedType === item.id }" @click="goToPost(item.id)">
+        <div v-for="item in items" :key="item.id" :class="{ 'selected': selectedType === item.id }" @click="selectType(item.id)">
             {{ item.label }}
         </div>
     </div>
 </template>
 
 <script>
+import axios from "@/axios"
+
 export default {
     data() {
         return {
-            selectedType: "1",
-            items: [
-                { id: '1', label: '산책인증' },
-                { id: '2', label: '정보공유' },
-                { id: '3', label: '곧오픈예정' },
-                { id: '4', label: '이다모' }
-            ]
-        }
-        
+            selectedType: null,
+            items: [],
+        };
+    },
+    created() {
+        this.fetchBoardTypes();
     },
     methods: {
-        goToPost(type) {
-            if (this.selectedType !== type) {
-                this.selectedType = type;
-                this.$router.push({ name: 'PostCompo', params: { postType: type } });
+        async fetchBoardTypes() {
+            try {
+                const response = await axios.get('/post/board');
+                this.items = response.data.map(board => ({
+                    id: parseInt(board.id),
+                    label: board.name
+                }));
+                if (this.items.length > 0 && !this.selectedType) {
+                    this.selectedType = this.items[0].id; // 첫 번째 타입을 기본 선택
+                }
+            } catch (error) {
+                console.error("Error fetching board types:", error);
             }
         },
+        selectType(type) {
+        if (this.selectedType !== type) {
+            this.selectedType = type;
+            this.$emit('typeSelected', type);
+            // 오류를 catch하고 무시하기
+            this.$router.push({ name: 'PostCompo', params: { postType: type } })
+                .catch(err => {
+                    if (err.name !== 'NavigationDuplicated') {
+                        throw err;
+                    }
+                }
+            );
+        }
+    },
+
     }
 }
 </script>
