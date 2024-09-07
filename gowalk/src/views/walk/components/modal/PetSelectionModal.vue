@@ -11,7 +11,7 @@
                     class="pet-item"
                 >
                     <div class="pet-image-container" @click="togglePetSelection(pet.petId)">
-                        <img :src="pet.profileImageUrl" :alt="pet.name" class="pet-image" />
+                        <img :src="pet.profileImageUrl ? pet.profileImageUrl : defaultDogImage" class="pet-image" />
                         <div class="check-icon">✓</div>
                     </div>
                     <p class="pet-name">{{ pet.name }}</p>
@@ -24,8 +24,10 @@
 </template>
 
 <script>
+import defaultDogImage from "@/assets/icon/default-dog-icon.png";
 import ModalCompo from "@/components/layout/ModalCompo.vue";
 import WalkStartButton from "@/views/walk/components/button/WalkStartButton.vue";
+import { getMyPets } from "@/views/walk/util/walkApi";
 export default {
     name: "PetSelectionModal",
     components: {
@@ -37,20 +39,24 @@ export default {
             type: Boolean,
             default: false,
         },
-        pets: {
-            type: Array,
-            required: true,
-        },
+    },
+    async created() {
+        this.fetchPets();
     },
     data() {
         return {
+            defaultDogImage,
             selectedPets: [],
+            pets: [],
         };
     },
     methods: {
         closeModal() {
             this.$emit("close");
             this.selectedPets = [];
+        },
+        async fetchPets() {
+            this.pets = await getMyPets();
         },
         togglePetSelection(petId) {
             const index = this.selectedPets.indexOf(petId);
@@ -104,10 +110,10 @@ export default {
     flex-direction: column;
     align-items: center;
     cursor: pointer;
-    margin-right: 2vh;
+    margin-right: 2.5vh;
+    margin-left: 2.5vh;
     position: relative;
     min-width: 50px;
-    max-width: 100px;
 }
 
 .pet-image-container {

@@ -8,6 +8,8 @@
                     <span class="unit">h</span>
                     <span class="number">{{ walkTimeMinutes }}</span>
                     <span class="unit">m</span>
+                    <span class="number">{{ walkTimeSeconds }}</span>
+                    <span class="unit">s</span>
                 </div>
             </div>
             <div class="stat">
@@ -21,8 +23,8 @@
         <hr class="divider" />
         <transition name="slide-fade">
             <div v-if="showCalories" class="dog-calories">
-                <div v-for="(calories, name) in dogCalories" :key="name" class="dog-calorie-item">
-                    <span>{{ name }}가 {{ Math.round(calories) }}</span>
+                <div v-for="dog in dogs" :key="dog.pet.petId" class="dog-calorie-item">
+                    <span>{{ dog.pet.name }}가 {{ Math.round(dog.caloriesBurned) }}</span>
                     <span class="unit">KCAL</span>
                     <span> 를 소비했어요</span>
                 </div>
@@ -35,51 +37,76 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
     name: "ExerciseCard",
-    props: {
-        walk: {
-            type: Object,
-            required: true,
-        },
-    },
     data() {
         return {
             showCalories: false,
+            currentTime: Date.now(),
+            timer: null,
         };
     },
     computed: {
-        WalkTime() {
-            return this.walk.totalDistance;
+        ...mapState({
+            totalDistance: (state) => state.walkStore.walks.distance,
+            dogs: (state) => state.walkStore.walks.dogs,
+            startTime: (state) => state.walkStore.walks.startTime,
+            isWalking: (state) => state.walkStore.walks.isWalking,
+        }),
+        duration() {
+            if (!this.startTime) return 0;
+            return Math.floor((this.currentTime - new Date(this.startTime).getTime()) / 1000);
         },
         walkTimeHours() {
-            return Math.floor(this.WalkTime / 3600);
+            return Math.floor(this.duration / 3600);
         },
         walkTimeMinutes() {
-            return Math.floor((this.WalkTime % 3600) / 60)
+            return Math.floor((this.duration % 3600) / 60)
                 .toString()
                 .padStart(2, "0");
         },
-        WalkDistance() {
-            const distance = this.walk.totalDistance;
-            return (distance / 1000).toFixed(2); // Km
+        walkTimeSeconds() {
+            return (this.duration % 60).toString().padStart(2, "0");
         },
-        dogCalories() {
-            const calories = {};
-            this.walk.dogs.forEach((dog) => {
-                if (calories[dog.pet.name]) {
-                    calories[dog.pet.name] += dog.caloriesBurned;
-                } else {
-                    calories[dog.pet.name] = dog.caloriesBurned;
-                }
-            });
-            return calories;
+        WalkDistance() {
+            return (this.totalDistance / 1000).toFixed(2); // Km
         },
     },
     methods: {
         toggleCalories() {
             this.showCalories = !this.showCalories;
         },
+        startTimer() {
+            this.timer = setInterval(() => {
+                this.currentTime = Date.now();
+            }, 1000);
+        },
+        stopTimer() {
+            if (this.timer) {
+                clearInterval(this.timer);
+                this.timer = null;
+            }
+        },
+    },
+    watch: {
+        isWalking(newValue) {
+            if (newValue) {
+                this.startTimer();
+            } else {
+                this.stopTimer();
+            }
+        },
+    },
+    mounted() {
+        if (this.isWalking) {
+            this.startTimer();
+        }
+        console.log(this.dogs);
+    },
+    beforeDestroy() {
+        this.stopTimer();
     },
 };
 </script>

@@ -1,35 +1,23 @@
 <template>
     <div class="map-wrapper">
-        <WalkMenuCompo class="menu-compo" />
+        <WalkMenuCompo />
+        <WalkCalendar @date-selected="testcal" class="overlay-card" />
         <KakaoMap class="kakao-map" />
-        <div class="overlay-container">
-            <TodayExerciseCard class="overlay-card" />
-            <WalkStartButton @button-clicked="walkStartButtonClick" class="overlay-button" />
-            <PetSelectionModal
-                :is-visible="selectModalVisible"
-                @close="closeSelectModal"
-                @start-walk="vaildAndstartWalk"
-            />
-        </div>
     </div>
 </template>
 
 <script>
+import WalkCalendar from "@/views/walk/components/WalkCalendar.vue";
 import KakaoMap from "@/views/walk/components/KakaoMap.vue";
-import WalkStartButton from "@/views/walk/components/button/WalkStartButton.vue";
-import TodayExerciseCard from "@/views/walk/components/cards/TodayExerciseCard.vue";
-import PetSelectionModal from "@/views/walk/components/modal/PetSelectionModal.vue";
 import WalkMenuCompo from "@/views/walk/components/WalkMenuCompo.vue";
 import { walkStart } from "@/views/walk/util/walkApi";
 import { mapActions, mapGetters } from "vuex";
 
 export default {
-    name: "WalkMainPage",
+    name: "WalkSummaryPage",
     components: {
         KakaoMap,
-        TodayExerciseCard,
-        WalkStartButton,
-        PetSelectionModal,
+        WalkCalendar,
         WalkMenuCompo,
     },
     data() {
@@ -71,6 +59,9 @@ export default {
             this.startWalk(response.data);
             this.$router.push("/walk/onwalk");
         },
+        testcal(selectedDate) {
+            console.log(selectedDate);
+        },
     },
 };
 </script>
@@ -98,11 +89,10 @@ export default {
 }
 
 .overlay-card {
-    position: absolute;
-    top: 50px;
+    position: relative;
     left: 50%;
     transform: translateX(-50%);
-    width: 90%;
+    width: 100%;
     z-index: 10;
     pointer-events: auto;
 }
@@ -115,9 +105,5 @@ export default {
     width: 90%;
     z-index: 10;
     pointer-events: auto;
-}
-.menu-compo {
-    position: relative;
-    z-index: 20; /* 메뉴바를 TodayExerciseCard보다 위에 표시 */
 }
 </style>

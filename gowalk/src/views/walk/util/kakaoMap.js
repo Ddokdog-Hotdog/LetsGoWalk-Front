@@ -1,6 +1,6 @@
+/* global kakao */
 import { kakaoApiKey } from "@/views/walk/util/config";
 
-/* global kakao */
 export const loadKakaoMapScript = (callback) => {
     if (window.kakao && window.kakao.maps) {
         callback();
@@ -39,6 +39,7 @@ export const createMarker = (position, markerImage, map) => {
         image: markerImage,
     });
     marker.setMap(map);
+    return marker;
 };
 
 export const markerImages = {
@@ -63,8 +64,8 @@ export const markerImages = {
             [25, 50]
         );
     },
-    cafe: function () {
-        return this.markerImage(require("@/assets/marker/currentLocation.png"), [35, 35], [22, 25]);
+    myPosition: function () {
+        return this.markerImage(require("@/assets/marker/currentLocation.png"), [35, 35], [19, 19]);
     },
     markerImage(src, size, off) {
         const imageSrc = src;
@@ -76,10 +77,11 @@ export const markerImages = {
 };
 
 export const drawPolyline = (path, map) => {
+    console.log("경로 그리기: ", path);
     const polyline = new kakao.maps.Polyline({
-        path: path.map((coord) => new kakao.maps.LatLng(coord[0], coord[1])),
+        path: path.map((point) => new kakao.maps.LatLng(point.location.coordinates[1], point.location.coordinates[0])),
         strokeWeight: 5,
-        strokeColor: "#FF0000",
+        strokeColor: "699BF7",
         strokeOpacity: 0.7,
         strokeStyle: "solid",
     });
