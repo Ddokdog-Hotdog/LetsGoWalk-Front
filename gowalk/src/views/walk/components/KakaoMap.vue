@@ -115,16 +115,16 @@ export default {
                 this.polylines.push(polyline);
             }
         },
-        drawMonthlyWalks() {
-            this.clearPolyLines();
-            this.monthlyWalk.dailyWalks.forEach((day) => {
-                const polyline = day.walks.map((walk) => drawWalk(walk.route, this.map)); // 월별 폴리라인 추가
+        // drawMonthlyWalks() {
+        //     this.clearPolyLines();
+        //     this.monthlyWalk.dailyWalks.forEach((day) => {
+        //         const polyline = day.walks.map((walk) => drawWalk(walk.route, this.map)); // 월별 폴리라인 추가
 
-                if (polyline) {
-                    this.polylines.push(polyline);
-                }
-            });
-        },
+        //         if (polyline) {
+        //             this.polylines.push(polyline);
+        //         }
+        //     });
+        // },
         clearPolyLines() {
             console.log("경로 지우기: ", this.polylines);
             this.polylines.forEach((polyline) => {
@@ -133,6 +133,24 @@ export default {
                 }
             });
             this.polylines = [];
+        },
+        drawMonthlyWalks() {
+            this.clearPolyLines();
+            if (this.monthlyWalk && this.monthlyWalk.dailyWalks) {
+                console.log("월간 걷기 데이터:", this.monthlyWalk); // 전체 데이터 로깅
+                this.monthlyWalk.dailyWalks.forEach((day, dayIndex) => {
+                    console.log(`${dayIndex + 1}일차 걷기 데이터:`, day); // 일별 데이터 로깅
+                    day.walks.forEach((walk, walkIndex) => {
+                        console.log(`${dayIndex + 1}일차 ${walkIndex + 1}번째 걷기 경로:`, walk.route); // 각 걷기 경로 로깅
+                        const polyline = drawWalk(walk.route, this.map);
+                        if (polyline) {
+                            this.polylines.push(polyline);
+                        }
+                    });
+                });
+            } else {
+                console.warn("월간 걷기 데이터가 없습니다.");
+            }
         },
     },
 };

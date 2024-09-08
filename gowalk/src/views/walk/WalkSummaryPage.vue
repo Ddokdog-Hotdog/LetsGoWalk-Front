@@ -14,6 +14,7 @@
 </template>
 
 <script>
+import { nextTick } from "vue";
 import WalkCalendar from "@/views/walk/components/WalkCalendar.vue";
 import KakaoMap from "@/views/walk/components/KakaoMap.vue";
 import WalkMenuCompo from "@/views/walk/components/WalkMenuCompo.vue";
@@ -53,6 +54,7 @@ export default {
         async dateSelected(selectedDate) {
             console.log("날짜선택: ", selectedDate);
             this.setDailyWalks(selectedDate.walks);
+            await nextTick();
             this.monthlyCardVisible = false;
             this.dailyCardVisible = true;
             this.$refs.kakaoMap.drawDailyWalks();
@@ -60,6 +62,7 @@ export default {
         async monthSelcted() {
             this.monthlyCardVisible = true;
             this.dailyCardVisible = false;
+            await nextTick();
             this.$refs.kakaoMap.drawMonthlyWalks();
         },
     },
