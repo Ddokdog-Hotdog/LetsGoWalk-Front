@@ -1,17 +1,17 @@
 <template>
     <div>
-        <backButtonCompo />
         <div class="product-detail">
+            <backButtonCompo />
             <!-- 상품 상세 이미지 -->
             <div class="product-image-container">
-                <img :src="data.image" alt="Product Image" class="product-image" />
+                <img :src="data.THUMBNAILIMAGE" alt="Product Image" class="product-image" />
             </div>
 
             <!-- 상품 정보 -->
             <div class="product-info">
-                <p class="product-seller">{{ data.seller }}</p>
-                <h1 class="product-name">{{ data.name }}</h1>
-                <p class="product-price">{{ data.price | currency }}</p>
+                <p class="product-seller">{{ data.VENDOR }}</p>
+                <h1 class="product-name">{{ data.NAME }}</h1>
+                <p class="product-price">{{ data.PRICE | currency }}</p>
             </div>
 
             <!-- 구분선 -->
@@ -20,16 +20,16 @@
             <!-- 상품 상세 정보 -->
             <div class="detail-info">
                 <h2 class="info-title">상품정보</h2>
-                <img :src="data.detailImage" alt="Detail Image" class="detail-image" />
+                <img :src="data.DETAILIMAGE" alt="Detail Image" class="detail-image" />
             </div>
 
             <hr />
             <!-- 좋아요와 구매하기 버튼 -->
             <div class="action-buttons">
-                <button class="like-button" @click="toggleLike">
+                <button class="like-button" @click="toggleLike(data)">
                     <img
                         :src="
-                            data.liked
+                            data.ISLIKE === 'Y'
                                 ? require('@/assets/icon/heart-active-icon.png')
                                 : require('@/assets/icon/heart-icon.png')
                         "
@@ -43,15 +43,25 @@
             </div>
         </div>
 
-        <shopModalCompo ref="shopModal" :seller="data.seller" :name="data.name" :price="data.price">
+        <shopModalCompo
+            ref="shopModal"
+            :PRODUCTID="data.PRODUCTID"
+            :NAME="data.NAME"
+            :VENDOR="data.VENDOR"
+            :PRICE="data.PRICE"
+            :THUMBNAILIMAGE="data.THUMBNAILIMAGE"
+        >
             <!-- 모달에 들어갈 내용 -->
         </shopModalCompo>
+
+        <!-- <confirmModalCompo ref="confirmModal" :message="`정말로 구매하시겠습니까?`"></confirmModalCompo> -->
     </div>
 </template>
 
 <script>
-import backButtonCompo from "@/components/layout/BackCompo.vue";
 import shopModalCompo from "@/views/shop/ShopModalCompo.vue";
+import backButtonCompo from "@/components/layout/BackCompo.vue";
+import { shopApiRequest } from "@/views/shop/util/shopApi";
 
 export default {
     props: {
@@ -74,12 +84,24 @@ export default {
         };
     },
     components: {
-        backButtonCompo,
         shopModalCompo,
+        backButtonCompo,
+        // confirmModalCompo,
     },
     methods: {
-        toggleLike() {
-            this.data.liked = !this.data.liked;
+        toggleLike(product) {
+            if(product.ISLIKE === 'N'){
+                shopApiRequest.insertItemLike(product.PRODUCTID).then((response) => {
+                    console.log(response.data);
+                    product.ISLIKE = 'Y'; // 좋아요 상태를 토글합니다.
+                })
+
+            }else{
+                shopApiRequest.deleteItemLike(product.PRODUCTID).then((response) => {
+                    console.log(response.data);
+                    product.ISLIKE = 'N'; // 좋아요 상태를 토글합니다.
+                })
+            }
         },
         openModal() {
             // this.isModalVisible = true;
@@ -91,12 +113,21 @@ export default {
             return new Intl.NumberFormat("ko-KR", { style: "currency", currency: "KRW" }).format(value);
         },
     },
+    mounted: function () {
+        // 상품 상세페이지
+        shopApiRequest.getItemDetail(this.id).then((response) => {
+            console.log(response.data);
+            this.data = response.data.itemDetail;
+        });
+    },
 };
 </script>
 
 <style scoped>
 .product-detail {
     padding: 16px;
+    padding-bottom: 100px;
+    padding-top: 30px;
 }
 
 .product-image-container {
@@ -104,12 +135,13 @@ export default {
     height: 500px;
     overflow: hidden;
     position: relative;
+    padding-top: 10px;
 }
 
 .product-image {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
 }
 
 .product-info {
@@ -145,8 +177,12 @@ export default {
 }
 
 .detail-image {
+    /* width: 100%; */
+    /* height: 500px; */
+    /* object-fit: contain; */
+
     width: 100%;
-    height: 500px;
+    height: 100%;
     object-fit: cover;
 }
 

@@ -1,11 +1,24 @@
 <template>
     <div>
-        <h1>Notification compo</h1>
+        <notification-top-compo/>
+        <notification-list-compo/>
     </div>
 </template>
 
 <script>
-export default {};
+import NotificationListCompo from "./NotificationListCompo.vue";
+import NotificationTopCompo from "./NotificationTopCompo.vue";
+export default {
+    components: {
+        NotificationTopCompo,
+        NotificationListCompo,
+    },
+    data(){
+        return {
+
+        }
+    },
+};
 </script>
 
 <style scoped></style>

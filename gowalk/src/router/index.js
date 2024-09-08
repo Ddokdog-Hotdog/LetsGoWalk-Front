@@ -87,14 +87,20 @@ const router = new VueRouter({
 // 전역 네비게이션 가드
 router.beforeEach((to, from, next) => {
     const isLoggedIn = store.getters.isAuthenticated;
-    const isPublicPage = to.path === "/" || to.path === "/login" || to.path === "/auth/register";
+    const isPublicPage =
+        to.path === "/" || to.path === "/login" || to.path === "/auth/register" || to.path === "/auth/success";
+    const isWalking = store.getters["walkStore/isWalking"];
+
+    if (isWalking) {
+        store.dispatch("walkStore/startTracking");
+    }
 
     if (!isLoggedIn && !isPublicPage) {
-        store.commit("showLoginModal", true); // 보호된 페이지에서만 모달 표시
-        store.commit("setRedirectPath", to.fullPath); // 리다이렉트 경로 저장
-        next(false); // 페이지 이동 중단
+        store.commit("showLoginModal", true);
+        store.commit("setRedirectPath", to.fullPath);
+        next(false);
     } else {
-        store.commit("showLoginModal", false); // 로그인 페이지나 메인 페이지에서는 모달 숨김
+        store.commit("showLoginModal", false);
         next();
     }
 });

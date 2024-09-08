@@ -60,6 +60,7 @@ export default {
     /*padding-bottom: 40px; /* 하단 네비게이션  높이만큼 마진 추가 */
     /*padding-top: 20px;
     /*하단 네비게이션 바 높이만큼 마진 추가 */
+    /* overflow-y: auto; */
 
     height: 100%;
 }
