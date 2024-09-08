@@ -1,22 +1,20 @@
 <template>
     <div class="post-detail-good-compo" @click="toggleLike">
-        좋아요<div class="heart-icon" :class="{ 'liked': isLiked }">{{ isLiked ? '♥' : '♡' }}</div>
+        좋아요 <div class="heart-icon" :class="{ 'liked': isLiked }">{{ isLiked ? '♥' : '♡' }}</div>
     </div>
 </template>
 
 <script>
 export default {
-    data(){
-        return {
-            isLiked: false
-        }
+    props: {
+        isLiked: Boolean,
+        likesCount: Number
     },
     methods: {
         toggleLike() {
-            this.isLiked = !this.isLiked;
+            this.$emit('toggle-like'); // 부모 컴포넌트의 메소드 호출
         }
-    },
-
+    }
 }
 </script>
 

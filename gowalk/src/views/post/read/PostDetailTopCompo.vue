@@ -1,8 +1,6 @@
 <template>
     <div class="post-top-compo">
         <back-compo/>
-        <div style="margin: 0 0 5px 0;">{{ board.type }}</div>
-        <div style="width: 40px;"></div>
     </div>
 </template>
 
@@ -13,13 +11,8 @@ export default {
     components: {
         BackCompo
     },
-    data() {
-        return {
-            name: 'PostDetailTopCompo',
-            board: {
-                type: "자유게시판"
-            },
-        }
+    props: {
+        boardType: String
     }
 }
 </script>

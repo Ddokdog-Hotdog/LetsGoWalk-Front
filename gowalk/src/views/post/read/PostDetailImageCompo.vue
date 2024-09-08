@@ -1,17 +1,13 @@
 <template>
     <div>
-        <img :src="PostImage1Src" alt="PostImage1">
-        <img :src="PostImage2Src" alt="PostImage2">
+        <img v-for="image in images" :src="image" :alt="'Post Image ' + image" :key="image">
     </div>
 </template>
 
 <script>
 export default {
-    data(){
-        return {
-            PostImage1Src : require("@/assets/writePostCompo/5.png"),
-            PostImage2Src : require("@/assets/writePostCompo/6.png"),
-        }
+    props: {
+        images: Array
     }
 }
 </script>

@@ -25,7 +25,7 @@ export default {
         return {
             name: "PostCompo",
             postCreateButtonSrc: require("@/assets/postListCompo/createPost.png"),
-            currentType: null,
+            currentType: 1,
         };
     },
     methods: {

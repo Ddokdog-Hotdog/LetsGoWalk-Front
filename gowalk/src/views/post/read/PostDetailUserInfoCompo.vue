@@ -1,34 +1,50 @@
 <template>
     <div class="post-detail-userinfo-compo">
-        <!-- <div>{{ member.profile }}</div> -->
         <div class="post-detail-userinfo-compo-profile">
-            <img :src="postListProfileSrc" alt="profile">
+            <img :src="displayedImage" @error="handleImageError" alt="profile">
         </div>
         <div class="post-detail-userinfo-compo-info">
-            <div>{{ member.nickname }}</div>
-            <div class="post-detail-userinfo-compo-info-detail">
-                <div>{{ post.createdAt}}</div>
-                <div>❤️ {{ post.goods}}</div>
-            </div>
+        <div>{{ computedUserInfo.nickname }}</div>
+        <div class="post-detail-userinfo-compo-info-detail">
+            <div>{{ postCreatedAt }}</div>
+            <div>❤️ {{ likesCount }}</div>
+        </div>
         </div>
     </div>
 </template>
 
 <script>
 export default {
-    data() {
-        return {
-            postListProfileSrc: require("@/assets/postListCompo/postListProfile.png"),
-            components: {
-                
-            },
-            member: {
-                nickname: "jjongs",
-            },
-            post : {
-                createdAt : "2024.09.06",
-                goods: 3,
-            },
+    props: {
+        userInfo: {
+            type: Object,
+            default: () => ({ nickname: '', profileImage: '' })
+        },
+            postCreatedAt: {
+            type: String,
+            default: ''
+        },
+        likesCount: {
+            type: Number,
+            default: 0
+        }
+    },
+    computed: {
+        computedUserInfo() {
+        // 기본값으로 빈 객체를 반환하거나, 필요한 기본 값을 설정합니다.
+            return {
+                nickname: this.userInfo?.nickname || '익명',
+                profileImage: this.userInfo?.profileImage || require("@/assets/icon/default-dog-icon.png")
+            };
+        },
+        displayedImage() {
+            // 이미지 경로가 없을 경우 기본 이미지를 사용합니다.
+            return this.computedUserInfo.profileImage;
+        }
+    },
+    methods: {
+        handleImageError() {
+            this.computedUserInfo.profileImage = require("@/assets/icon/default-dog-icon.png");
         }
     }
 }
@@ -55,5 +71,12 @@ export default {
 }
 .post-detail-userinfo-compo-info-detail div{
     margin: 0 10px 0 0;
+}
+.post-detail-userinfo-compo-profile{
+    align-content: center;
+}
+.post-detail-userinfo-compo-profile img{
+    height: 50px;
+    width: 50px;
 }
 </style>
