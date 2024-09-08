@@ -48,6 +48,7 @@
 <script>
 import modalCompo from "@/components/layout/ModalCompo.vue";
 import confirmModalCompo from "@/components/layout/ConfirmModalCompo.vue";
+import { shopApiRequest } from "@/views/shop/util/shopApi";
 
 export default {
     name: "shopModalCompo",
@@ -117,6 +118,10 @@ export default {
         },
         addToCart() {
             // Logic to add the item to the cart
+            shopApiRequest.insertCart({productId:this.PRODUCTID, quantity:this.quantity}).then((response) => {
+                console.log(response.data);
+                
+            })
             console.log("장바구니에 추가");
         },
         goToCart() {
