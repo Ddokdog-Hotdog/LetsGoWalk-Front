@@ -1,47 +1,56 @@
 <template>
-    <div class="calendar" @touchstart="touchStart" @touchmove="touchMove" @touchend="touchEnd">
-        <div class="header">
-            <button @click="changeMonth(-1)">&lt;</button>
-            <span>{{ currentYear }}.{{ currentMonth + 1 }}</span>
-            <button @click="changeMonth(1)">&gt;</button>
-        </div>
-        <div class="calendar-container" :style="{ transform: `translateX(${translateX}px)` }">
-            <div class="month-view">
-                <div class="weekdays">
-                    <span
-                        v-for="(day, index) in weekdays"
-                        :key="day"
-                        :class="{ weekend: index === 0 || index === 6 }"
-                        >{{ day }}</span
-                    >
-                </div>
-                <div class="days">
-                    <div
-                        v-for="{ date, isCurrentMonth, hasWalk } in calendarDays"
-                        :key="date.toISOString()"
-                        class="day"
-                        :class="{
-                            'current-month': isCurrentMonth,
-                            'has-walk': hasWalk,
-                            weekend: date.getDay() === 0 || date.getDay() === 6,
-                            sunday: date.getDay() === 0,
-                            saturday: date.getDay() === 6,
-                            selected: isSelected(date),
-                        }"
-                        @click="selectDate(date)"
-                    >
-                        <span class="date-number">{{ date.getDate() }}</span>
-                        <img v-if="hasWalk" :src="calendarDayOfWalk" alt="Walk Image" class="paw-icon" />
+    <transition name="slide-up" mode="out-in">
+        <div v-show="isVisible" class="calendar" @touchstart="touchStart" @touchmove="touchMove" @touchend="touchEnd">
+            <div class="header">
+                <button @click="changeMonth(-1)">&lt;</button>
+                <span>{{ currentYear }}.{{ currentMonth + 1 }}</span>
+                <button @click="changeMonth(1)">&gt;</button>
+            </div>
+            <div class="calendar-container" :style="{ transform: `translateX(${translateX}px)` }">
+                <div class="month-view">
+                    <div class="weekdays">
+                        <span
+                            v-for="(day, index) in weekdays"
+                            :key="day"
+                            :class="{ weekend: index === 0 || index === 6 }"
+                            >{{ day }}</span
+                        >
+                    </div>
+                    <div class="days">
+                        <div
+                            v-for="{ date, isCurrentMonth, hasWalk } in calendarDays"
+                            :key="date.toISOString()"
+                            class="day"
+                            :class="{
+                                'current-month': isCurrentMonth,
+                                'has-walk': hasWalk,
+                                weekend: date.getDay() === 0 || date.getDay() === 6,
+                                sunday: date.getDay() === 0,
+                                saturday: date.getDay() === 6,
+                                selected: isSelected(date),
+                            }"
+                            @click="selectDate(date)"
+                        >
+                            <span class="date-number">{{ date.getDate() }}</span>
+                            <img v-if="hasWalk" :src="calendarDayOfWalk" alt="Walk Image" class="paw-icon" />
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </transition>
 </template>
 
 <script>
-import calendarDayOfWalk from "@/assets/icon/calendar-walkday.png";
+import { mapActions, mapState } from "vuex";
+
 export default {
+    props: {
+        isVisible: {
+            type: Boolean,
+            default: true,
+        },
+    },
     data() {
         return {
             currentDate: new Date(),
@@ -50,11 +59,12 @@ export default {
             touchStartX: 0,
             touchEndX: 0,
             translateX: 0,
-            selectedDate: null,
-            calendarDayOfWalk,
+            selectedDate: new Date(),
+            calendarDayOfWalk: require("@/assets/icon/calendar-walkday.png"),
         };
     },
     computed: {
+        ...mapState("walkStore", ["monthlyWalk"]),
         currentYear() {
             return this.currentDate.getFullYear();
         },
@@ -75,12 +85,7 @@ export default {
                 days.push({
                     date: new Date(startDay),
                     isCurrentMonth: startDay.getMonth() === month,
-                    hasWalk: this.walkDates.some(
-                        (walkDate) =>
-                            walkDate.getDate() === startDay.getDate() &&
-                            walkDate.getMonth() === startDay.getMonth() &&
-                            walkDate.getFullYear() === startDay.getFullYear()
-                    ),
+                    hasWalk: this.hasWalkOnDate(startDay),
                 });
                 startDay.setDate(startDay.getDate() + 1);
             }
@@ -89,13 +94,16 @@ export default {
         },
     },
     methods: {
-        changeMonth(delta) {
+        ...mapActions("walkStore", ["fetchMonthlyWalk"]),
+        async changeMonth(delta) {
             this.currentDate = new Date(this.currentYear, this.currentMonth + delta, 1);
-            this.fetchWalkData();
+            await this.fetchWalkData();
+            this.$emit("month-selected");
         },
-        selectDate(date) {
+        async selectDate(date) {
             this.selectedDate = date;
-            this.$emit("date-selected", date);
+            const dailyWalks = this.getDailyWalksForDate(date);
+            this.$emit("date-selected", { date, walks: dailyWalks });
         },
         isSelected(date) {
             return (
@@ -105,14 +113,31 @@ export default {
                 date.getFullYear() === this.selectedDate.getFullYear()
             );
         },
-        fetchWalkData() {
-            // API 호출 로직 (현재는 임시 데모 데이터 사용)
-            this.walkDates = [
-                new Date(this.currentYear, this.currentMonth, 3),
-                new Date(this.currentYear, this.currentMonth, 5),
-                new Date(this.currentYear, this.currentMonth, 7),
-                new Date(this.currentYear, this.currentMonth, 10),
-            ];
+        async fetchWalkData() {
+            const monthly = {
+                memberId: 0,
+                year: this.currentYear,
+                month: this.currentMonth + 1,
+            };
+            await this.fetchMonthlyWalk(monthly);
+        },
+        hasWalkOnDate(date) {
+            if (!this.monthlyWalk || !this.monthlyWalk.dailyWalks) return false;
+            return this.monthlyWalk.dailyWalks.some((dailyWalk) => this.isSameDate(new Date(dailyWalk.date), date));
+        },
+        getDailyWalksForDate(date) {
+            if (!this.monthlyWalk || !this.monthlyWalk.dailyWalks) return [];
+            const dailyWalk = this.monthlyWalk.dailyWalks.find((dailyWalk) =>
+                this.isSameDate(new Date(dailyWalk.date), date)
+            );
+            return dailyWalk ? dailyWalk.walks : [];
+        },
+        isSameDate(date1, date2) {
+            return (
+                date1.getFullYear() === date2.getFullYear() &&
+                date1.getMonth() === date2.getMonth() &&
+                date1.getDate() === date2.getDate()
+            );
         },
         touchStart(event) {
             this.touchStartX = event.touches[0].clientX;
@@ -215,5 +240,13 @@ export default {
 .selected {
     background-color: #e6f7ff;
     border: 2px solid #1890ff;
+}
+/* 슬라이드 애니메이션 */
+.slide-up-enter-active,
+.slide-up-leave-active {
+    transition: transform 0.3s ease;
+}
+.slide-up-enter, .slide-up-leave-to /* leave-active in <2.1.8 */ {
+    transform: translateY(100%);
 }
 </style>

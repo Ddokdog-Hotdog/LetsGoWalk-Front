@@ -1,23 +1,25 @@
 <template>
     <div class="comment-list-compo">
-        <div v-for="comment in comments" :key="comment.id" class="comment-list-compo-comtainer" :class="{ 'is-reply': comment.isReply }">
+        <div v-for="comment in comments" :key="comment.id" class="comment-list-compo-container" :class="{'is-reply': comment.commentsId}">
             <div>
-                <img class="user-profile" :src="ProfileSrc" alt="profile">
+                <img class="user-profile" :src="comment.profileImg || defaultProfileUrl" alt="profile" @error="handleImageError">
             </div>
             <div class="comment-list-content-info">
                 <div class="comment-list-userinfo">
-                    <div>{{ comment.member.nickname }}</div>
-                    <div class="comment-list-userinfo-createdAt">{{ comment.createdAt}}</div>
+                    <div>{{ comment.nickname }}</div>
+                    <div class="comment-list-userinfo-createdAt">{{ comment.createdAt }}</div>
                 </div>
                 <div>{{ comment.content }}</div>
-                <div class="comment-list-compo-comtainer-count">
+                <div class="comment-list-compo-container-count" v-if="!comment.commentsId">
                     <div>
-                        <img :src="commentSrc" alt="">
+                        <img :src="commentSrc" alt="comments">
                     </div>
                     <div>
-                        {{ comment.count}}
+                        {{ comment.count }}
                     </div>
                 </div>
+                <!-- CommentListCompo 컴포넌트 내부에서 재귀적으로 자신을 호출하는 부분-->
+                <comment-list-compo v-if="comment.children.length" :comments="comment.children"/>
             </div>
         </div>
     </div>
@@ -25,32 +27,19 @@
 
 <script>
 export default {
-    data(){
+    name: "CommentListCompo",
+    props: {
+        comments: Array
+    },
+    data() {
         return {
-            ProfileSrc : require("@/assets/writePostCompo/5.png"),
             commentSrc: require("@/assets/postListCompo/comment.png"),
-            comments: [
-                {
-                    id: 1,
-                    content: "오늘 저녁은 뭐먹지?",
-                    createdAt: "2024-09-06",
-                    count: 1,
-                    isReply: false,
-                    member: {
-                        nickname: "jjongs",
-                    },
-                },
-                {
-                    id: 2,
-                    content: "회가 최고지 !",
-                    createdAt: "2024-09-06",
-                    count: 1,
-                    isReply: true,
-                    member: {
-                        nickname: "dogdog",
-                    },
-                },
-            ],
+            defaultProfileUrl: require("@/assets/icon/default-dog-icon.png")
+        };
+    },
+    methods: {
+        handleImageError(event) {
+            event.target.src = this.defaultProfileUrl;
         }
     }
 }
@@ -62,14 +51,16 @@ export default {
     height: 50px;
     border-radius: 70%;
 }
-.comment-list-compo-comtainer{
+.comment-list-compo-container{
     width: 100%;
     display: flex;
-    margin:  0 0 0 10px;
+    margin:  0 0 10px 10px;
 }
 .comment-list-content-info{
     text-align: left;
     margin:  0 0 0 10px;
+    padding: 0 30px 0 0;
+    /* max-width: 90%; */
 }
 .comment-list-userinfo{
     display: flex;
