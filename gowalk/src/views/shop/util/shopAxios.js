@@ -6,13 +6,14 @@ const instance = axios.create({
     headers: {
         "Content-Type": "application/json",
     },
+    // withCredentials: true // 필요에 따라 설정
 });
 
 instance.interceptors.request.use(
     (config) => {
         const token = accessToken;
         if (token) {
-            // config.headers["Authorization"] = `Bearer ${token}`; 배포 시에는 주석 풀어야함
+            // config.headers["Authorization"] = `Bearer ${token}`;
         }
         return config;
     },

@@ -26,10 +26,10 @@
             <hr />
             <!-- 좋아요와 구매하기 버튼 -->
             <div class="action-buttons">
-                <button class="like-button" @click="toggleLike">
+                <button class="like-button" @click="toggleLike(data)">
                     <img
                         :src="
-                            data.liked
+                            data.ISLIKE === 'Y'
                                 ? require('@/assets/icon/heart-active-icon.png')
                                 : require('@/assets/icon/heart-icon.png')
                         "
@@ -89,8 +89,19 @@ export default {
         // confirmModalCompo,
     },
     methods: {
-        toggleLike() {
-            this.data.liked = !this.data.liked;
+        toggleLike(product) {
+            if(product.ISLIKE === 'N'){
+                shopApiRequest.insertItemLike(product.PRODUCTID).then((response) => {
+                    console.log(response.data);
+                    product.ISLIKE = 'Y'; // 좋아요 상태를 토글합니다.
+                })
+
+            }else{
+                shopApiRequest.deleteItemLike(product.PRODUCTID).then((response) => {
+                    console.log(response.data);
+                    product.ISLIKE = 'N'; // 좋아요 상태를 토글합니다.
+                })
+            }
         },
         openModal() {
             // this.isModalVisible = true;
@@ -166,9 +177,13 @@ export default {
 }
 
 .detail-image {
+    /* width: 100%; */
+    /* height: 500px; */
+    /* object-fit: contain; */
+
     width: 100%;
-    height: 500px;
-    object-fit: contain;
+    height: 100%;
+    object-fit: cover;
 }
 
 .action-buttons {

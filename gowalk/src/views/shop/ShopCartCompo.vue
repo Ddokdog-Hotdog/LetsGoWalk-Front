@@ -37,7 +37,7 @@
                 <!-- 수량 조절 -->
                 <button @click="decreaseQuantity(product)">-</button>
 
-                <span>{{ product.quantity }}</span>
+                <span>{{ product.QUANTITY }}</span>
 
                 <button @click="increaseQuantity(product)">+</button>
             </div>
@@ -54,9 +54,13 @@
             <p></p>
             <label for="name">이름</label>
             <input id="name" v-model="shippingInfo.name" type="text" placeholder="이름 입력" />
+            <!-- 이름 오류 메시지 -->
+            <p v-if="validationErrors.name" class="error-message">{{ validationErrors.name }}</p>
             <p></p>
             <label for="address">배송지</label>
             <input id="address" v-model="shippingInfo.address" type="text" placeholder="배송지 입력" />
+            <!-- 주소 오류 메시지 -->
+            <p v-if="validationErrors.address" class="error-message">{{ validationErrors.address }}</p>
         </div>
 
         <!-- 결제 정보 섹션 -->
@@ -103,6 +107,8 @@
 <script>
 import backButtonCompo from "@/components/layout/BackCompo.vue";
 import confirmModalCompo from "@/components/layout/ConfirmModalCompo.vue";
+import { shopApiRequest } from "@/views/shop/util/shopApi";
+// import Vue from 'vue';
 
 export default {
     components: {
@@ -112,24 +118,7 @@ export default {
     data() {
         return {
             selectAll: false,
-            cartProducts: [
-                {
-                    id: 1,
-                    name: "상품 1",
-                    price: 20000,
-                    image: "https://via.placeholder.com/100",
-                    quantity: 1,
-                    checked: false,
-                },
-                {
-                    id: 2,
-                    name: "상품 2",
-                    price: 15000,
-                    image: "https://via.placeholder.com/100",
-                    quantity: 1,
-                    checked: false,
-                },
-            ],
+            cartProducts: [],
             shippingInfo: {
                 name: "",
                 address: "",
@@ -137,12 +126,41 @@ export default {
             points: 0,
             currentPoints: 5000,
             isConfirmModalVisible: false, // 모달 표시 여부
+            validationErrors: { // 각 필드에 대한 오류 메시지 저장
+            name: "",
+            address: "",
+        }   ,
         };
+    },
+    mounted: async function(){
+        await shopApiRequest.getCartItemList().then((response) => {
+            console.log(response.data);
+            this.cartProducts = response.data.cartProducts;
+            this.cartProducts.forEach(product => {
+                this.$set(product, 'checked', true); // 반응성 보장
+                // product.checked = true; // 각 객체에 checked 속성 추가
+            });
+            this.currentPoints = response.data.nowPoint;
+            if(response.data.recentAddress !== "NO ORDER"){
+                this.shippingInfo.address = response.data.recentAddress;
+            }
+        })
+        console.log("마운트");
+        // 쿼리 파라미터에 따라 replaceProductFromQuery 호출
+        // 쿼리 파라미터가 있는 경우에만 replaceProductFromQuery 호출
+        if (this.$route.query.PRODUCTID && 
+            this.$route.query.VENDOR && 
+            this.$route.query.NAME && 
+            this.$route.query.PRICE && 
+            this.$route.query.THUMBNAILIMAGE && 
+            this.$route.query.quantity) {
+            this.replaceProductFromQuery();
+        }
     },
     computed: {
         totalPrice() {
             return this.cartProducts.reduce((total, product) => {
-                return total + (product.checked ? product.PRICE * product.quantity : 0);
+                return total + (product.checked ? product.PRICE * product.QUANTITY : 0);
             }, 0);
         },
         finalPrice() {
@@ -158,15 +176,34 @@ export default {
             product.checked = !product.checked;
         },
         increaseQuantity(product) {
-            product.quantity += 1;
+            
+            // shopApiRequest.updateCart({cartItemId: product.CARTID, 
+            //                             productId: product.ID, 
+            //                             quantity: product.QUANTITY+1})
+            // .then((response) => {
+            //     console.log(response.data);
+                product.QUANTITY += 1;
+            // })
         },
         decreaseQuantity(product) {
-            if (product.quantity > 1) {
-                product.quantity -= 1;
+            if (product.QUANTITY > 1) {
+                // shopApiRequest.updateCart({cartItemId: product.CARTID, 
+                //                         productId: product.ID, 
+                //                         quantity: product.QUANTITY-1})
+                // .then((response) => {
+                //     console.log(response.data);
+                    product.QUANTITY -= 1;
+                // })
             }
         },
         removeFromCart(product) {
-            this.cartProducts = this.cartProducts.filter((p) => p.id !== product.id);
+            shopApiRequest.deleteCart({cartItemId: product.CARTID, 
+                                        productId: product.ID, 
+                                        quantity: product.QUANTITY})
+            .then((response) => {
+                console.log(response.data);
+                this.cartProducts = this.cartProducts.filter((p) => p.ID !== product.ID);
+            })
         },
         useAllPoints() {
             this.points = this.currentPoints;
@@ -193,53 +230,127 @@ export default {
             }
         },
         proceedWithPayment() {
+            // 필드 검증
+            if (!this.validateFields()) {
+                return; // 검증 실패시 결제 진행 안함
+            }
+            const paymentUrl = this.isDesktop();
+            
             // 결제 로직을 여기에 작성
             console.log("구매 완료 프로세스 진행");
             // 예: 서버로 결제 요청 보내기, 페이지 이동 등
+            
+            let orderItems = [];
+            this.cartProducts
+                .filter((product) => (product.checked === true))
+                .forEach((product) => (
+                orderItems.push({
+                    cartItemId: product.CARTID,
+                    productId: product.ID,
+                    productName: product.NAME,
+                    quantity: product.QUANTITY
+                })
+            ));
+            let shopOrderItemDTO = {
+                orderItems: orderItems,
+                totalAmount: this.finalPrice,
+                address: this.shippingInfo.address,
+                point: this.points
+            };
 
-            // 결제 성공 페이지로 이동
-            this.$router.push("/shop/payment/complete");
+            console.log("결제 내용 : ", shopOrderItemDTO);
 
-            // 결제 실패 페이지로 이동
-            // this.$router.push("/shop/payment/error");
+            if(paymentUrl){
+                // 현재 결제 요청을 pc에서 한 경우
+                shopApiRequest.pcPayment(shopOrderItemDTO).then((response) => {
+                    console.log(response.data);
+                    // 결제 성공 페이지로 이동
+                    // this.$router.push("/shop/payment/complete");
+                    // 서버에서 반환된 URL로 리디렉션
+                    window.location.href = response.data;
+                }).catch((error) => {
+                    console.log(error);
+                    // 결제 실패 페이지로 이동
+                    this.$router.push("/shop/payment/error");
+                })
+            }else{
+                // 현재 결제 요청을 모바일에서 한 경우
+                shopApiRequest.mobilePayment(shopOrderItemDTO).then((response) => {
+                    console.log(response.data);
+                    // 결제 성공 페이지로 이동
+                    // this.$router.push("/shop/payment/complete");
+                    // 서버에서 반환된 URL로 리디렉션
+                    window.location.href = response.data;
+                }).catch((error) => {
+                    console.log(error);
+                    // 결제 실패 페이지로 이동
+                    this.$router.push("/shop/payment/error");
+                })
+            }
         },
         replaceProductFromQuery() {
             // query에서 넘어온 값을 이용해 새로운 상품 데이터 만들기
             const newProduct = {
-                PRODUCTID: Number(this.$route.query.PRODUCTID), // 고유 id 생성
+                CARTID: 0,
+                ID: Number(this.$route.query.PRODUCTID), // 고유 id 생성
                 VENDOR: this.$route.query.VENDOR,
                 NAME: this.$route.query.NAME,
                 PRICE: Number(this.$route.query.PRICE),
                 THUMBNAILIMAGE: this.$route.query.THUMBNAILIMAGE, // 기본 이미지
-                quantity: Number(this.$route.query.quantity),
+                QUANTITY: Number(this.$route.query.quantity),
                 checked: true,
             };
 
             // cartProducts 배열에 상품을 추가
             this.cartProducts = [newProduct];
 
-            console.log(this.cartProducts);
+        },
+        validateFields() {
+            let isValid = true;
+
+            // 이름 검증
+            if (!this.shippingInfo.name) {
+                this.validationErrors.name = "이름을 입력해주세요.";
+                isValid = false;
+            } else {
+                this.validationErrors.name = "";
+            }
+
+            // 배송지 검증
+            if (!this.shippingInfo.address) {
+                this.validationErrors.address = "배송지를 입력해주세요.";
+                isValid = false;
+            } else {
+                this.validationErrors.address = "";
+            }
+
+            return isValid;
+        },
+        isDesktop() {
+            const userAgent = navigator.userAgent;
+            // 일반적으로 데스크탑에서 사용하는 브라우저 userAgent에 포함된 키워드를 사용
+            return /Windows|Macintosh|Linux/.test(userAgent);
         },
     },
     watch: {
         points: "updatePoints",
         // $route.query가 변경될 때 실행
-        "$route.query": {
-            immediate: true, // 컴포넌트가 처음 로드될 때도 실행
-            handler(newQuery) {
-                // shopModalCompo로부터 데이터를 넘겨받았는지 확인
-                if (
-                    newQuery.PRODUCTID &&
-                    newQuery.VENDOR &&
-                    newQuery.NAME &&
-                    newQuery.PRICE &&
-                    newQuery.THUMBNAILIMAGE &&
-                    newQuery.quantity
-                ) {
-                    this.replaceProductFromQuery();
-                }
-            },
-        },
+        // "$route.query": {
+        //     immediate: true, // 컴포넌트가 처음 로드될 때도 실행
+        //     handler(newQuery) {
+        //         // shopModalCompo로부터 데이터를 넘겨받았는지 확인
+        //         if (
+        //             newQuery.PRODUCTID &&
+        //             newQuery.VENDOR &&
+        //             newQuery.NAME &&
+        //             newQuery.PRICE &&
+        //             newQuery.THUMBNAILIMAGE &&
+        //             newQuery.quantity
+        //         ) {
+        //             this.replaceProductFromQuery();
+        //         }
+        //     },
+        // },
     },
 
     filters: {
@@ -436,5 +547,10 @@ input {
     border-radius: 15px;
     font-size: 15px;
     background-color: rgba(0, 0, 0, 0.09);
+}
+.error-message {
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
 }
 </style>

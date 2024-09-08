@@ -36,7 +36,7 @@ export const getLikesItemList = async (page) => {
 // 찜 누르기
 export const insertItemLike = async (object) => {
     try {
-        return shopAxios.post(shopURL.insertItemLike + `?productId=${object}`);
+        return shopAxios.post(shopURL.like + `?productId=${object}`);
     } catch (error) {
         handleApiError(error, "찜 누르기 중 오류 발생");
     }
@@ -45,7 +45,7 @@ export const insertItemLike = async (object) => {
 // 찜 해제
 export const deleteItemLike = async (object) => {
     try {
-        return shopAxios.delete(shopURL.insertItemLike + `?productId=${object}`);
+        return shopAxios.delete(shopURL.like + `?productId=${object}`);
     } catch (error) {
         handleApiError(error, "찜 해제 중 오류 발생");
     }
@@ -90,7 +90,7 @@ export const updateCart = async (object) => {
 // 장바구니 제거
 export const deleteCart = async (object) => {
     try {
-        return shopAxios.delete(shopURL.deleteCart, object);
+        return shopAxios.delete(shopURL.deleteCart, {data: object});
     } catch (error) {
         handleApiError(error, "장바구니 삭제 중 오류 발생");
     }
@@ -99,7 +99,7 @@ export const deleteCart = async (object) => {
 // 결제
 export const mobilePayment = async (object) => {
     try {
-        return shopAxios.get(shopURL.mobilePayment, object);
+        return shopAxios.post(shopURL.mobilePayment, object);
     } catch (error) {
         handleApiError(error, "모바일 결제 중 오류 발생");
     }
@@ -107,7 +107,7 @@ export const mobilePayment = async (object) => {
 
 export const pcPayment = async (object) => {
     try {
-        return shopAxios.get(shopURL.pcPayment, object);
+        return shopAxios.post(shopURL.pcPayment, object);
     } catch (error) {
         handleApiError(error, "pc 결제 중 오류 발생");
     }
@@ -150,49 +150,49 @@ export const getOrderListAdmin = async (page) => {
 };
 
 export const shopApiRequest = {
-    // 인기 상품 조회
+    // 인기 상품 조회 => 완료
     getBestItemList: getBestItemList,
 
-    // 일반 상품 조회
+    // 일반 상품 조회 => 완료
     getItemList: getItemList,
 
-    // 찜 상품 목록 조회
+    // 찜 상품 목록 조회 => 완료
     getLikesItemList: getLikesItemList,
 
-    // 찜 누르기
+    // 찜 누르기 => 완료
     insertItemLike: insertItemLike,
 
-    // 찜 해제
+    // 찜 해제 => 완료
     deleteItemLike: deleteItemLike,
 
-    // 상품 상세 페이지
+    // 상품 상세 페이지 => 완료
     getItemDetail: getItemDetail,
 
-    // 장바구니 목록 보기
+    // 장바구니 목록 보기 => 완료
     getCartItemList: getCartItemList,
 
-    // 장바구니 담기
+    // 장바구니 담기 => 완료
     insertCart: insertCart,
 
-    // 장바구니 수정 (수량)
+    // 장바구니 수정 (수량) => 완료
     updateCart: updateCart,
 
-    // 장바구니 제거
+    // 장바구니 제거 => 완료
     deleteCart: deleteCart,
 
-    // 결제
+    // 결제 => 완료
     mobilePayment: mobilePayment,
     pcPayment: pcPayment,
 
-    // 환불
+    // 환불 => mypage
     refund: refund,
 
-    // 멤버별 주문 상품 조회
+    // 멤버별 주문 상품 조회 => mypage
     getOrderList: getOrderList,
 
-    // admin 월별 통계
+    // admin 월별 통계 => adminPage
     getOrderListByMonthAdmin: getOrderListByMonthAdmin,
 
-    // admin 주문건별 멤버 정보 및 상품 정보
+    // admin 주문건별 멤버 정보 및 상품 정보 => adminPage
     getOrderListAdmin: getOrderListAdmin,
 };
