@@ -1,8 +1,15 @@
 <template>
     <div class="map-wrapper">
         <WalkMenuCompo />
-        <WalkCalendar @date-selected="testcal" class="overlay-card" />
-        <KakaoMap class="kakao-map" />
+        <WalkCalendar
+            :is-visible="calendarVisible"
+            @date-selected="dateSelected"
+            @month-selected="monthSelcted"
+            class="overlay-card"
+        />
+        <MonthlyExerciseCard class="monthly-card" :is-visible="monthlyCardVisible" />
+        <TodayExerciseCard :is-visible="dailyCardVisible" />
+        <KakaoMap ref="kakaoMap" :enable-summary="true" class="kakao-map" />
     </div>
 </template>
 
@@ -10,8 +17,9 @@
 import WalkCalendar from "@/views/walk/components/WalkCalendar.vue";
 import KakaoMap from "@/views/walk/components/KakaoMap.vue";
 import WalkMenuCompo from "@/views/walk/components/WalkMenuCompo.vue";
-import { walkStart } from "@/views/walk/util/walkApi";
-import { mapActions, mapGetters } from "vuex";
+import TodayExerciseCard from "@/views/walk/components/cards/TodayExerciseCard.vue";
+import MonthlyExerciseCard from "@/views/walk/components/cards/MonthlyExerciseCard.vue";
+import { mapGetters, mapMutations } from "vuex";
 
 export default {
     name: "WalkSummaryPage",
@@ -19,48 +27,40 @@ export default {
         KakaoMap,
         WalkCalendar,
         WalkMenuCompo,
+        MonthlyExerciseCard,
+        TodayExerciseCard,
     },
     data() {
         return {
             selectModalVisible: false,
+            monthlyCardVisible: true,
+            dailyCardVisible: false,
+            calendarVisible: true,
         };
     },
     computed: {
         curLocation() {
             return this.$store.getters["walkStore/getCurLocation"];
         },
-        isWalking() {
-            return this.$store.getters["walkStore/isWalking"];
-        },
-    },
-    async created() {
-        this.isWalking && this.$router.push("/walk/onwalk");
     },
     methods: {
-        ...mapActions("walkStore", ["startWalk"]),
         ...mapGetters("walkStore", ["getCurLocation"]),
-        walkStartButtonClick() {
-            this.selectModalVisible = true;
-        },
+        ...mapMutations("walkStore", ["setDailyWalks"]),
         closeSelectModal() {
             this.selectModalVisible = false;
             this.selectedPets = [];
         },
-        async vaildAndstartWalk(selectedPets) {
-            //산책 시작 요청
-            const { lat, lng } = this.curLocation;
-            const response = await walkStart({
-                memberId: 0,
-                dogs: selectedPets,
-                latitude: lat,
-                longitude: lng,
-            });
-            //Vuex 산책 시작
-            this.startWalk(response.data);
-            this.$router.push("/walk/onwalk");
+        async dateSelected(selectedDate) {
+            console.log("날짜선택: ", selectedDate);
+            this.setDailyWalks(selectedDate.walks);
+            this.monthlyCardVisible = false;
+            this.dailyCardVisible = true;
+            this.$refs.kakaoMap.drawDailyWalks();
         },
-        testcal(selectedDate) {
-            console.log(selectedDate);
+        async monthSelcted() {
+            this.monthlyCardVisible = true;
+            this.dailyCardVisible = false;
+            this.$refs.kakaoMap.drawMonthlyWalks();
         },
     },
 };
@@ -93,16 +93,6 @@ export default {
     left: 50%;
     transform: translateX(-50%);
     width: 100%;
-    z-index: 10;
-    pointer-events: auto;
-}
-
-.overlay-button {
-    position: absolute;
-    bottom: 0px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 90%;
     z-index: 10;
     pointer-events: auto;
 }

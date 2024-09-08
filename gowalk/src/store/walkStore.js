@@ -1,4 +1,4 @@
-import { dailyWalk, walkUpdate, walkEnd } from "@/views/walk/util/walkApi";
+import { dailyWalk, monthlyWalk, walkUpdate, walkEnd } from "@/views/walk/util/walkApi";
 import { startTracking as trackingModule, startWalk as startModule } from "@/store/modules/tracking";
 
 const state = {
@@ -24,6 +24,10 @@ const state = {
 const mutations = {
     setDailyWalks(state, walks) {
         state.dailyWalks = walks;
+    },
+    setMonthlyWalks(state, walks) {
+        state.monthlyWalk = walks;
+        console.log(`${walks.month}월 산책정보: `, walks);
     },
     addToRoute(state, point) {
         state.walks.tmpRoute.push(point);
@@ -67,6 +71,10 @@ const actions = {
     async fetchDailyWalks({ commit }, today) {
         const response = await dailyWalk(today);
         commit("setDailyWalks", response.data.walks);
+    },
+    async fetchMonthlyWalk({ commit }, month) {
+        const response = await monthlyWalk(month);
+        commit("setMonthlyWalks", response.data);
     },
     startTracking({ commit, state, dispatch }) {
         trackingModule(commit, state, dispatch);

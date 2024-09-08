@@ -24,7 +24,6 @@
 </template>
 
 <script>
-import defaultDogImage from "@/assets/icon/default-dog-icon.png";
 import ModalCompo from "@/components/layout/ModalCompo.vue";
 import WalkStartButton from "@/views/walk/components/button/WalkStartButton.vue";
 import { getMyPets } from "@/views/walk/util/walkApi";
@@ -45,7 +44,7 @@ export default {
     },
     data() {
         return {
-            defaultDogImage,
+            defaultDogImage: require("@/assets/icon/default-dog-icon.png"),
             selectedPets: [],
             pets: [],
         };

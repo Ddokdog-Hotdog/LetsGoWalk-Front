@@ -81,11 +81,31 @@ export const drawPolyline = (path, map) => {
     const polyline = new kakao.maps.Polyline({
         path: path.map((point) => new kakao.maps.LatLng(point.location.coordinates[1], point.location.coordinates[0])),
         strokeWeight: 5,
-        strokeColor: "699BF7",
+        strokeColor: "#699BF7",
         strokeOpacity: 0.7,
         strokeStyle: "solid",
     });
 
     polyline.setMap(map);
     return polyline;
+};
+
+export const drawWalk = (path, map) => {
+    console.log("경로 그리기: ", path);
+    if (!path || path.length === 0) {
+        console.warn("경로가 비어있습니다.");
+        return null;
+    }
+    const polyline = new kakao.maps.Polyline({
+        path: path.map((point) => new kakao.maps.LatLng(point.location.coordinates[1], point.location.coordinates[0])),
+        strokeWeight: 5,
+        strokeColor: "699BF7",
+        strokeOpacity: 0.7,
+        strokeStyle: "solid",
+    });
+    polyline.setMap(map);
+    return polyline;
+
+    //중심위치 설정해야함
+    // this.placeMarkerAtStart(walk.startLocation);
 };

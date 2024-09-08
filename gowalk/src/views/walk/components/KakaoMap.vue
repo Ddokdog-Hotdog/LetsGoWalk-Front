@@ -13,6 +13,7 @@ import {
     markerImages,
     createMarker,
     drawPolyline,
+    drawWalk,
 } from "@/views/walk/util/kakaoMap";
 import { defaultPosition } from "@/views/walk/util/config";
 import { mapMutations, mapState } from "vuex";
@@ -23,18 +24,25 @@ export default {
             type: Boolean,
             default: false,
         },
+        enableSummary: {
+            type: Boolean,
+            default: false,
+        },
     },
     data() {
         return {
             map: null,
             marker: null,
             polyline: null,
+            polylines: [],
         };
     },
     computed: {
         ...mapState({
             route: (state) => state.walkStore.walks.route,
             curLocation: (state) => state.walkStore.walks.curLocation,
+            dailyWalk: (state) => state.walkStore.dailyWalks,
+            monthlyWalk: (state) => state.walkStore.monthlyWalk,
         }),
     },
     mounted() {
@@ -98,6 +106,33 @@ export default {
                 this.polyline.setMap(null); // 기존 경로 제거
             }
             this.polyline = drawPolyline(this.route, this.map); // 새로운 경로 그리기
+        },
+        drawDailyWalks() {
+            this.clearPolyLines();
+            const polyline = this.dailyWalk.map((walk) => drawWalk(walk.route, this.map));
+
+            if (polyline) {
+                this.polylines.push(polyline);
+            }
+        },
+        drawMonthlyWalks() {
+            this.clearPolyLines();
+            this.monthlyWalk.dailyWalks.forEach((day) => {
+                const polyline = day.walks.map((walk) => drawWalk(walk.route, this.map)); // 월별 폴리라인 추가
+
+                if (polyline) {
+                    this.polylines.push(polyline);
+                }
+            });
+        },
+        clearPolyLines() {
+            console.log("경로 지우기: ", this.polylines);
+            this.polylines.forEach((polyline) => {
+                if (polyline && typeof polyline.setMap === "function") {
+                    polyline.setMap(null);
+                }
+            });
+            this.polylines = [];
         },
     },
 };
