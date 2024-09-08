@@ -4,18 +4,21 @@
         <div>
             <img :src="CommentSrc" alt="comment">
         </div>
-        <div>{{ comment.count }}</div>
+        <div>{{ commentCount }}</div>
     </div>
 </template>
 
 <script>
 export default {
-    data(){
+    data() {
         return {
-            CommentSrc : require("@/assets/postListCompo/comment.png"),
-            comment: {
-                count : 5,
-            }
+            CommentSrc: require("@/assets/postListCompo/comment.png"),
+        }
+    },
+    props: {
+        commentCount: {
+            type: Number,
+            default: 0
         }
     }
 }

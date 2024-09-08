@@ -1,19 +1,14 @@
 <template>
     <div class="post-detail-content-compo">
-        {{ post.content }}
+        {{ content }}
     </div>
 </template>
 
 <script>
 export default {
-    data(){
-        return {
-            post: {
-                content: "회에 소주 먹고 싶다멍~"
-            }
-        }
+    props: {
+        content: String
     }
-
 }
 </script>
 

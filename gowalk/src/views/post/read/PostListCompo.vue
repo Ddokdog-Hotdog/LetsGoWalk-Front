@@ -1,6 +1,6 @@
 <template>
     <div class="postList" ref="scrollContainer">
-        <div class="post-list-compo" v-for="post in posts" :key="post.id">
+        <div class="post-list-compo" v-for="post in posts" :key="post.id" @click="navigateToDetail(post.postid)">
             <div>
                 <img :src="postListProfileSrc" alt="Profile Image" class="postListCompoProfile" />
             </div>
@@ -27,7 +27,7 @@ import axios from "@/axios.js";
 
 export default {
     props: {
-        postType: Number
+        postType: Number,
     },
     data() {
         return {
@@ -120,9 +120,12 @@ export default {
                         console.log('Triggering scroll fetch');
                         this.fetchPosts();
                     }
-                }, 500);  // 200ms의 디바운스 시간
+                }, 300);
             }
         },
+        navigateToDetail(postid) {
+            this.$router.push(`/post/${this.postType}/${postid}`);
+        }
     }
 };
 </script>

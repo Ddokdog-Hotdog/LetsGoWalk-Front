@@ -1,19 +1,14 @@
 <template>
     <div class="post-detail-title-compo">
-        {{ post.title }}
+        {{ title }}
     </div>
 </template>
 
 <script>
 export default {
-    data(){
-        return {
-            post: {
-                title : "제목이다멍",
-            }
-        }
+    props: {
+        title: String
     }
-
 }
 </script>
 

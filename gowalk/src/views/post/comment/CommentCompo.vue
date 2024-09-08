@@ -1,8 +1,8 @@
 <template>
     <div>
-        <comment-top-compo/>
-        <comment-list-compo/>
-        <comment-input-compo/>
+        <comment-top-compo :comment-count="comments.length" />
+        <comment-list-compo :comments="comments" />
+        <comment-input-compo />
     </div>
 </template>
 
@@ -15,7 +15,13 @@ export default {
         CommentTopCompo,
         CommentListCompo,
         CommentInputCompo,
-        },
+    },
+    props: {
+        comments: {
+            type: Array,
+            default: () => []
+        }
+    },
 
 }
 </script>
