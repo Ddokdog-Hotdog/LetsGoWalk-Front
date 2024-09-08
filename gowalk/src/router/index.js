@@ -38,6 +38,14 @@ const routes = [
         path: "/login",
         name: "login",
         component: () => import(/* webpackChunkName: "login" */ "../views/login/LoginCompo.vue"),
+        beforeEnter: (to, from, next) => {
+            const isLoggedIn = store.getters.isAuthenticated;
+            if (isLoggedIn) {
+                next("/"); // 액세스 토큰이 있는 경우 메인 페이지로 리다이렉트
+            } else {
+                next(); // 토큰이 없으면 로그인 페이지로 이동
+            }
+        },
     },
     {
         path: "/auth/success",
@@ -49,7 +57,11 @@ const routes = [
                 store.commit("setAccessToken", token);
                 localStorage.setItem("accessToken", token);
             }
-            next("/");
+            if (from.name && from.name !== "login") {
+                next(from.fullPath);
+            } else {
+                next("/"); // 이전 페이지가 없거나 로그인 페이지였다면 홈으로
+            }
         },
     },
     {
@@ -67,7 +79,24 @@ const routes = [
     },
 ];
 
-export default new VueRouter({
+const router = new VueRouter({
     mode: "history",
     routes,
 });
+
+// 전역 네비게이션 가드
+router.beforeEach((to, from, next) => {
+    const isLoggedIn = store.getters.isAuthenticated;
+    const isPublicPage = to.path === "/" || to.path === "/login" || to.path === "/auth/register";
+
+    if (!isLoggedIn && !isPublicPage) {
+        store.commit("showLoginModal", true); // 보호된 페이지에서만 모달 표시
+        store.commit("setRedirectPath", to.fullPath); // 리다이렉트 경로 저장
+        next(false); // 페이지 이동 중단
+    } else {
+        store.commit("showLoginModal", false); // 로그인 페이지나 메인 페이지에서는 모달 숨김
+        next();
+    }
+});
+
+export default router;

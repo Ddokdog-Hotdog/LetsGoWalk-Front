@@ -8,6 +8,7 @@ const instance = axios.create({
         "Content-Type": "application/json",
     },
 });
+
 // 요청 인터셉터 설정
 instance.interceptors.request.use(
     (config) => {

@@ -26,12 +26,18 @@ export default {
 </script>
 
 <style>
+@import url("https://fonts.googleapis.com/css2?family=Jua&family=Nanum+Gothic:wght@400;700;800&display=swap");
+* {
+    font-family: "Nanum Gothic", sans-serif;
+    font-weight: 500;
+    font-style: normal;
+}
+
 html,
 body {
     height: 100%;
     margin: 0;
     padding: 0;
-    font-family: Arial, sans-serif;
 }
 
 #app {

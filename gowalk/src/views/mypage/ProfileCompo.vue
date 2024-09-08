@@ -3,7 +3,7 @@
         <h2>내정보수정</h2>
 
         <div class="profile-picture">
-            <img :src="profilePictureUrl" alt="Profile Picture" />
+            <img :src="profilePictureUrl" alt="Profile Picture" v-if="profilePictureUrl" />
             <input type="file" @change="onFileChange" />
         </div>
 
@@ -26,10 +26,8 @@
 
             <div class="form-group gender">
                 <label>성별</label>
-                <button type="button" :class="{ selected: gender === 'female' }" @click="gender = 'female'">
-                    여성
-                </button>
-                <button type="button" :class="{ selected: gender === 'male' }" @click="gender = 'male'">남성</button>
+                <button type="button" :class="{ selected: gender === 'f' }" @click="gender = 'f'">여성</button>
+                <button type="button" :class="{ selected: gender === 'm' }" @click="gender = 'm'">남성</button>
             </div>
 
             <div class="form-group">
@@ -48,24 +46,26 @@ import axios from "@/axios";
 export default {
     data() {
         return {
-            profilePictureUrl: "", // 기본 프로필 사진 URL
+            profilePictureUrl: "@/assets/login/AccountProfile.png", // 기본 프로필 사진 URL
             nickname: "",
             email: "", // 이메일은 백엔드에서 가져온 후 변경 불가하게
             dateOfBirth: "",
             gender: "",
             phoneNumber: "",
+            profilePictureFile: null,
             nicknameTaken: false, // 닉네임 중복 체크 상태
+            currentNickname: "", // 현재 닉네임 저장
         };
     },
     mounted() {
-        // 백엔드에서 사용자 정보 불러오기
         this.loadUserInfo();
     },
     methods: {
         loadUserInfo() {
             axios.get("/register").then((response) => {
-                this.profilePictureUrl = response.data.profilePictureUrl;
+                this.profilePictureUrl = response.data.profilePictureUrl || "@/assets/login/AccountProfile.png";
                 this.nickname = response.data.nickname;
+                this.currentNickname = response.data.nickname; // 현재 닉네임 저장
                 this.email = response.data.email;
                 this.dateOfBirth = response.data.dateOfBirth;
                 this.gender = response.data.gender;
@@ -73,32 +73,61 @@ export default {
             });
         },
         onFileChange(event) {
-            const file = event.target.files[0];
-            this.uploadProfilePicture(file);
+            this.profilePictureFile = event.target.files[0];
         },
-        uploadProfilePicture(file) {
-            const formData = new FormData();
-            formData.append("file", file);
-            axios.post("/api/user/upload-picture", formData).then((response) => {
-                this.profilePictureUrl = response.data.profilePictureUrl;
-            });
+        checkNicknameAvailability() {
+            if (this.nickname.trim() === "" || this.nickname === this.currentNickname) {
+                // 닉네임이 빈 문자열이거나 현재 닉네임과 같으면 중복 체크를 건너뜁니다.
+                this.nicknameTaken = false;
+                return;
+            }
+
+            axios
+                .get("/register/check-nickname", { params: { nickname: this.nickname } })
+                .then((response) => {
+                    this.nicknameTaken = response.data;
+                })
+                .catch((error) => {
+                    console.error("닉네임 중복 확인 실패:", error);
+                });
         },
         async submitAdditionalInfo() {
+            if (this.nicknameTaken) {
+                alert("이미 사용 중인 닉네임입니다. 다른 닉네임을 선택해주세요.");
+                return;
+            }
+
             try {
-                await axios.post("/api/user/update-profile", {
+                const formData = new FormData();
+                const memberUpdateDTO = {
                     nickname: this.nickname,
                     dateOfBirth: this.dateOfBirth,
                     gender: this.gender,
                     phoneNumber: this.phoneNumber,
+                };
+
+                formData.append("memberUpdateDTO", JSON.stringify(memberUpdateDTO));
+
+                if (this.profilePictureFile) {
+                    formData.append("profileImage", this.profilePictureFile);
+                }
+
+                const response = await axios.put("/register", formData, {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
                 });
+
+                this.profilePictureUrl = response.data.profilePictureUrl;
                 this.$router.push({ name: "HomePage" });
             } catch (error) {
-                if (error.response && error.response.data.error === "NICKNAME_TAKEN") {
-                    this.nicknameTaken = true;
-                } else {
-                    console.error("프로필 업데이트 실패:", error);
-                }
+                console.error("프로필 업데이트 실패:", error);
             }
+        },
+    },
+    watch: {
+        nickname() {
+            this.checkNicknameAvailability();
         },
     },
 };
