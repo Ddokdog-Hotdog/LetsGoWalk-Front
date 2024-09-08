@@ -4,8 +4,10 @@
         <div class="top">
             <div class="user-profile">
                 <img :src="computedProfilePictureUrl" alt="Profile" />
-                <p>{{ memberInfo.nickname }} 님</p>
-                <button @click="editProfile" class="edit-button">편집</button>
+                <div class="info">
+                    <p>{{ memberInfo.nickname }} 님</p>
+                    <button @click="editProfile" class="edit-button">편집</button>
+                </div>
             </div>
             <div class="my-point">
                 <p>보유 포인트</p>
@@ -39,9 +41,13 @@ import axios from "axios";
 export default {
     data() {
         return {
-            memberInfo: {}, // 서버에서 받아올 회원 정보
-            pets: [], // 서버에서 받아올 애완동물 리스트
-            defaultPetImageUrl: "path-to-default-pet-image", // 기본 애완동물 이미지 경로
+            memberInfo: {
+                nickname: "",
+                point: 0,
+                profileImageUrl: "",
+            },
+            pets: [],
+            defaultPetImageUrl: "path-to-default-pet-image",
         };
     },
     computed: {
@@ -55,7 +61,7 @@ export default {
     methods: {
         async loadMyPageInfo() {
             try {
-                const response = await axios.get("/mypage");
+                const response = await axios.get("http://localhost:8080/api/mypage"); // 올바른 경로로 요청
                 this.memberInfo = response.data.memberInfo;
                 this.pets = response.data.pets;
             } catch (error) {
@@ -71,7 +77,7 @@ export default {
 <style scoped>
 .mypage-container {
     width: 100%;
-    max-width: 600px;
+    max-width: 580px;
     margin: 0 auto;
     padding: 20px;
     background-color: #f9f9f9;
@@ -85,21 +91,27 @@ h1 {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 20px;
+    width: 100%;
+}
+.user-profile {
+    text-align: center;
+    display: flex;
+    align-items: center;
     background-color: #ffffff;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
-}
-.user-profile {
-    text-align: center;
+    width: 65%;
+    height: 100%;
 }
 .user-profile img {
-    width: 60px;
-    height: 60px;
+    min-width: 60px;
+    height: auto;
     border-radius: 50%;
     object-fit: cover;
     margin-bottom: 10px;
+    width: 50%;
 }
 .user-profile p {
     margin: 0;
@@ -118,6 +130,10 @@ h1 {
     background-color: #fff4e6;
     padding: 10px;
     border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 30%;
+    height: 100%;
 }
 .my-point p {
     margin: 0;
