@@ -3,7 +3,7 @@
         <template v-if="hasData">
             <div class="stats-container">
                 <div class="stat">
-                    <div class="stat-label">오늘의 산책 시간</div>
+                    <div class="stat-label">이번달 산책 시간</div>
                     <div class="stat-value">
                         <span class="number">{{ walkTimeHours }}</span>
                         <span class="unit">h</span>
@@ -12,9 +12,9 @@
                     </div>
                 </div>
                 <div class="stat">
-                    <div class="stat-label">오늘의 산책 거리</div>
+                    <div class="stat-label">이번달 산책 거리</div>
                     <div class="stat-value">
-                        <span class="number">{{ dailyWalkDistance }}</span>
+                        <span class="number">{{ monthlyWalkDistance }}</span>
                         <span class="unit">Km</span>
                     </div>
                 </div>
@@ -33,13 +33,14 @@
                 {{ showCalories ? "▲" : "▼" }}
             </button>
         </template>
-        <div v-else class="no-data">오늘 아직 산책을 안했어요 :(</div>
+        <div v-else class="no-data">이번달 아직 산책을 안했어요 :(</div>
     </div>
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
-    name: "ExerciseStatsCard",
+    name: "MonthlyExerciseStatsCard",
     props: {
         isVisible: {
             type: Boolean,
@@ -52,36 +53,47 @@ export default {
         };
     },
     computed: {
-        walks() {
-            return this.$store.getters["walkStore/dailyWalks"];
-        },
+        ...mapState({
+            monthlyWalk: (state) => state.walkStore.monthlyWalk,
+        }),
         hasData() {
-            return this.walks.length > 0;
+            return (
+                this.monthlyWalk &&
+                this.monthlyWalk.dailyWalks &&
+                this.monthlyWalk.dailyWalks.some((day) => day.walks && day.walks.length > 0)
+            );
         },
-        dailyWalkTime() {
-            return this.walks.reduce((total, walk) => total + walk.duration, 0);
+        monthlyWalkTime() {
+            if (!this.monthlyWalk || !this.monthlyWalk.dailyWalks) return 0;
+            return this.monthlyWalk.dailyWalks.reduce((total, day) => {
+                return total + (day.walks ? day.walks.reduce((dayTotal, walk) => dayTotal + walk.duration, 0) : 0);
+            }, 0);
         },
         walkTimeHours() {
-            return Math.floor(this.dailyWalkTime / 3600);
+            return Math.floor(this.monthlyWalkTime / 3600);
         },
         walkTimeMinutes() {
-            return Math.floor((this.dailyWalkTime % 3600) / 60)
+            return Math.floor((this.monthlyWalkTime % 3600) / 60)
                 .toString()
                 .padStart(2, "0");
         },
-        dailyWalkDistance() {
-            const distance = this.walks.reduce((total, walk) => total + walk.distance, 0);
+        monthlyWalkDistance() {
+            const distance = this.monthlyWalk.dailyWalks.reduce((total, day) => {
+                return total + day.walks.reduce((dayTotal, walk) => dayTotal + walk.distance, 0);
+            }, 0);
             return (distance / 1000).toFixed(2); // Km
         },
         dogCalories() {
             const calories = {};
-            this.walks.forEach((walk) => {
-                walk.dogs.forEach((dog) => {
-                    if (calories[dog.pet.name]) {
-                        calories[dog.pet.name] += dog.caloriesBurned;
-                    } else {
-                        calories[dog.pet.name] = dog.caloriesBurned;
-                    }
+            this.monthlyWalk.dailyWalks.forEach((day) => {
+                day.walks.forEach((walk) => {
+                    walk.dogs.forEach((dog) => {
+                        if (calories[dog.pet.name]) {
+                            calories[dog.pet.name] += dog.caloriesBurned;
+                        } else {
+                            calories[dog.pet.name] = dog.caloriesBurned;
+                        }
+                    });
                 });
             });
             return calories;

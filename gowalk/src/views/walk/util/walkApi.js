@@ -93,5 +93,5 @@ export const getMyPets = async () => {
 
 const handleApiError = (error, errorMessage) => {
     console.error(`${errorMessage}:`, error);
-    throw error;
+    // throw error;
 };
