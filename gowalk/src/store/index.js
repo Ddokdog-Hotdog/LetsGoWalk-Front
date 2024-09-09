@@ -10,7 +10,6 @@ export default new Vuex.Store({
     modules: {
         walkStore,
         quests,
-        walkStore,
     },
     state: {
         showLoginModal: false, // 모달 표시 여부
