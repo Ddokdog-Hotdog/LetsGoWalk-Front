@@ -1,22 +1,22 @@
 <template>
     <div class="post-write-compo">
-        <post-top-compo @cancel="showConfirmModal" @register="submitPost"/>
-        <board-type-compo/>
-        <post-input-compo/>
+        <post-top-compo @cancel="showConfirmModal" @register="submitPost" />
+        <board-type-compo />
+        <post-input-compo />
         <confirm-modal-compo
             :isVisible="isConfirmModalVisible"
             @close="isConfirmModalVisible = false"
             @confirm="handleCancelConfirmation"
             :message="`정말로 취소하시겠습니까?`"
-            />
+        />
     </div>
 </template>
 
 <script>
-import PostTopCompo from "./PostTopCompo.vue"
-import BoardTypeCompo from "./BoardTypeCompo.vue"
-import PostInputCompo from "./PostInputCompo.vue"
-import ConfirmModalCompo from "../../../components/layout/ConfirmModalCompo.vue"
+import PostTopCompo from "./PostTopCompo.vue";
+import BoardTypeCompo from "./BoardTypeCompo.vue";
+import PostInputCompo from "./PostInputCompo.vue";
+import ConfirmModalCompo from "../../../components/layout/ConfirmModalCompo.vue";
 
 export default {
     components: {
@@ -25,11 +25,11 @@ export default {
         PostInputCompo,
         ConfirmModalCompo,
     },
-    data(){
+    data() {
         return {
             name: "PostWrtieCompo",
             isConfirmModalVisible: false,
-        }
+        };
     },
     methods: {
         showConfirmModal() {
@@ -43,14 +43,14 @@ export default {
         },
         submitPost() {
             console.log("게시글 등록 처리");
-            this.$router.push('/post/1');
-        }
-    }
-}
+            this.$router.push("/post/1");
+        },
+    },
+};
 </script>
 
 <style scoped>
-.post-write-compo{
+.post-write-compo {
     height: 100%;
 }
 </style>

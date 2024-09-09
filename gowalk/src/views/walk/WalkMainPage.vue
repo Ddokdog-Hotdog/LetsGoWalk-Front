@@ -87,7 +87,7 @@ export default {
 .map-wrapper {
     position: relative;
     width: 100%;
-    height: 85vh;
+    height: 90vh;
 }
 
 .kakao-map {
@@ -116,10 +116,11 @@ export default {
 }
 
 .overlay-button {
-    position: absolute;
-    bottom: 0px;
+    position: fixed;
+    bottom: 70px;
     left: 50%;
     transform: translateX(-50%);
+    max-width: 590px;
     width: 90%;
     z-index: 10;
     pointer-events: auto;
