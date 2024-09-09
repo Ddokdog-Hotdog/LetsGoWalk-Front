@@ -3,22 +3,16 @@
         <div class="loginpage">
             <div class="logo">
                 <img src="~@/assets/login/logo.png" />
-                <p>간편하게게 소셜로그인하고 <br />산책가까 서비스를 이용해보세요</p>
+                <p>간편하게 소셜로그인하고 <br />산책가까 서비스를 이용해보세요</p>
             </div>
             <div class="socialLogin">
-                <a
-                    href="http://localhost:8080/oauth2/authorization/google?redirect_uri=http://localhost:3000/oauth2/redirect"
-                >
+                <a :href="googleLoginUrl">
                     <img src="~@/assets/login/google.png" />
                 </a>
-                <a
-                    href="http://localhost:8080/oauth2/authorization/kakao?redirect_uri=http://localhost:3000/oauth2/redirect"
-                >
+                <a :href="kakaoLoginUrl">
                     <img src="~@/assets/login/kakao.png" />
                 </a>
-                <a
-                    href="http://localhost:8080/oauth2/authorization/naver?redirect_uri=http://localhost:3000/oauth2/redirect"
-                >
+                <a :href="naverLoginUrl">
                     <img src="~@/assets/login/naver.png" />
                 </a>
             </div>
@@ -27,7 +21,15 @@
 </template>
 
 <script>
-export default {};
+export default {
+    data() {
+        return {
+            googleLoginUrl: `${process.env.VUE_APP_BASE_URL}/oauth2/authorization/google?redirect_uri=${process.env.VUE_APP_BASE_URL}/oauth2/redirect`,
+            kakaoLoginUrl: `${process.env.VUE_APP_BASE_URL}/oauth2/authorization/kakao?redirect_uri=${process.env.VUE_APP_BASE_URL}/oauth2/redirect`,
+            naverLoginUrl: `${process.env.VUE_APP_BASE_URL}/oauth2/authorization/naver?redirect_uri=${process.env.VUE_APP_BASE_URL}/oauth2/redirect`,
+        };
+    },
+};
 </script>
 
 <style scoped>
