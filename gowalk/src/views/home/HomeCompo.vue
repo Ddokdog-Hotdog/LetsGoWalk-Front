@@ -24,9 +24,10 @@
         <!-- Hot Place Section -->
         <div class="hot-place">
             <p class="hot-place-text">오늘 산책, 여기 핫플 어때요?</p>
-            <div class="map-placeholder">[지도 영역]</div>
+            <div class="map-placeholder">
+                <KakaoMap id="kakao-map"> </KakaoMap>
+            </div>
         </div>
-
         <!-- Quest Section -->
         <div class="quest-section">
             <div class="quest-header">
@@ -72,6 +73,8 @@
 </template>
 
 <script>
+import KakaoMap from "@/views/walk/components/KakaoMap.vue";
+
 export default {
     data() {
         return {
@@ -109,6 +112,9 @@ export default {
                 },
             ],
         };
+    },
+    components: {
+        KakaoMap,
     },
     mounted() {
         this.startCarousel();
@@ -211,6 +217,7 @@ export default {
 .hot-place {
     margin-top: 20px;
     margin-bottom: 10px;
+    height: 100%;
 }
 
 .hot-place-text {
@@ -220,7 +227,7 @@ export default {
 
 .map-placeholder {
     height: 200px;
-    background-color: lightgray;
+    /* background-color: lightgray; */
     margin-top: 10px;
 }
 
@@ -341,5 +348,8 @@ export default {
 }
 .walk-title {
     align-items: center;
+}
+#kakao-map {
+    height: 100%;
 }
 </style>
