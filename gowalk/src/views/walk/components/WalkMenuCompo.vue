@@ -27,7 +27,6 @@ export default {
     methods: {
         isSelected(route) {
             const isSelected = this.$route.path === route;
-            console.log(`Route ${route} selected: ${isSelected}`);
             return isSelected;
         },
         goToRoute(route) {
