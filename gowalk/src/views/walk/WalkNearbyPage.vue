@@ -1,28 +1,19 @@
 <template>
     <div class="map-wrapper">
         <WalkMenuCompo />
-        <KakaoMap ref="kakaoMap" class="kakao-map" />
+        <KakaoMap :enable-nearby="true" ref="kakaoMap" class="kakao-map" />
     </div>
 </template>
 
 <script>
 import KakaoMap from "@/views/walk/components/KakaoMap.vue";
 import WalkMenuCompo from "@/views/walk/components/WalkMenuCompo.vue";
-import { mapGetters } from "vuex";
 
 export default {
     name: "WalkNearbyPage",
     components: {
         KakaoMap,
         WalkMenuCompo,
-    },
-    computed: {
-        curLocation() {
-            return this.$store.getters["walkStore/getCurLocation"];
-        },
-    },
-    methods: {
-        ...mapGetters("walkStore", ["getCurLocation"]),
     },
 };
 </script>

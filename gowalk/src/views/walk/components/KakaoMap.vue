@@ -14,7 +14,10 @@ import {
     createMarker,
     drawPolyline,
     drawWalk,
+    drawWalkWithoutBounds,
+    findHotspots,
 } from "@/views/walk/util/kakaoMap";
+import { nearbyWalks } from "@/views/walk/util/walkApi";
 import { defaultPosition } from "@/views/walk/util/config";
 import { mapMutations, mapState } from "vuex";
 export default {
@@ -28,6 +31,14 @@ export default {
             type: Boolean,
             default: false,
         },
+        enableNearby: {
+            type: Boolean,
+            default: false,
+        },
+        enableHotplace: {
+            type: Boolean,
+            default: false,
+        },
     },
     data() {
         return {
@@ -35,6 +46,7 @@ export default {
             marker: null,
             polyline: null,
             polylines: [],
+            hotspotMarkers: [],
         };
     },
     computed: {
@@ -47,6 +59,7 @@ export default {
     },
     mounted() {
         loadKakaoMapScript(this.initMapWithUserLocation);
+        this.checkProps();
     },
     watch: {
         route: {
@@ -81,6 +94,14 @@ export default {
     },
     methods: {
         ...mapMutations("walkStore", ["setCurLocation"]),
+        checkProps() {
+            if (this.enableNearby) {
+                this.drawWalkNearBy();
+            }
+            if (this.enableHotplace) {
+                this.showHotplace();
+            }
+        },
         initMapWithUserLocation() {
             getUserLocation(
                 (position) => {
@@ -112,15 +133,17 @@ export default {
                 return;
             }
             this.clearPolyLines();
-            this.dailyWalk.forEach((walk) => {
-                const polyline = drawWalk(walk.route, this.map);
-                if (polyline) {
-                    this.polylines.push(polyline);
+            if (this.dailyWalk) {
+                const polylines = drawWalk(this.dailyWalk, this.map);
+                if (polylines && polylines.length > 0) {
+                    this.polylines.push(...polylines);
                 }
-            });
+            } else {
+                console.warn("일일 걷기 데이터가 없습니다.");
+            }
         },
         clearPolyLines() {
-            console.log("경로 지우기: ", this.polylines);
+            // console.log("경로 지우기: ", this.polylines);
             this.polylines.forEach((polyline) => {
                 if (polyline && typeof polyline.setMap === "function") {
                     polyline.setMap(null);
@@ -133,19 +156,53 @@ export default {
                 return;
             }
             this.clearPolyLines();
-            if (this.monthlyWalk && this.monthlyWalk.dailyWalks) {
-                this.monthlyWalk.dailyWalks.forEach((day) => {
-                    day.walks.forEach((walk) => {
-                        const polyline = drawWalk(walk.route, this.map);
-                        if (polyline) {
-                            this.polylines.push(polyline);
-                        }
-                    });
-                });
-            } else {
-                console.warn("월간 걷기 데이터가 없습니다.");
+            this.monthlyWalk.dailyWalks.forEach((day) => {
+                const polylines = drawWalk(day.walks, this.map);
+                if (polylines && polylines.length > 0) {
+                    this.polylines.push(...polylines);
+                }
+            });
+        },
+        async drawWalkNearBy() {
+            const walks = await this.searchNearby(this.curLocation);
+            this.clearPolyLines();
+            const polylines = drawWalkWithoutBounds(walks, this.map);
+            if (polylines && polylines.length > 0) {
+                this.polylines.push(...polylines);
             }
         },
+        async searchNearby(location) {
+            const data = {
+                latitude: location.lat,
+                longitude: location.lng,
+            };
+            const response = await nearbyWalks(data);
+            return response.data;
+        },
+        async showHotplace() {
+            const walks = await this.searchNearby(this.curLocation);
+            const hotspots = findHotspots(walks);
+            console.log("핫플레이스 순위: ", hotspots);
+            this.deleteMarker();
+
+            hotspots.forEach((spot) => {
+                const marker = createMarker(
+                    [spot.coordinate.lat, spot.coordinate.lng],
+                    markerImages.hotPlace(),
+                    this.map
+                );
+                this.hotspotMarkers.push(marker);
+            });
+        },
+        deleteMarker() {
+            if (this.hotspotMarkers) {
+                this.hotspotMarkers.forEach((marker) => marker.setMap(null));
+            }
+            this.hotspotMarkers = [];
+        },
+    },
+    beforeDestroy() {
+        this.deleteMarker();
     },
 };
 </script>
