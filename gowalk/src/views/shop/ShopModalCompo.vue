@@ -118,10 +118,14 @@ export default {
         },
         addToCart() {
             // Logic to add the item to the cart
-            shopApiRequest.insertCart({productId:this.PRODUCTID, quantity:this.quantity}).then((response) => {
-                console.log(response.data);
-                
-            })
+            shopApiRequest
+                .insertCart({ productId: this.PRODUCTID, quantity: this.quantity })
+                .then((response) => {
+                    console.log(response.data);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
             console.log("장바구니에 추가");
         },
         goToCart() {
