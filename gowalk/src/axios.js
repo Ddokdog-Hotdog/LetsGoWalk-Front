@@ -3,11 +3,12 @@ import axios from "axios";
 import store from "./store";
 
 const instance = axios.create({
-    baseURL: "http://localhost:8080/api", // API의 기본 URL을 설정
+    baseURL: process.env.VUE_APP_BASE_URL, // API의 기본 URL을 설정
     headers: {
         "Content-Type": "application/json",
     },
 });
+
 // 요청 인터셉터 설정
 instance.interceptors.request.use(
     (config) => {

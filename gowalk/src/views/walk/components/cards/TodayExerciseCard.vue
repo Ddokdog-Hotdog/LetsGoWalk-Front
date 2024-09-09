@@ -1,5 +1,5 @@
 <template>
-    <div class="card">
+    <div v-show="isVisible" class="card">
         <template v-if="hasData">
             <div class="stats-container">
                 <div class="stat">
@@ -41,9 +41,9 @@
 export default {
     name: "ExerciseStatsCard",
     props: {
-        walks: {
-            type: Array,
-            required: true,
+        isVisible: {
+            type: Boolean,
+            default: true,
         },
     },
     data() {
@@ -52,6 +52,9 @@ export default {
         };
     },
     computed: {
+        walks() {
+            return this.$store.getters["walkStore/dailyWalks"];
+        },
         hasData() {
             return this.walks.length > 0;
         },

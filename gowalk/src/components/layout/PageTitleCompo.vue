@@ -13,10 +13,16 @@ export default {
             console.log(path);
             if (path.includes("/shop/item")) {
                 return "상품 상세 페이지";
+            } else if (path.includes("/shop/cart")) {
+                return "장바구니 페이지";
             } else if (path === "/shop") {
                 return "쇼핑몰";
-            } else if (path === "/post") {
-                return "커뮤니티";
+            } else if (path.startsWith("/post/1/")) {
+                return "산책인증";
+            } else if (path.startsWith("/post/2/")) {
+                return "정보공유";
+            } else if (path === "/notification"){
+                return "알림";
             }
             return "페이지";
         },

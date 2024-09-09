@@ -1,4 +1,5 @@
 import PostCompo from '@/views/post/PostCompo';
+import PostDetailCompo from '@/views/post/read/PostDetailCompo';
 import PostWriteCompo from '@/views/post/write/PostWriteCompo';
 
 export default [
@@ -15,5 +16,13 @@ export default [
         component: PostCompo,
         props: true // 컴포넌트 내에서 postType으로 prop으로 접근 가능
     },
-    
+    {
+        name: 'PostDetailCompo',
+        path: '/post/:postType/:postId',
+        component: PostDetailCompo,
+        props: route => ({
+            postType: route.params.postType,
+            postId: Number(route.params.postId),
+        })
+    },
 ];

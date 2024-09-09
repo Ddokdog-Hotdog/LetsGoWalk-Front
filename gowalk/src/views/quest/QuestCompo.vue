@@ -1,6 +1,8 @@
 <template>
     <div class="questPage">
-        <div class="carouselBoard"></div>
+        <div class="carouselBoard">
+            <img src="~@/assets/carousel/quest-poster.png" id="carousel" />
+        </div>
         <div class="questList">
             <div class="quest">
                 <div class="questName">
@@ -18,18 +20,18 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters } from "vuex";
 
 export default {
-    name: 'QuestList',
+    name: "QuestList",
     computed: {
-        ...mapGetters('quests', ['allQuests']),
+        ...mapGetters("quests", ["allQuests"]),
     },
     created() {
         this.fetchQuests();
     },
     methods: {
-        ...mapActions('quests', ['fetchQuests']),
+        ...mapActions("quests", ["fetchQuests"]),
     },
 };
 </script>
@@ -43,9 +45,12 @@ export default {
 }
 .carouselBoard {
     width: 100%;
-    background-image: url('~@/assets/carousel/quest-poster.png');
     background-size: cover;
-    height: 350px;
+    min-height: 10%;
+}
+#carousel {
+    width: 100%;
+    object-fit: fill;
 }
 .questList {
     justify-content: center;
