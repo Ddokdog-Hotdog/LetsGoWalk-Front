@@ -74,97 +74,125 @@ export default {
         };
     },
     mounted: async function () {
-        
         // BEST 상품 조회
-        await shopApiRequest.getBestItemList().then((response) => {
-            console.log("BEST 상품 조회 : ",response.data.bestItemList);
-            response.data.bestItemList.forEach((product) => {
-                product.isBest = true;
-                this.products.push(product);
+        await shopApiRequest
+            .getBestItemList()
+            .then((response) => {
+                console.log("BEST 상품 조회 : ", response.data.bestItemList);
+                response.data.bestItemList.forEach((product) => {
+                    product.isBest = true;
+                    this.products.push(product);
+                });
             })
-        });
+            .catch((error) => {
+                console.log(error);
+            });
 
         // 일반 상품 조회
-        await shopApiRequest.getItemList(this.page).then((response) => {
-            console.log("일반 상품 조회 : ", response.data.itemList);
-            
-            if(response.data.itemList.length > 1){
-                // 반환 받는 게 있는 경우
-                this.page++;
-                response.data.itemList.forEach((product) => {
-                    this.products.push(product);
-                })
-            }else{
-                // 더이상 서버에 요청하지 않기 위한 장치
-                this.isContentsExist = !this.isContentsExist;
-            }
-            
-        });
+        await shopApiRequest
+            .getItemList(this.page)
+            .then((response) => {
+                console.log("일반 상품 조회 : ", response.data.itemList);
 
-        window.addEventListener('scroll', this.debouncedOnScroll); // 스크롤 이벤트 추가
+                if (response.data.itemList.length >= 1) {
+                    // 반환 받는 게 있는 경우
+                    this.page++;
+                    response.data.itemList.forEach((product) => {
+                        this.products.push(product);
+                    });
+                } else {
+                    // 더이상 서버에 요청하지 않기 위한 장치
+                    this.isContentsExist = !this.isContentsExist;
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            });
 
+        window.addEventListener("scroll", this.debouncedOnScroll); // 스크롤 이벤트 추가
     },
     beforeDestroy() {
-        if (this.$refs.scrollcheck  && this.debouncedOnScroll) {
-            window.removeEventListener('scroll', this.debouncedOnScroll);
+        if (this.$refs.scrollcheck && this.debouncedOnScroll) {
+            window.removeEventListener("scroll", this.debouncedOnScroll);
         }
     },
     methods: {
         debouncedOnScroll() {
-        if (this.debounceTimeout) {
-            clearTimeout(this.debounceTimeout);
-        }
-        this.debounceTimeout = setTimeout(() => {
-            this.onScroll();
-        }, 1000); // 1초 지연
+            if (this.debounceTimeout) {
+                clearTimeout(this.debounceTimeout);
+            }
+            this.debounceTimeout = setTimeout(() => {
+                this.onScroll();
+            }, 1000); // 1초 지연
         },
         async onScroll() {
-            
+            const container = this.$refs.scrollcheck;
+            if (!container) return;
+            if (!this.$refs.scrollcheck.scrollHeight) return;
+
             if (this.$refs.scrollcheck.scrollHeight - (window.innerHeight + window.scrollY) < 1000) {
                 console.log("무한 스크롤 이벤트 발생");
-                if(!this.nowLike && this.isContentsExist){
+                if (!this.nowLike && this.isContentsExist) {
                     // 현재 일반 상품 목록을 보고 있는 중인 경우
-                    await shopApiRequest.getItemList(this.page).then((response) => {
-                        console.log(response.data);
-                        console.log("반환받은 값 길이 : ",response.data.itemList.length)
-                        if(response.data.itemList.length > 1){
-                            // 반환 받는 게 있는 경우
-                            this.page++;
-                            this.products = [...this.products, ...response.data.itemList];
-                        }else{
-                            // 더이상 서버에 요청하지 않기 위한 장치
-                            this.isContentsExist = !this.isContentsExist;
-                        }
-                    })
-                }else if(this.nowLike && this.isLikeContentsExist){
+                    await shopApiRequest
+                        .getItemList(this.page)
+                        .then((response) => {
+                            console.log(response.data);
+                            console.log("반환받은 값 길이 : ", response.data.itemList.length);
+                            if (response.data.itemList.length > 1) {
+                                // 반환 받는 게 있는 경우
+                                this.page++;
+                                this.products = [...this.products, ...response.data.itemList];
+                            } else {
+                                // 더이상 서버에 요청하지 않기 위한 장치
+                                this.isContentsExist = !this.isContentsExist;
+                            }
+                        })
+                        .catch((error) => {
+                            console.log(error);
+                        });
+                } else if (this.nowLike && this.isLikeContentsExist) {
                     // 찜 상품 목록을 보고 있는 중인 경우
-                    await shopApiRequest.getLikesItemList(this.page).then((response) => {
-                        console.log(response.data);
-                        if(response.data.itemLikeList.length > 1){
-                            // 반환 받는게 있는 경우
-                            this.likePage++;
-                            this.likeProducts = [...this.likeProducts, ...response.data.itemLikeList];
-                        }else{
-                            // 더이상 서버에 요청하지 않기 위한 장치
-                            this.isLikeContentsExist = !this.isLikeContentsExist;
-                        }
-
-                    })
+                    await shopApiRequest
+                        .getLikesItemList(this.page)
+                        .then((response) => {
+                            console.log(response.data);
+                            if (response.data.itemLikeList.length > 1) {
+                                // 반환 받는게 있는 경우
+                                this.likePage++;
+                                this.likeProducts = [...this.likeProducts, ...response.data.itemLikeList];
+                            } else {
+                                // 더이상 서버에 요청하지 않기 위한 장치
+                                this.isLikeContentsExist = !this.isLikeContentsExist;
+                            }
+                        })
+                        .catch((error) => {
+                            console.log(error);
+                        });
                 }
             }
         },
         toggleLike(product) {
-            if(product.ISLIKE === 'N'){
-                shopApiRequest.insertItemLike(product.PRODUCTID).then((response) => {
-                    console.log(response.data);
-                    product.ISLIKE = 'Y'; // 좋아요 상태를 토글합니다.
-                })
-
-            }else{
-                shopApiRequest.deleteItemLike(product.PRODUCTID).then((response) => {
-                    console.log(response.data);
-                    product.ISLIKE = 'N'; // 좋아요 상태를 토글합니다.
-                })
+            if (product.ISLIKE === "N") {
+                shopApiRequest
+                    .insertItemLike(product.PRODUCTID)
+                    .then((response) => {
+                        console.log(response.data);
+                        product.ISLIKE = "Y"; // 좋아요 상태를 토글합니다.
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+            } else {
+                shopApiRequest
+                    .deleteItemLike(product.PRODUCTID)
+                    .then((response) => {
+                        console.log(response.data);
+                        product.ISLIKE = "N"; // 좋아요 상태를 토글합니다.
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
             }
         },
         goToProduct(productId) {
@@ -175,18 +203,23 @@ export default {
         },
         seeLike() {
             // 찜 상품 목록
-            shopApiRequest.getLikesItemList(this.likePage).then((response) => {
-                console.log(response.data);
-                if(response.data.itemLikeList.length > 1){
-                    // 반환 받는게 있는 경우
-                    this.likePage++;
-                    this.likeProducts = response.data.itemLikeList;
-                }else{
-                    // 더이상 서버에 요청하지 않기 위한 장치
-                    this.isLikeContentsExist = !this.isLikeContentsExist;
-                }           
-            })
-            
+            shopApiRequest
+                .getLikesItemList(this.likePage)
+                .then((response) => {
+                    console.log(response.data);
+                    if (response.data.itemLikeList.length >= 1) {
+                        // 반환 받는게 있는 경우
+                        this.likePage++;
+                        this.likeProducts = response.data.itemLikeList;
+                    } else {
+                        // 더이상 서버에 요청하지 않기 위한 장치
+                        this.isLikeContentsExist = !this.isLikeContentsExist;
+                    }
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+
             this.nowLike = !this.nowLike;
         },
         // 2초 지연 함수 (API 요청 시뮬레이션)
