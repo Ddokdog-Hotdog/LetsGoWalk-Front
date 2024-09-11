@@ -1,9 +1,18 @@
-import MypageCompo from '@/views/mypage/MyPageCompo';
+import MypageCompo from "@/views/mypage/MyPageCompo.vue";
 
 export default [
     {
-        name: 'MyPageCompo',
-        path: '/mypage',
+        name: "MypageCompo",
+        path: "/mypage",
         component: MypageCompo,
+        children: [
+            {
+                name: "DefaultMyPage",
+                path: "",
+                component: MypageCompo,
+            },
+        ],
+        props: true,
+        meta: { hideBottom: true },
     },
 ];

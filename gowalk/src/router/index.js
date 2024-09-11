@@ -76,6 +76,8 @@ const routes = [
             }
             next();
         },
+        props: true,
+        meta: { hideBottom: true },
     },
 ];
 
