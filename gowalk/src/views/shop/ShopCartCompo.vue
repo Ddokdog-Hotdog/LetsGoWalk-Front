@@ -124,36 +124,44 @@ export default {
                 address: "",
             },
             points: 0,
-            currentPoints: 5000,
+            currentPoints: 0,
             isConfirmModalVisible: false, // 모달 표시 여부
-            validationErrors: { // 각 필드에 대한 오류 메시지 저장
-            name: "",
-            address: "",
-        }   ,
+            validationErrors: {
+                // 각 필드에 대한 오류 메시지 저장
+                name: "",
+                address: "",
+            },
         };
     },
-    mounted: async function(){
-        await shopApiRequest.getCartItemList().then((response) => {
-            console.log(response.data);
-            this.cartProducts = response.data.cartProducts;
-            this.cartProducts.forEach(product => {
-                this.$set(product, 'checked', true); // 반응성 보장
-                // product.checked = true; // 각 객체에 checked 속성 추가
+    mounted: async function () {
+        await shopApiRequest
+            .getCartItemList()
+            .then((response) => {
+                console.log(response.data);
+                this.cartProducts = response.data.cartProducts;
+                this.cartProducts.forEach((product) => {
+                    this.$set(product, "checked", true); // 반응성 보장
+                    // product.checked = true; // 각 객체에 checked 속성 추가
+                });
+                this.currentPoints = response.data.nowPoint;
+                if (response.data.recentAddress !== "NO ORDER") {
+                    this.shippingInfo.address = response.data.recentAddress;
+                }
+            })
+            .catch((error) => {
+                console.log(error);
             });
-            this.currentPoints = response.data.nowPoint;
-            if(response.data.recentAddress !== "NO ORDER"){
-                this.shippingInfo.address = response.data.recentAddress;
-            }
-        })
         console.log("마운트");
         // 쿼리 파라미터에 따라 replaceProductFromQuery 호출
         // 쿼리 파라미터가 있는 경우에만 replaceProductFromQuery 호출
-        if (this.$route.query.PRODUCTID && 
-            this.$route.query.VENDOR && 
-            this.$route.query.NAME && 
-            this.$route.query.PRICE && 
-            this.$route.query.THUMBNAILIMAGE && 
-            this.$route.query.quantity) {
+        if (
+            this.$route.query.PRODUCTID &&
+            this.$route.query.VENDOR &&
+            this.$route.query.NAME &&
+            this.$route.query.PRICE &&
+            this.$route.query.THUMBNAILIMAGE &&
+            this.$route.query.quantity
+        ) {
             this.replaceProductFromQuery();
         }
     },
@@ -176,34 +184,35 @@ export default {
             product.checked = !product.checked;
         },
         increaseQuantity(product) {
-            
-            // shopApiRequest.updateCart({cartItemId: product.CARTID, 
-            //                             productId: product.ID, 
+            // shopApiRequest.updateCart({cartItemId: product.CARTID,
+            //                             productId: product.ID,
             //                             quantity: product.QUANTITY+1})
             // .then((response) => {
             //     console.log(response.data);
-                product.QUANTITY += 1;
+            product.QUANTITY += 1;
             // })
         },
         decreaseQuantity(product) {
             if (product.QUANTITY > 1) {
-                // shopApiRequest.updateCart({cartItemId: product.CARTID, 
-                //                         productId: product.ID, 
+                // shopApiRequest.updateCart({cartItemId: product.CARTID,
+                //                         productId: product.ID,
                 //                         quantity: product.QUANTITY-1})
                 // .then((response) => {
                 //     console.log(response.data);
-                    product.QUANTITY -= 1;
+                product.QUANTITY -= 1;
                 // })
             }
         },
         removeFromCart(product) {
-            shopApiRequest.deleteCart({cartItemId: product.CARTID, 
-                                        productId: product.ID, 
-                                        quantity: product.QUANTITY})
-            .then((response) => {
-                console.log(response.data);
-                this.cartProducts = this.cartProducts.filter((p) => p.ID !== product.ID);
-            })
+            shopApiRequest
+                .deleteCart({ cartItemId: product.CARTID, productId: product.ID, quantity: product.QUANTITY })
+                .then((response) => {
+                    console.log(response.data);
+                    this.cartProducts = this.cartProducts.filter((p) => p.ID !== product.ID);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
         },
         useAllPoints() {
             this.points = this.currentPoints;
@@ -235,57 +244,63 @@ export default {
                 return; // 검증 실패시 결제 진행 안함
             }
             const paymentUrl = this.isDesktop();
-            
+
             // 결제 로직을 여기에 작성
             console.log("구매 완료 프로세스 진행");
             // 예: 서버로 결제 요청 보내기, 페이지 이동 등
-            
+
             let orderItems = [];
             this.cartProducts
-                .filter((product) => (product.checked === true))
-                .forEach((product) => (
-                orderItems.push({
-                    cartItemId: product.CARTID,
-                    productId: product.ID,
-                    productName: product.NAME,
-                    quantity: product.QUANTITY
-                })
-            ));
+                .filter((product) => product.checked === true)
+                .forEach((product) =>
+                    orderItems.push({
+                        cartItemId: product.CARTID,
+                        productId: product.ID,
+                        productName: product.NAME,
+                        quantity: product.QUANTITY,
+                    })
+                );
             let shopOrderItemDTO = {
                 orderItems: orderItems,
                 totalAmount: this.finalPrice,
                 address: this.shippingInfo.address,
-                point: this.points
+                point: this.points,
             };
 
             console.log("결제 내용 : ", shopOrderItemDTO);
 
-            if(paymentUrl){
+            if (paymentUrl) {
                 // 현재 결제 요청을 pc에서 한 경우
-                shopApiRequest.pcPayment(shopOrderItemDTO).then((response) => {
-                    console.log(response.data);
-                    // 결제 성공 페이지로 이동
-                    // this.$router.push("/shop/payment/complete");
-                    // 서버에서 반환된 URL로 리디렉션
-                    window.location.href = response.data;
-                }).catch((error) => {
-                    console.log(error);
-                    // 결제 실패 페이지로 이동
-                    this.$router.push("/shop/payment/error");
-                })
-            }else{
+                shopApiRequest
+                    .pcPayment(shopOrderItemDTO)
+                    .then((response) => {
+                        console.log(response.data);
+                        // 결제 성공 페이지로 이동
+                        // this.$router.push("/shop/payment/complete");
+                        // 서버에서 반환된 URL로 리디렉션
+                        window.location.href = response.data;
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                        // 결제 실패 페이지로 이동
+                        this.$router.push("/shop/payment/error");
+                    });
+            } else {
                 // 현재 결제 요청을 모바일에서 한 경우
-                shopApiRequest.mobilePayment(shopOrderItemDTO).then((response) => {
-                    console.log(response.data);
-                    // 결제 성공 페이지로 이동
-                    // this.$router.push("/shop/payment/complete");
-                    // 서버에서 반환된 URL로 리디렉션
-                    window.location.href = response.data;
-                }).catch((error) => {
-                    console.log(error);
-                    // 결제 실패 페이지로 이동
-                    this.$router.push("/shop/payment/error");
-                })
+                shopApiRequest
+                    .mobilePayment(shopOrderItemDTO)
+                    .then((response) => {
+                        console.log(response.data);
+                        // 결제 성공 페이지로 이동
+                        // this.$router.push("/shop/payment/complete");
+                        // 서버에서 반환된 URL로 리디렉션
+                        window.location.href = response.data;
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                        // 결제 실패 페이지로 이동
+                        this.$router.push("/shop/payment/error");
+                    });
             }
         },
         replaceProductFromQuery() {
@@ -303,7 +318,6 @@ export default {
 
             // cartProducts 배열에 상품을 추가
             this.cartProducts = [newProduct];
-
         },
         validateFields() {
             let isValid = true;

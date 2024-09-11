@@ -90,17 +90,26 @@ export default {
     },
     methods: {
         toggleLike(product) {
-            if(product.ISLIKE === 'N'){
-                shopApiRequest.insertItemLike(product.PRODUCTID).then((response) => {
-                    console.log(response.data);
-                    product.ISLIKE = 'Y'; // 좋아요 상태를 토글합니다.
-                })
-
-            }else{
-                shopApiRequest.deleteItemLike(product.PRODUCTID).then((response) => {
-                    console.log(response.data);
-                    product.ISLIKE = 'N'; // 좋아요 상태를 토글합니다.
-                })
+            if (product.ISLIKE === "N") {
+                shopApiRequest
+                    .insertItemLike(product.PRODUCTID)
+                    .then((response) => {
+                        console.log(response.data);
+                        product.ISLIKE = "Y"; // 좋아요 상태를 토글합니다.
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+            } else {
+                shopApiRequest
+                    .deleteItemLike(product.PRODUCTID)
+                    .then((response) => {
+                        console.log(response.data);
+                        product.ISLIKE = "N"; // 좋아요 상태를 토글합니다.
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
             }
         },
         openModal() {
@@ -113,12 +122,17 @@ export default {
             return new Intl.NumberFormat("ko-KR", { style: "currency", currency: "KRW" }).format(value);
         },
     },
-    mounted: function () {
+    mounted: async function () {
         // 상품 상세페이지
-        shopApiRequest.getItemDetail(this.id).then((response) => {
-            console.log(response.data);
-            this.data = response.data.itemDetail;
-        });
+        await shopApiRequest
+            .getItemDetail(this.id)
+            .then((response) => {
+                console.log(response.data);
+                this.data = response.data.itemDetail;
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     },
 };
 </script>

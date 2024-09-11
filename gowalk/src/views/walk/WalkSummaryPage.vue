@@ -52,7 +52,6 @@ export default {
             this.selectedPets = [];
         },
         async dateSelected(selectedDate) {
-            console.log("날짜선택: ", selectedDate);
             this.setDailyWalks(selectedDate.walks);
             await nextTick();
             this.monthlyCardVisible = false;

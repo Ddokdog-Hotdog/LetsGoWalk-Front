@@ -1,5 +1,6 @@
-import shopAxios from "@/views/shop/util/shopAxios";
+// import shopAxios from "@/views/shop/util/shopAxios";
 import { shopURL } from "@/views/shop/util/config";
+import axios from "@/axios";
 
 const handleApiError = (error, errorMessage) => {
     console.error(`${errorMessage}:`, error);
@@ -9,7 +10,7 @@ const handleApiError = (error, errorMessage) => {
 // 인기 상품 조회
 export const getBestItemList = async () => {
     try {
-        return shopAxios.get(shopURL.getBestItemList);
+        return axios.get(shopURL.getBestItemList);
     } catch (error) {
         handleApiError(error, "인기 상품 조회 중 오류 발생");
     }
@@ -18,7 +19,7 @@ export const getBestItemList = async () => {
 // 쇼핑몰 일반 상품 조회
 export const getItemList = async (page) => {
     try {
-        return shopAxios.get(shopURL.getItemList + `?page=${page}`);
+        return axios.get(shopURL.getItemList + `?page=${page}`);
     } catch (error) {
         handleApiError(error, "일반 상품 조회 중 오류 발생");
     }
@@ -27,7 +28,7 @@ export const getItemList = async (page) => {
 // 찜 상품 목록 조회
 export const getLikesItemList = async (page) => {
     try {
-        return shopAxios.get(shopURL.getLikesItemList + `?page=${page}`);
+        return axios.get(shopURL.getLikesItemList + `?page=${page}`);
     } catch (error) {
         handleApiError(error, "찜 상품 조회 중 오류 발생");
     }
@@ -36,7 +37,7 @@ export const getLikesItemList = async (page) => {
 // 찜 누르기
 export const insertItemLike = async (object) => {
     try {
-        return shopAxios.post(shopURL.like + `?productId=${object}`);
+        return axios.post(shopURL.like + `?productId=${object}`);
     } catch (error) {
         handleApiError(error, "찜 누르기 중 오류 발생");
     }
@@ -45,7 +46,7 @@ export const insertItemLike = async (object) => {
 // 찜 해제
 export const deleteItemLike = async (object) => {
     try {
-        return shopAxios.delete(shopURL.like + `?productId=${object}`);
+        return axios.delete(shopURL.like + `?productId=${object}`);
     } catch (error) {
         handleApiError(error, "찜 해제 중 오류 발생");
     }
@@ -54,7 +55,7 @@ export const deleteItemLike = async (object) => {
 // 상품 상세 페이지
 export const getItemDetail = async (object) => {
     try {
-        return shopAxios.get(shopURL.getItemDetail + `?productId=${object}`);
+        return axios.get(shopURL.getItemDetail + `?productId=${object}`);
     } catch (error) {
         handleApiError(error, "상품 상세페이지 조회 중 오류 발생");
     }
@@ -63,7 +64,7 @@ export const getItemDetail = async (object) => {
 // 장바구니 목록 보기
 export const getCartItemList = async () => {
     try {
-        return shopAxios.get(shopURL.getCartItemList);
+        return axios.get(shopURL.getCartItemList);
     } catch (error) {
         handleApiError(error, "장바구니 목록 조회 중 오류 발생");
     }
@@ -72,7 +73,7 @@ export const getCartItemList = async () => {
 // 장바구니 담기
 export const insertCart = async (object) => {
     try {
-        return shopAxios.post(shopURL.insertCart, object);
+        return axios.post(shopURL.insertCart, object);
     } catch (error) {
         handleApiError(error, "장바구니 담기 중 오류 발생");
     }
@@ -81,7 +82,7 @@ export const insertCart = async (object) => {
 // 장바구니 수정 (수량)
 export const updateCart = async (object) => {
     try {
-        return shopAxios.put(shopURL.updateCart, object);
+        return axios.put(shopURL.updateCart, object);
     } catch (error) {
         handleApiError(error, "장바구니 수정 중 오류 발생");
     }
@@ -90,7 +91,7 @@ export const updateCart = async (object) => {
 // 장바구니 제거
 export const deleteCart = async (object) => {
     try {
-        return shopAxios.delete(shopURL.deleteCart, {data: object});
+        return axios.delete(shopURL.deleteCart, { data: object });
     } catch (error) {
         handleApiError(error, "장바구니 삭제 중 오류 발생");
     }
@@ -99,7 +100,7 @@ export const deleteCart = async (object) => {
 // 결제
 export const mobilePayment = async (object) => {
     try {
-        return shopAxios.post(shopURL.mobilePayment, object);
+        return axios.post(shopURL.mobilePayment, object);
     } catch (error) {
         handleApiError(error, "모바일 결제 중 오류 발생");
     }
@@ -107,7 +108,7 @@ export const mobilePayment = async (object) => {
 
 export const pcPayment = async (object) => {
     try {
-        return shopAxios.post(shopURL.pcPayment, object);
+        return axios.post(shopURL.pcPayment, object);
     } catch (error) {
         handleApiError(error, "pc 결제 중 오류 발생");
     }
@@ -116,7 +117,7 @@ export const pcPayment = async (object) => {
 // 환불
 export const refund = async (object) => {
     try {
-        return shopAxios.post(shopURL.refund, object);
+        return axios.post(shopURL.refund, object);
     } catch (error) {
         handleApiError(error, "환불 중 오류 발생");
     }
@@ -125,7 +126,7 @@ export const refund = async (object) => {
 // 멤버별 주문 상품 조회
 export const getOrderList = async (page) => {
     try {
-        return shopAxios.post(shopURL.getOrderList + `?page=${page}`);
+        return axios.post(shopURL.getOrderList + `?page=${page}`);
     } catch (error) {
         handleApiError(error, "멤버별 주문 상품 조회 중 오류 발생");
     }
@@ -134,7 +135,7 @@ export const getOrderList = async (page) => {
 // admin 월별 통계
 export const getOrderListByMonthAdmin = async () => {
     try {
-        return shopAxios.get(shopURL.getOrderListByMonthAdmin);
+        return axios.get(shopURL.getOrderListByMonthAdmin);
     } catch (error) {
         handleApiError(error, "admin 월별 통계 조회 중 오류 발생");
     }
@@ -143,7 +144,7 @@ export const getOrderListByMonthAdmin = async () => {
 // admin 주문건별 멤버 정보 및 상품 정보
 export const getOrderListAdmin = async (page) => {
     try {
-        return shopAxios.get(shopURL.getOrderListAdmin + `?page=${page}`);
+        return axios.get(shopURL.getOrderListAdmin + `?page=${page}`);
     } catch (error) {
         handleApiError(error, "admin 주문건별 멤버 정보 및 상품 정보 조회 중 오류 발생");
     }
