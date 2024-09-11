@@ -1,12 +1,12 @@
 <template>
     <div class="post-input-compo">
         <div class="post-input-compo-text-input">
-            <input type="text" placeholder="제목을 입력해주세요.">
+            <input type="text" placeholder="제목을 입력해주세요." @input="$emit('update-title', $event.target.value)">
         </div>
         <div class="post-input-img">
             <div>
                 <!-- 파일 추가 시마다 이미지 미리보기 -->
-                <input type="file" id="upload-image" hidden multiple @change="addFiles" accept="image/*"/>
+                <input type="file" id="upload-image" hidden multiple @change="addFiles" accept="image/*" />
                 <label for="upload-image">
                     <img src="@/assets/writePostCompo/AddImage.png" />
                 </label>
@@ -20,7 +20,7 @@
             </div>
         </div>
         <div class="post-input-compo-text-textarea">
-            <textarea placeholder="내용을 입력해주세요."/>
+            <textarea placeholder="내용을 입력해주세요." @input="$emit('update-contents', $event.target.value)"></textarea>
         </div>
     </div>
 </template>
@@ -29,19 +29,24 @@
 export default {
     data() {
         return {
-        imageSrcs: [],  // 이미지 URL을 저장할 배열
-        deleteBtnSrc: require("@/assets/writePostCompo/deleteBtn.png")
+            imageFiles: [], // 파일을 저장할 배열
+            imageSrcs: [],  // 이미지 URL을 저장할 배열
+            deleteBtnSrc: require("@/assets/writePostCompo/deleteBtn.png")
         };
     },
     methods: {
         addFiles(event) {
-        const files = Array.from(event.target.files);
-        // 새로 추가된 파일을 기존 파일에 추가하되 최대 5개를 유지
-        files.forEach(file => {
-            if (this.imageSrcs.length < 5 && file.type.startsWith('image/')) {
-            this.readFile(file);
-            }
-        });
+            const files = Array.from(event.target.files);
+            // 이미 추가된 이미지 수와 새로 추가하려는 이미지 수의 합이 5를 넘지 않도록 제한
+            const totalFiles = this.imageFiles.length + files.length;
+            files.forEach(file => {
+                if (this.imageFiles.length < 5 && totalFiles <= 5 && file.type.startsWith('image/')) {
+                    this.imageFiles.push(file); // 파일 배열에 파일 추가
+                    this.readFile(file);        // 미리보기 생성
+                }
+            });
+            // 부모 컴포넌트로 파일 배열 전송
+            this.$emit('update-images', this.imageFiles);
         },
         readFile(file) {
             const reader = new FileReader();
@@ -52,7 +57,10 @@ export default {
             reader.readAsDataURL(file);
         },
         removeImage(index) {
-            this.imageSrcs.splice(index, 1);
+            this.imageSrcs.splice(index, 1);   // 미리보기 이미지 URL 제거
+            this.imageFiles.splice(index, 1);  // 실제 파일 배열에서도 제거
+            // 부모 컴포넌트로 변경된 파일 배열 전송
+            this.$emit('update-images', this.imageFiles);
         }
     }
 }

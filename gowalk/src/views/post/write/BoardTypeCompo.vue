@@ -17,8 +17,6 @@ export default {
             items: [
                 { id: '1', label: '산책인증' },
                 { id: '2', label: '정보공유' },
-                { id: '3', label: '곧오픈예정' },
-                { id: '4', label: '이다모' }
             ]
         }
         
@@ -28,6 +26,7 @@ export default {
             if (this.selectedType !== type) {
                 this.selectedType = type;
                 // this.$router.push({ name: 'PostCompo', params: { postType: type } });
+                this.$emit("type-selected", type)
             }
         },
     }
@@ -42,7 +41,7 @@ export default {
 }
 .board-type-content-compo{
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: center;
     margin: 5px;
     height: 40px;
