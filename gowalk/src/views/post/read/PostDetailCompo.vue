@@ -10,7 +10,7 @@
         <post-detail-image-compo :images="postDetail.imgList" />
         <post-detail-content-compo :content="postDetail.contents" />
         <post-detail-good-compo :is-liked="isLiked" :likes-count="likesCount" @toggle-like="toggleLike" />
-        <comment-compo :comments="postDetail.comments" />
+        <comment-compo :comments="postDetail.comments" :postid="postId" />
     </div>
 </template>
 
@@ -46,7 +46,7 @@ export default {
     },
     methods: {
         fetchPostDetail() {
-            axios.get(`/post/${this.postId}`)
+            axios.get(`/api/post/${this.postId}`)
                 .then(response => {
                     console.log(response.data)
                     
@@ -54,6 +54,9 @@ export default {
                     this.isLiked = response.data.isLiked;
                     this.likesCount = response.data.likesCount;
                     console.log("좋아요 제발 체크되라..." + response.data)
+
+                    this.postDetail.comments = response.data.comments || [];
+                    console.log("댓글 데이터 존재 여부 확인:", this.postDetail.comments);
                     
                     this.postDetail.comments = this.structureComments(this.postDetail.comments); // 댓글 구조화
                     console.log("Structured comments:", this.postDetail.comments); // 구조화된 댓글 데이터 로깅
@@ -89,7 +92,7 @@ export default {
             this.likesCount += this.isLiked ? 1 : -1;
 
             // 서버 요청
-            axios.post(`/post/like/${this.postId}`, { likeStatus: this.isLiked })
+            axios.post(`/api/post/like/${this.postId}`, { likeStatus: this.isLiked })
                 .then(response => {
                     // 서버로부터 정확한 좋아요 수를 받아 UI를 업데이트
                     this.likesCount = response.data.likesCount; // 예상 응답 필드명

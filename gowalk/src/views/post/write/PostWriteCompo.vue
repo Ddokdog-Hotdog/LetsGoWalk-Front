@@ -63,13 +63,13 @@ export default {
             console.log("this.post : " + this.post)
             
             this.post.images.forEach(file => {
-                formData.append('mediaUrlList', file);
+                formData.append('images', file);
                 console.log('Adding file:', file.name); // 파일 로그 확인
             });
 
             console.log("FormData 전체 내용 확인 : " + [...formData]); // FormData 전체 내용 확인
 
-            axios.post('/post/write', formData, {
+            axios.post('/api/post/write', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }

@@ -1,27 +1,31 @@
 <template>
-    <div class="comment-list-compo">
-        <div v-for="comment in comments" :key="comment.id" class="comment-list-compo-container" :class="{'is-reply': comment.commentsId}">
-            <div>
-                <img class="user-profile" :src="comment.profileImg || defaultProfileUrl" alt="profile" @error="handleImageError">
-            </div>
-            <div class="comment-list-content-info">
-                <div class="comment-list-userinfo">
-                    <div>{{ comment.nickname }}</div>
-                    <div class="comment-list-userinfo-createdAt">{{ comment.createdAt }}</div>
+    <div class="comment-list-compo" v-if="comments && comments.length">
+        <!-- Use a <template> to apply the v-if condition -->
+        <template v-if="comments.length > 0">
+            <div v-for="comment in comments" :key="comment.id" class="comment-list-compo-container" :class="{'is-reply': comment.commentsId}">
+                <div>
+                    <img class="user-profile" :src="comment.profileImg || defaultProfileUrl" alt="profile" @error="handleImageError">
                 </div>
-                <div>{{ comment.content }}</div>
-                <div class="comment-list-compo-container-count" v-if="!comment.commentsId">
-                    <div>
-                        <img :src="commentSrc" alt="comments">
+                <div class="comment-list-content-info">
+                    <div class="comment-list-userinfo">
+                        <div>{{ comment.nickname }}</div>
+                        <div class="comment-list-userinfo-createdAt">{{ comment.createdAt }}</div>
                     </div>
-                    <div>
-                        {{ comment.count }}
+                    <div>{{ comment.content }}</div>
+                    <div class="comment-list-compo-container-count" v-if="!comment.commentsId">
+                        <div>
+                            <img :src="commentSrc" alt="comments">
+                        </div>
+                        <div>
+                            {{ comment.count }}
+                        </div>
                     </div>
+                    <!-- Recursive comments if any -->
+                    <comment-list-compo v-if="comment.children.length" :comments="comment.children"/>
                 </div>
-                <!-- CommentListCompo 컴포넌트 내부에서 재귀적으로 자신을 호출하는 부분-->
-                <comment-list-compo v-if="comment.children.length" :comments="comment.children"/>
             </div>
-        </div>
+        </template>
+        <div v-else>No comments to display.</div>
     </div>
 </template>
 
@@ -29,7 +33,10 @@
 export default {
     name: "CommentListCompo",
     props: {
-        comments: Array
+        comments: {
+            type: Array,
+            default: () => []
+        }
     },
     data() {
         return {
