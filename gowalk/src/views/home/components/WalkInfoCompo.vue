@@ -1,16 +1,16 @@
 <template>
-        <div>
+        <div v-if="hasData">
             <div class="walk-info-box">
                 <div class="walk-time">
                     <p class="walk-title">산책 시간</p>
-                    <p class="walk-value">1h 35M</p>
+                    <p class="walk-value">{{ walkTimeHours }}h {{ walkTimeMinutes }}M</p>
                 </div>
                 <div class="walk-distance">
                     <p class="walk-title">산책 거리</p>
-                    <p class="walk-value">3.00km</p>
+                    <p class="walk-value">{{ dailyWalkDistance }}km</p>
                 </div>
             </div>
-            <p class="calorie-info">몽몽이가 167kcal를 소비했어요</p>
+            <p class="calorie-info">우리 강아지들이 {{ Math.round(dogCalories) }}kcal를 소비했어요</p>
         </div>
 </template>
 
@@ -23,7 +23,39 @@ export default {
     },
     methods: {
         
-    }
+    },
+    computed: {
+        walks() {
+            return this.$store.getters["walkStore/dailyWalks"];
+        },
+        hasData() {
+            return this.walks.length > 0;
+        },
+        dailyWalkTime() {
+            return this.walks.reduce((total, walk) => total + walk.duration, 0);
+        },
+        walkTimeHours() {
+            return Math.floor(this.dailyWalkTime / 3600);
+        },
+        walkTimeMinutes() {
+            return Math.floor((this.dailyWalkTime % 3600) / 60)
+                .toString()
+                .padStart(2, "0");
+        },
+        dailyWalkDistance() {
+            const distance = this.walks.reduce((total, walk) => total + walk.distance, 0);
+            return (distance / 1000).toFixed(2); // Km
+        },
+        dogCalories() {
+            let calories = 0;
+            this.walks.forEach((walk) => {
+                walk.dogs.forEach((dog) => {
+                    calories += dog.caloriesBurned;
+                });
+            });
+            return calories;
+        },
+    },
 }
 </script>
 
