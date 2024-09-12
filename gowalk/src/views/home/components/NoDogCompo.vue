@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="walk-info-box">
+        <div class="walk-info-box" @click="goToRegisterDog">
             강아지 등록하기
         </div>
         <p class="calorie-info">아직 강아지 등록이 안돼있어요 !</p>
@@ -15,7 +15,9 @@ data(){
     }
 },
 methods: {
-    
+    goToRegisterDog(){
+        this.$router.push("/mypage")
+    }
 }
 }
 </script>
@@ -40,6 +42,7 @@ methods: {
                 0 4px 4px rgba(0,0,0,0.11), 
                 0 6px 8px rgba(0,0,0,0.11),
                 0 8px 16px rgba(0,0,0,0.11);
+    cursor: pointer;
 }
 
 .calorie-info {

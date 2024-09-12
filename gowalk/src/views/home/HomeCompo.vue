@@ -2,14 +2,14 @@
     <div class="home">
         <CarouselCompo></CarouselCompo>
 
-        <!-- 로그인을 했으며, 오늘 산책을 한 경우 -->
-        <WalkInfoCompo v-if="true"></WalkInfoCompo>
+        <!-- 로그인을 했으며, 강아지가 있으며, 오늘 산책을 한 경우 -->
+        <WalkInfoCompo v-if="isLogined && haveDog && todayWalk"></WalkInfoCompo>
 
-        <!-- 로그인을 했으며, 오늘 산책을 하지 않은 경우 -->
-        <TodayNoWalkCompo v-if="false"></TodayNoWalkCompo>
+        <!-- 로그인을 했으며, 강아지가 있으며, 오늘 산책을 하지 않은 경우 -->
+        <TodayNoWalkCompo v-if="isLogined && haveDog && !todayWalk"></TodayNoWalkCompo>
 
         <!-- 로그인을 했으며, 강아지를 등록하지 않은 경우 -->
-        <NoDogCompo v-if="false"></NoDogCompo>
+        <NoDogCompo v-if="isLogined && !haveDog"></NoDogCompo>
 
         <!-- Hot Place Section -->
         <div class="hot-place">
@@ -22,16 +22,16 @@
         <div class="quest-section">
             <div class="quest-header">
                 <p><span class="word-border"><span class="word-color-green word-border">퀘스트</span> 완료하고 포인트 받아요</span></p>
-                <p class="read-more">더보기</p>
+                <p class="read-more" @click="goToQuest">더보기</p>
             </div>
             <div class="quest-buttons">
-                <button>
+                <button @click="goToQuest">
                     <img src="@/assets/home/check-icon.png" />
                 </button>
-                <button>
+                <button @click="goToWalk">
                     <img src="@/assets/home/walk-icon.png" />
                 </button>
-                <button>
+                <button @click="goToWrite">
                     <img src="@/assets/home/post-icon.png" />
                 </button>
             </div>
@@ -43,20 +43,23 @@
                 <p><span class="word-border">우리 <span class="word-color-pink word-border">소통</span>해요 ♡</span></p>
             </div>
             <div class="post-list">
-                <div class="post-item" v-for="(post, index) in posts" :key="index">
-                    <img :src="post.image" alt="Post Image" />
+                <div class="post-item" v-for="(post, index) in posts" :key="index" @click="goToDetail(post)">
+                    <img :src="post.img" alt="Post Image" class="post-img"/>
                     <div class="post-details">
                         <p class="post-title">{{ post.title }}</p>
                         <p class="post-info">
-                            {{ post.author }}
+                            {{ post.nickname }}
                             ·
-                            {{ post.time }} · 좋아요 {{ post.likes }} · 댓글 {{ post.comments }}
+                            {{ post.createdAt | day}} · 좋아요 {{ post.likesCount }} · 댓글 {{ post.commentsCount }}
                         </p>
                     </div>
                 </div>
             </div>
-            <div class="more-community">
-                <p class="read-more">커뮤니티 더보기</p>
+            <div v-if="posts.length == 0">
+                현재 등록된 게시글이 없습니다.
+            </div>
+            <div class="more-community" v-if="posts.length >= 1">
+                <p class="read-more" @click="goToPost">커뮤니티 더보기</p>
             </div>
         </div>
     </div>
@@ -68,37 +71,47 @@ import WalkInfoCompo from "@/views/home/components/WalkInfoCompo.vue";
 import TodayNoWalkCompo from "@/views/home/components/TodayNoWalkCompo.vue";
 import NoDogCompo from "@/views/home/components/NoDogCompo.vue";
 import CarouselCompo from "@/views/home/components/CarouselCompo.vue";
+import axios from "@/axios.js"; 
 
 export default {
     data() {
         return {
-            posts: [
-                {
-                    image: require(`@/assets/home/temp-post.png`),
-                    title: "오산완 인증이요 ~",
-                    author: "작성자닉네임",
-                    time: "23분 전",
-                    likes: 23,
-                    comments: 1,
-                },
-                {
-                    image: require(`@/assets/home/temp-post.png`),
-                    title: "오산완 인증이요 ~",
-                    author: "작성자닉네임",
-                    time: "23분 전",
-                    likes: 23,
-                    comments: 1,
-                },
-                {
-                    image: require(`@/assets/home/temp-post.png`),
-                    title: "오산완 인증이요 ~",
-                    author: "작성자닉네임",
-                    time: "23분 전",
-                    likes: 23,
-                    comments: 1,
-                },
-            ],
+            posts: [],
+            isLogined: false, // 로그인 여부
+            haveDog: false, // 강아지 여부
+            todayWalk: false, // 오늘 산책 여부
         };
+    },
+    mounted: async function(){
+        
+        // 메인 화면 게시글 최신 3개글 가져오기
+        await axios.get("/api/post/board/1?page=0&size=3").then((response) => {
+            console.log("게시글 목록");
+            console.log((response.data));
+            this.posts = [...response.data];
+        }).catch((error) => {
+            console.log(error);
+        });        
+
+        // 강아지 여부 체크
+        await axios.get("/api/mypage/pets").then((response) => {
+            console.log("강아지 목록 : ", response.data);
+            // 강아지 여부를 가지고 올 수 있다는 것은 로그인이 되었다는 의미
+            this.isLogined = true;
+            if(response.data.length >= 1){
+                this.haveDog = true;
+            }
+            if(this.$store.getters["walkStore/dailyWalks"] > 0){
+                // 산책 여부 체크
+                this.todayWalk = true;
+            }
+        }).catch((error) => {
+            console.log(error);
+        })
+        console.log("isLogined : ", this.isLogined);
+        console.log("havedog : ", this.haveDog);
+        console.log("todayWalk : ", this.todayWalk);
+
     },
     components: {
         KakaoMap,
@@ -107,6 +120,35 @@ export default {
         NoDogCompo,
         CarouselCompo,
     },
+    methods: {
+        goToPost(){
+            this.$router.push("/post/1");
+        },
+        goToQuest(){
+            this.$router.push("/quest");
+        },
+        goToDetail(post){
+            this.$router.push(`/post/${post.boardid}/${post.postid}`);
+        },
+        goToWalk(){
+            this.$router.push("/walk");
+        },
+        goToWrite(){
+            this.$router.push("/post/write");
+        }
+    },
+    filters: {
+        day(value) {
+            const date = new Date(value);
+            const year = String(date.getFullYear()).slice(2); // 연도 뒤 두 자리
+            const month = String(date.getMonth() + 1).padStart(2, '0'); // 월 (1~12)
+            const day = String(date.getDate()).padStart(2, '0'); // 일
+            const hours = String(date.getHours()).padStart(2, '0'); // 시
+            const minutes = String(date.getMinutes()).padStart(2, '0'); // 분
+            const seconds = String(date.getSeconds()).padStart(2, '0'); // 초
+            return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+        },
+    }
 };
 </script>
 
@@ -206,14 +248,15 @@ export default {
 .post-item {
     display: flex;
     margin-bottom: 10px;
+    cursor: pointer;
 }
 
-.post-item img {
+.post-img {
     width: 20%; /* 게시글 이미지 너비 20% */
     height: auto;
     object-fit: cover;
+    border-radius: 10px;
 }
-
 .post-details {
     display: flex;
     flex-direction: column;
@@ -246,8 +289,8 @@ export default {
 
 /* 반응형 처리 */
 @media (max-width: 768px) {
-    .post-item img {
-        width: 30%; /* 작은 화면에서는 30%로 */
+    .post-img {
+        width: 20%; /* 작은 화면에서는 30%로 */
     }
 }
 
