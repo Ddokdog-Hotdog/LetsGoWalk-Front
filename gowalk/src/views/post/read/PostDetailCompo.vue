@@ -10,7 +10,7 @@
         <post-detail-image-compo :images="postDetail.imgList" />
         <post-detail-content-compo :content="postDetail.contents" />
         <post-detail-good-compo :is-liked="isLiked" :likes-count="likesCount" @toggle-like="toggleLike" />
-        <comment-compo :comments="postDetail.comments" />
+        <comment-compo :comments="postDetail.comments" :postid="postId" />
     </div>
 </template>
 
@@ -46,13 +46,18 @@ export default {
     },
     methods: {
         fetchPostDetail() {
-            axios.get(`/post/${this.postId}`)
+            axios.get(`/api/post/${this.postId}`)
                 .then(response => {
                     console.log(response.data)
                     
                     this.postDetail = response.data;
                     this.isLiked = response.data.isLiked;
                     this.likesCount = response.data.likesCount;
+                    console.log("좋아요 제발 체크되라..." + response.data)
+
+                    this.postDetail.comments = response.data.comments || [];
+                    console.log("댓글 데이터 존재 여부 확인:", this.postDetail.comments);
+                    
                     this.postDetail.comments = this.structureComments(this.postDetail.comments); // 댓글 구조화
                     console.log("Structured comments:", this.postDetail.comments); // 구조화된 댓글 데이터 로깅
                 })
@@ -81,12 +86,23 @@ export default {
             return structuredComments.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
         },
         toggleLike() {
-            axios.post(`/post/like/${this.postId}`)
+            // UI 즉시 업데이트를 위한 예비 처리
+            const wasLiked = this.isLiked;
+            this.isLiked = !this.isLiked;
+            this.likesCount += this.isLiked ? 1 : -1;
+
+            // 서버 요청
+            axios.post(`/api/post/like/${this.postId}`, { likeStatus: this.isLiked })
                 .then(response => {
-                    this.isLiked = !this.isLiked; // 상태 토글
-                    this.likesCount = response.data; // 서버로부터 업데이트된 좋아요 수 받기
+                    // 서버로부터 정확한 좋아요 수를 받아 UI를 업데이트
+                    this.likesCount = response.data.likesCount; // 예상 응답 필드명
                 })
-                .catch(error => console.error('Error toggling like:', error));
+                .catch(error => {
+                    console.error('Error toggling like:', error);
+                    // 에러 시 상태 롤백
+                    this.isLiked = wasLiked;
+                    this.likesCount += wasLiked ? -1 : 1;
+                });
         },
     },
     mounted() {

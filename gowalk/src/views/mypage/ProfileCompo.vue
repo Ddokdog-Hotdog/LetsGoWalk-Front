@@ -82,7 +82,7 @@ export default {
     methods: {
         async loadUserInfo() {
             try {
-                const response = await axios.get("/register");
+                const response = await axios.get("/api/register");
                 console.log("서버 응답 데이터:", response.data);
 
                 this.profilePictureUrl = response.data.profileImageUrl || "";

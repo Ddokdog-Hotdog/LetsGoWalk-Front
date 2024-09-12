@@ -28,7 +28,7 @@
             </div>
         </div>
         <div class="bottom">
-            <a href="#">구매내역</a>
+            <router-link to="/mypage/orderlist">구매내역</router-link>
             <a href="#">나의 활동</a>
             <a href="#">설정</a>
         </div>

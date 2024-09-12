@@ -126,7 +126,7 @@ export const refund = async (object) => {
 // 멤버별 주문 상품 조회
 export const getOrderList = async (page) => {
     try {
-        return axios.post(shopURL.getOrderList + `?page=${page}`);
+        return axios.get(shopURL.getOrderList + `?page=${page}`);
     } catch (error) {
         handleApiError(error, "멤버별 주문 상품 조회 중 오류 발생");
     }
