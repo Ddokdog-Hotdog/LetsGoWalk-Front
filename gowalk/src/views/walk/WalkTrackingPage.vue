@@ -41,8 +41,9 @@ export default {
     },
     methods: {
         ...mapActions("walkStore", ["stopWalk"]),
-        walkEnd() {
-            this.stopWalk();
+        async walkEnd() {
+            await this.stopWalk();
+            this.$router.push("/walk/summary");
         },
         toggleConfirmMoal() {
             this.confirmModal = !this.confirmModal;

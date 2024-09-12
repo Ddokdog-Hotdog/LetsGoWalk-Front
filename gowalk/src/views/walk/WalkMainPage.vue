@@ -47,14 +47,6 @@ export default {
     },
     async created() {
         this.isWalking && this.$router.push("/walk/onwalk");
-        const now = new Date();
-        const today = {
-            memberId: 0,
-            year: now.getFullYear(),
-            month: now.getMonth() + 1,
-            day: now.getDate(),
-        };
-        this.fetchDailyWalks(today);
     },
     methods: {
         ...mapActions("walkStore", ["startWalk", "fetchDailyWalks"]),

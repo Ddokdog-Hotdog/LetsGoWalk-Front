@@ -15,9 +15,8 @@ import {
     drawPolyline,
     drawWalk,
     drawWalkWithoutBounds,
-    findHotspots,
 } from "@/views/walk/util/kakaoMap";
-import { nearbyWalks } from "@/views/walk/util/walkApi";
+import { nearbyWalks, nearbyHotplace } from "@/views/walk/util/walkApi";
 import { defaultPosition } from "@/views/walk/util/config";
 import { mapMutations, mapState } from "vuex";
 export default {
@@ -180,17 +179,14 @@ export default {
             return response.data;
         },
         async showHotplace() {
-            const walks = await this.searchNearby(this.curLocation);
-            const hotspots = findHotspots(walks);
-            console.log("핫플레이스 순위: ", hotspots);
-            this.deleteMarker();
-
+            const response = await nearbyHotplace(this.curLocation);
+            const hotspots = response.data;
+            console.log(hotspots);
+            if (hotspots.length === 0) {
+                return;
+            }
             hotspots.forEach((spot) => {
-                const marker = createMarker(
-                    [spot.coordinate.lat, spot.coordinate.lng],
-                    markerImages.hotPlace(),
-                    this.map
-                );
+                const marker = createMarker([spot.lat, spot.lng], markerImages.hotPlace(), this.map);
                 this.hotspotMarkers.push(marker);
             });
         },

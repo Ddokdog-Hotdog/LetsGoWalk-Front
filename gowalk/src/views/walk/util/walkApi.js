@@ -82,6 +82,19 @@ export const nearbyWalks = (nearby) => {
     }
 };
 
+export const nearbyHotplace = (location) => {
+    console.log("보내기전 ", location);
+    try {
+        const data = {
+            latitude: location.lat,
+            longitude: location.lng,
+        };
+        return axios.post(walkURL.walkHotplace, data);
+    } catch (error) {
+        handleApiError(error, "주변 산책경로 불러오는 중 오류 발생");
+    }
+};
+
 export const getMyPets = async () => {
     try {
         const response = await axios.get(walkURL.getMyPets);

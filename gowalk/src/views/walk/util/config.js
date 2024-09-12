@@ -14,4 +14,5 @@ export const walkURL = {
     walkDaily: apiURL + "/daily",
     walkMonthly: apiURL + "/monthly",
     walkNearby: apiURL + "/nearby",
+    walkHotplace: apiURL + "/hotplace",
 };

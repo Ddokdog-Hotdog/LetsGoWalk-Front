@@ -58,7 +58,7 @@ export const markerImages = {
         );
     },
     hotPlace: function () {
-        return this.markerImage(require("@/assets/marker/hotplace.png"), [50, 50], [25, 50]);
+        return this.markerImage(require("@/assets/marker/hotplace.png"), [70, 70], [25, 50]);
     },
     myPosition: function () {
         return this.markerImage(require("@/assets/marker/currentLocation.png"), [35, 35], [19, 19]);
@@ -175,29 +175,4 @@ export const drawWalkWithoutBounds = (walks, map) => {
     });
 
     return polylines;
-};
-
-export const findHotspots = (walkData) => {
-    const locationCounts = {};
-
-    // 모든 경로 데이터를 순회하며 소수점 3자리까지 좌표 카운트
-    walkData.forEach((walk) => {
-        walk.paths.forEach((path) => {
-            const roundedX = Number(path.location.x.toFixed(3));
-            const roundedY = Number(path.location.y.toFixed(3));
-            const coordinateKey = `${roundedY},${roundedX}`;
-
-            locationCounts[coordinateKey] = (locationCounts[coordinateKey] || 0) + 1;
-        });
-    });
-
-    const sortedHotspots = Object.entries(locationCounts)
-        .map(([coordinateKey, count]) => {
-            const [lat, lng] = coordinateKey.split(",").map(Number);
-            return { coordinate: { lat, lng }, count };
-        })
-        .sort((a, b) => b.count - a.count);
-
-    // 일단 최대 100등까지 반환
-    return sortedHotspots.slice(0, 100);
 };
