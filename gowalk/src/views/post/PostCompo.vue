@@ -20,7 +20,7 @@ export default {
         PostCreateBtn,
         ConfirmModalCompo,
     },
-    // props: ["postType"],
+    props: ["postType"],
     data() {
         return {
             name: "PostCompo",

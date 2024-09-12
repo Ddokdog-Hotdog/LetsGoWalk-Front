@@ -89,7 +89,7 @@ export default {
             console.log('Starting fetch for post type:', this.postType);
 
             try {
-                const response = await axios.get(`/post/board/${this.postType}?page=${this.currentPage}&size=${this.pageSize}`);
+                const response = await axios.get(`/api/post/board/${this.postType}?page=${this.currentPage}&size=${this.pageSize}`);
                 console.log('Fetched posts:', response.data);
                 if (response.data.length > 0) {
                     this.posts = [...this.posts, ...response.data];

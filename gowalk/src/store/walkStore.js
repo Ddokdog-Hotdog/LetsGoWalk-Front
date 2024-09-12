@@ -94,7 +94,7 @@ const actions = {
         dispatch("startTracking");
     },
     async stopWalk({ commit, dispatch, state }) {
-        dispatch("sendRoute");
+        await dispatch("sendRoute");
         const data = {
             memberId: 0,
             walkId: state.walks.walkId,

@@ -22,7 +22,7 @@ export default {
     methods: {
         async fetchBoardTypes() {
             try {
-                const response = await axios.get('/post/board');
+                const response = await axios.get('/api/post/board');
                 this.items = response.data.map(board => ({
                     id: parseInt(board.id),
                     label: board.name
