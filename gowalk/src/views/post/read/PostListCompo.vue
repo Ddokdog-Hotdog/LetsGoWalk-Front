@@ -92,9 +92,12 @@ export default {
                 const response = await axios.get(`/api/post/board/${this.postType}?page=${this.currentPage}&size=${this.pageSize}`);
                 console.log('Fetched posts:', response.data);
                 if (response.data.length > 0) {
+                    const sortedData = response.data.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
                     this.posts = [...this.posts, ...response.data];
                     this.currentPage++;
-                    this.allDataLoaded = response.data.length < this.pageSize;
+                    // this.allDataLoaded = response.data.length < this.pageSize;
+                    this.allDataLoaded = sortedData.length < this.pageSize;
+
                 } else {
                     this.allDataLoaded = true;
                 }

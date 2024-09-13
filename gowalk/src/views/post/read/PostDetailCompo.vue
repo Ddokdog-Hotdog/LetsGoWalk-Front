@@ -56,7 +56,7 @@ export default {
                     console.log("좋아요 제발 체크되라..." + response.data)
 
                     this.postDetail.comments = response.data.comments || [];
-                    console.log("댓글 데이터 존재 여부 확인:", this.postDetail.comments);
+                    // console.log("댓글 데이터 존재 여부 확인:", this.postDetail.comments);
                     
                     this.postDetail.comments = this.structureComments(this.postDetail.comments); // 댓글 구조화
                     console.log("Structured comments:", this.postDetail.comments); // 구조화된 댓글 데이터 로깅
