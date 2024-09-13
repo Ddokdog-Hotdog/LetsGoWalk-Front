@@ -23,7 +23,7 @@ export default {
         postid: {
             type: Number,
             required: true
-        }
+        },
     },
     methods: {
         submitComment() {

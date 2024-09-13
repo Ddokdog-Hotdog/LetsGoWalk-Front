@@ -4,12 +4,13 @@
         <div class="top">
             <div class="user-profile">
                 <img :src="computedProfilePictureUrl" alt="Profile" />
-                <div class="info">
+                <div class="infomation">
                     <p>{{ memberInfo.nickname }} 님</p>
-                    <button @click="editProfile" class="edit-button">편집</button>
+                    <button @click="goToProfile" class="edit-button">편집</button>
                 </div>
             </div>
             <div class="my-point">
+                <img src="@/assets/quest/point.png" id="point" />
                 <p>보유 포인트</p>
                 <p class="point-value">{{ memberInfo.point }}P</p>
                 <button class="history-button">내역보기</button>
@@ -18,12 +19,17 @@
         <div class="middle">
             <div id="title">
                 <p>우리 멍멍이들</p>
-                <button class="add-button">추가</button>
+                <button @click="goToAddDog" class="add-button">추가</button>
             </div>
             <div class="pet-profile">
-                <div v-for="pet in pets" :key="pet.petId" class="pet">
-                    <img :src="pet.profileImageUrl || defaultPetImageUrl" alt="Pet" />
-                    <p>{{ pet.name }}</p>
+                <div v-if="pets && pets.length > 0" class="petEntity">
+                    <div v-for="pet in pets" :key="pet.petId" class="pet">
+                        <img :src="pet.profileImageUrl || defaultPetImageUrl" alt="Pet" />
+                        <p>{{ pet.name }}</p>
+                    </div>
+                </div>
+                <div v-else>
+                    <p>등록한 멍멍이가 없어요 !</p>
                 </div>
             </div>
         </div>
@@ -36,7 +42,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import axios from "@/axios";
 
 export default {
     data() {
@@ -47,7 +53,7 @@ export default {
                 profileImageUrl: "",
             },
             pets: [],
-            defaultPetImageUrl: "path-to-default-pet-image",
+            defaultPetImageUrl: require("@/assets/login/dog-profile.png"),
         };
     },
     computed: {
@@ -56,20 +62,31 @@ export default {
         },
     },
     mounted() {
+        console.log("Component mounted");
         this.loadMyPageInfo();
     },
     methods: {
         async loadMyPageInfo() {
             try {
-                const response = await axios.get("http://localhost:8080/api/mypage"); // 올바른 경로로 요청
+                const response = await axios.get("/api/mypage", {
+                    headers: {
+                        Authorization: `Bearer ${this.$store.getters.getAccessToken}`,
+                    },
+                });
+                console.log("Response headers:", response.config.headers); // 헤더 로그 출력
                 this.memberInfo = response.data.memberInfo;
                 this.pets = response.data.pets;
             } catch (error) {
                 console.error("마이페이지 정보 로드 실패:", error);
             }
         },
-        editProfile() {
-            // 프로필 편집 로직을 추가하세요.
+
+        goToProfile() {
+            this.$router.push("/mypage/profile"); // /profile 경로로 이동
+        },
+
+        goToAddDog() {
+            this.$router.push("/mypage/addDog"); // /profile 경로로 이동
         },
     },
 };
@@ -81,6 +98,7 @@ export default {
     margin: 0 auto;
     padding: 20px;
     background-color: #f9f9f9;
+    height: 100%;
 }
 h1 {
     text-align: center;
@@ -93,6 +111,7 @@ h1 {
     align-items: center;
     margin-bottom: 20px;
     width: 100%;
+    height: 25%;
 }
 .user-profile {
     text-align: center;
@@ -113,9 +132,12 @@ h1 {
     margin-bottom: 10px;
     width: 50%;
 }
+.infomation {
+    width: 50%;
+}
 .user-profile p {
-    margin: 0;
-    font-size: 16px;
+    margin-bottom: 10px;
+    font-size: 100%;
     font-weight: bold;
 }
 .edit-button {
@@ -128,16 +150,23 @@ h1 {
 .my-point {
     text-align: center;
     background-color: #fff4e6;
-    padding: 10px;
     border-radius: 10px;
-    padding: 20px;
+    padding: 20px 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    width: 30%;
+    width: 33%;
     height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+#point {
+    width: 30px;
+    margin: 0 auto;
 }
 .my-point p {
     margin: 0;
-    font-size: 14px;
+    font-size: 80%;
+    font-weight: bold;
 }
 .point-value {
     font-size: 24px;
@@ -151,6 +180,7 @@ h1 {
     border-radius: 20px;
     color: white;
     cursor: pointer;
+    font-size: 70%;
 }
 .middle {
     background-color: #ffffff;
@@ -172,15 +202,14 @@ h1 {
     border-radius: 20px;
     cursor: pointer;
 }
-.pet-profile {
+
+.petEntity {
     display: flex;
-    justify-content: space-around;
-    text-align: center;
 }
 .pet {
-    display: flex;
-    flex-direction: column;
     align-items: center;
+    width: 70px;
+    margin: 0;
 }
 .pet img {
     width: 60px;

@@ -179,6 +179,7 @@ export default {
             return response.data;
         },
         async showHotplace() {
+            await new Promise((resolve) => setTimeout(resolve, 1000));
             const response = await nearbyHotplace(this.curLocation);
             const hotspots = response.data;
             console.log(hotspots);
