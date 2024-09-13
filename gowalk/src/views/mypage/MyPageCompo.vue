@@ -6,10 +6,11 @@
                 <img :src="computedProfilePictureUrl" alt="Profile" />
                 <div class="infomation">
                     <p>{{ memberInfo.nickname }} 님</p>
-                    <button @click="editProfile" class="edit-button">편집</button>
+                    <button @click="goToProfile" class="edit-button">편집</button>
                 </div>
             </div>
             <div class="my-point">
+                <img src="@/assets/quest/point.png" id="point" />
                 <p>보유 포인트</p>
                 <p class="point-value">{{ memberInfo.point }}P</p>
                 <button class="history-button">내역보기</button>
@@ -18,7 +19,7 @@
         <div class="middle">
             <div id="title">
                 <p>우리 멍멍이들</p>
-                <button class="add-button">추가</button>
+                <button @click="goToAddDog" class="add-button">추가</button>
             </div>
             <div class="pet-profile">
                 <div v-if="pets && pets.length > 0">
@@ -67,7 +68,7 @@ export default {
     methods: {
         async loadMyPageInfo() {
             try {
-                const response = await axios.get("/mypage", {
+                const response = await axios.get("/api/mypage", {
                     headers: {
                         Authorization: `Bearer ${this.$store.getters.getAccessToken}`,
                     },
@@ -80,8 +81,12 @@ export default {
             }
         },
 
-        editProfile() {
-            // 프로필 편집 로직을 추가하세요.
+        goToProfile() {
+            this.$router.push("/mypage/profile"); // /profile 경로로 이동
+        },
+
+        goToAddDog() {
+            this.$router.push("/mypage/addDog"); // /profile 경로로 이동
         },
     },
 };
@@ -132,7 +137,7 @@ h1 {
 }
 .user-profile p {
     margin-bottom: 10px;
-    font-size: 16px;
+    font-size: 100%;
     font-weight: bold;
 }
 .edit-button {
@@ -146,17 +151,22 @@ h1 {
     text-align: center;
     background-color: #fff4e6;
     border-radius: 10px;
-    padding: 20px;
+    padding: 20px 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    width: 30%;
+    width: 33%;
     height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
 }
+#point {
+    width: 30px;
+    margin: 0 auto;
+}
 .my-point p {
     margin: 0;
-    font-size: 14px;
+    font-size: 80%;
+    font-weight: bold;
 }
 .point-value {
     font-size: 24px;
@@ -170,6 +180,7 @@ h1 {
     border-radius: 20px;
     color: white;
     cursor: pointer;
+    font-size: 70%;
 }
 .middle {
     background-color: #ffffff;
