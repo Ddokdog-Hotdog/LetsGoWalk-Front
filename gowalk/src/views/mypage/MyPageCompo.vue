@@ -22,7 +22,7 @@
                 <button @click="goToAddDog" class="add-button">추가</button>
             </div>
             <div class="pet-profile">
-                <div v-if="pets && pets.length > 0">
+                <div v-if="pets && pets.length > 0" class="petEntity">
                     <div v-for="pet in pets" :key="pet.petId" class="pet">
                         <img :src="pet.profileImageUrl || defaultPetImageUrl" alt="Pet" />
                         <p>{{ pet.name }}</p>
@@ -202,15 +202,14 @@ h1 {
     border-radius: 20px;
     cursor: pointer;
 }
-.pet-profile {
+
+.petEntity {
     display: flex;
-    justify-content: space-around;
-    text-align: center;
 }
 .pet {
-    display: flex;
-    flex-direction: column;
     align-items: center;
+    width: 70px;
+    margin: 0;
 }
 .pet img {
     width: 60px;
