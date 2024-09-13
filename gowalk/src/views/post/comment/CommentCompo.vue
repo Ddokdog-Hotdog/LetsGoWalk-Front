@@ -31,7 +31,7 @@ export default {
     },
     data() {
         return {
-            internalComments: this.comments,
+            internalComments: [...this.comments],
         };
     },
     // methods: {
@@ -52,11 +52,18 @@ export default {
         //     console.log('Updated comments:', this.internalComments);
         //     this.$emit('update-comment-count', this.internalComments.length);
         // }
-        handleNewComment(newComment) {
-            // 기존 배열에 새 댓글을 추가하는 대신 새 배열을 생성합니다
+        // handleNewComment(newComment) {
+        //     // 기존 배열에 새 댓글을 추가하는 대신 새 배열을 생성합니다
             
-            this.internalComments = [...this.internalComments, newComment];
+        //     this.internalComments = [...this.internalComments, newComment];
+        //     this.$emit('update-comment-count', this.internalComments.length);
+        // }
+        handleNewComment(newComment) {
+            this.internalComments.push(newComment); // 댓글 추가
             this.$emit('update-comment-count', this.internalComments.length);
+            this.$nextTick(() => {
+                this.internalComments = [...this.internalComments]; // 변경을 강제로 감지
+            });
         }
     },
     watch: {
