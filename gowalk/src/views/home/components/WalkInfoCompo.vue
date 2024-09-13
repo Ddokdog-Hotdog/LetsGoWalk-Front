@@ -15,14 +15,26 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
+
 export default {
     data(){
         return {
 
         }
     },
+    mounted: async function() {
+        const now = new Date();
+        const today = {
+            memberId: 0,
+            year: now.getFullYear(),
+            month: now.getMonth() + 1,
+            day: now.getDate(),
+        };
+        this.fetchDailyWalks(today);
+    },
     methods: {
-        
+        ...mapActions("walkStore", ["fetchDailyWalks"]),
     },
     computed: {
         walks() {
