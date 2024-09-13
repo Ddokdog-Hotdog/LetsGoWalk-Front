@@ -15,7 +15,7 @@
         <div class="hot-place">
             <p class="hot-place-text"><span class="word-border">오늘 <span class="word-color-green word-border">산책</span>, 여기 핫플 어때요?</span> <img id="leaf-icon" src="@/assets/home/leaf-icon.png"/></p>
             <div class="map-placeholder">
-                <KakaoMap id="kakao-map"> </KakaoMap>
+                <KakaoMap id="kakao-map" :enable-hotplace="true"> </KakaoMap>
             </div>
         </div>
         <!-- Quest Section -->
