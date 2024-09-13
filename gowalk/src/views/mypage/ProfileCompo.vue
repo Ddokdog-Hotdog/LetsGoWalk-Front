@@ -87,6 +87,7 @@ export default {
                         Authorization: `Bearer ${this.$store.getters.getAccessToken}`,
                     },
                 });
+
                 console.log("서버 응답 데이터:", response.data);
 
                 this.profilePictureUrl = response.data.profileImageUrl || "";

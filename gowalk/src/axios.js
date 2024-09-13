@@ -13,6 +13,9 @@ instance.interceptors.request.use(
     (config) => {
         const token = store.getters.getAccessToken;
         console.log("JWT Token being sent:", token); // 이 로그가 콘솔에 출력되는지 확인
+
+        /*const token = localStorage.getItem("accessToken");*/
+
         if (token) {
             config.headers["Authorization"] = `Bearer ${token}`;
             console.log(token);

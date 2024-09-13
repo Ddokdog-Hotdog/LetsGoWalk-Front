@@ -23,6 +23,8 @@ export default {
                 return "정보공유";
             } else if (path === "/notification"){
                 return "알림";
+            } else if (path.includes("/mypage/orderlist")){
+                return "주문 내역";
             }
             return "페이지";
         },
