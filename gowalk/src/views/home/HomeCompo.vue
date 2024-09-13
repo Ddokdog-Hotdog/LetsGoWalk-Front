@@ -252,8 +252,8 @@ export default {
 }
 
 .post-img {
-    width: 20%; /* 게시글 이미지 너비 20% */
-    height: auto;
+    width: 80px;
+    height: 80px;
     object-fit: cover;
     border-radius: 10px;
 }
