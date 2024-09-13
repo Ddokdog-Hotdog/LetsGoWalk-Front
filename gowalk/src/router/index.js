@@ -67,7 +67,7 @@ const routes = [
     {
         path: "/auth/register",
         name: "AuthRegister",
-        component: () => import(/* webpackChunkName: "register" */ "../views/mypage/ProfileCompo.vue"),
+        component: () => import(/* webpackChunkName: "register" */ "../views/login/RegisterCompo.vue"),
         beforeEnter: (to, from, next) => {
             const token = to.query.accessToken;
             if (token) {
@@ -76,6 +76,8 @@ const routes = [
             }
             next();
         },
+        props: true,
+        meta: { hideBottom: true },
     },
 ];
 
