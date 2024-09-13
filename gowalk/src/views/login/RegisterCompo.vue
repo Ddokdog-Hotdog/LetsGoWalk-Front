@@ -1,6 +1,6 @@
 <template>
     <div class="profile-edit-container">
-        <h3>회원 정보 수정</h3>
+        <h3>회원 정보 입력</h3>
 
         <div class="profile-picture-wrapper">
             <img :src="computedProfilePictureUrl" alt="Profile Picture" class="profile-picture" />
@@ -87,7 +87,6 @@ export default {
                         Authorization: `Bearer ${this.$store.getters.getAccessToken}`,
                     },
                 });
-
                 console.log("서버 응답 데이터:", response.data);
 
                 this.profilePictureUrl = response.data.profileImageUrl || "";
@@ -164,7 +163,7 @@ export default {
                 });
 
                 this.profilePictureUrl = response.data.profilePictureUrl;
-                this.$router.go(-1);
+                this.$router.go(-2);
             } catch (error) {
                 if (error.response && error.response.status === 409) {
                     // 닉네임 중복 에러 처리

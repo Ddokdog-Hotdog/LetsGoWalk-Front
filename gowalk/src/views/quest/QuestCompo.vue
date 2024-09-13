@@ -4,91 +4,193 @@
             <img src="~@/assets/carousel/quest-poster.png" id="carousel" />
         </div>
         <div class="questList">
-            <div class="quest">
+            <div v-for="quest in quests" :key="quest.id" class="quest">
                 <div class="questName">
-                    <img src="~@/assets/quest/calendar.png" id="img" />
-                    <p id="qusetDescription">출석체크하고 <span class="highlight">10p</span> 받기</p>
+                    <img :src="getQuestImage(quest)" id="quest-img" />
+                    <p id="questDescription">
+                        {{ quest.questName }}하고 <span class="highlight">{{ quest.questPoint }}p</span> 받기
+                    </p>
                 </div>
-                <button><img src="~@/assets/quest/get-point.png" id="button" /></button>
+                <button
+                    class="quest-button"
+                    :class="getButtonClass(quest)"
+                    :disabled="quest.isCompleted && quest.reward"
+                    @click="handleQuestButtonClick(quest)"
+                >
+                    {{ getButtonLabel(quest) }}
+                </button>
             </div>
         </div>
-
-        <ul>
-            <li v-for="quest in quests" :key="quest.questId">{{ quest.questName }} - {{ quest.description }}</li>
-        </ul>
     </div>
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
+import axios from "@/axios";
 
 export default {
-    name: "QuestList",
-    computed: {
-        ...mapGetters("quests", ["allQuests"]),
+    data() {
+        return {
+            quests: [],
+        };
+    },
+    methods: {
+        async fetchQuests() {
+            try {
+                const response = await axios.get("/api/quests", {
+                    headers: {
+                        Authorization: `Bearer ${this.$store.getters.getAccessToken}`,
+                    },
+                });
+                console.log("Response headers:", response.config.headers);
+                this.quests = response.data;
+            } catch (error) {
+                console.error("퀘스트 정보 로드 실패:", error);
+            }
+        },
+        getQuestImage(quest) {
+            switch (quest.questId) {
+                case 1:
+                    return require("@/assets/quest/calendar.png");
+                case 2:
+                    return require("@/assets/quest/walking.png");
+                case 3:
+                    return require("@/assets/quest/posting.png");
+                case 4:
+                    return require("@/assets/quest/point.png");
+                default:
+                    return require("@/assets/quest/point.png"); // 기본 이미지 설정
+            }
+        },
+        getButtonLabel(quest) {
+            // 퀘스트의 상태에 따라 버튼의 라벨을 변경
+            if (quest.completed === true && quest.reward == false) return "포인트받기";
+            if (quest.completed === true && quest.reward == true) return "완료";
+            return "바로가기";
+        },
+        getButtonClass(quest) {
+            if (quest.completed === true && quest.reward === false) return "orange-button";
+            if (quest.completed === true && quest.reward === true) return "gray-button";
+            return "yellow-button";
+        },
+        handleQuestButtonClick(quest) {
+            if (quest.completed === true && quest.reward === false) {
+                return this.claimReward(quest);
+            } else if (quest.completed === false && quest.questId === 2) {
+                return this.$router.push("/walk");
+            } else if (quest.completed === false && quest.questId === 3) {
+                return this.$router.push("/post/1");
+            }
+        },
+        completeQuest(questId) {
+            try {
+                const response = axios.put("/api/quests", null, {
+                    params: {
+                        questId: questId,
+                        memberId: this.$store.state.memberId,
+                    },
+                    headers: {
+                        Authorization: `Bearer ${this.$store.getters.getAccessToken}`,
+                        "Content-Type": "application/json", // 필요한 경우 추가
+                    },
+                });
+                console.log("Reward claimed:", response.data);
+                this.fetchQuests(); // 퀘스트 상태를 업데이트
+            } catch (error) {
+                console.error("Error claiming reward:", error.response);
+            }
+        },
+        claimReward(quest) {
+            try {
+                const response = axios.put("/api/quests", null, {
+                    params: {
+                        questId: quest.questId,
+                        memberId: this.$store.state.memberId,
+                    },
+                    headers: {
+                        Authorization: `Bearer ${this.$store.getters.getAccessToken}`,
+                        "Content-Type": "application/json", // 필요한 경우 추가
+                    },
+                });
+                console.log("Reward claimed:", response.data);
+                this.fetchQuests(); // 퀘스트 상태를 업데이트
+            } catch (error) {
+                console.error("Error claiming reward:", error.response);
+            }
+        },
     },
     created() {
         this.fetchQuests();
     },
-    methods: {
-        ...mapActions("quests", ["fetchQuests"]),
-    },
 };
 </script>
+
 <style scoped>
 .questPage {
-    padding-bottom: 10%;
-    margin: 0;
-    width: 100%;
-    height: 100%;
     background-color: #62bd95;
-}
-.carouselBoard {
+    height: 100%;
     width: 100%;
-    background-size: cover;
-    min-height: 10%;
 }
 #carousel {
     width: 100%;
-    object-fit: fill;
 }
 .questList {
-    justify-content: center;
     width: 100%;
+    display: flex;
+    flex-direction: column;
 }
+
 .quest {
     display: flex;
-    width: 80%;
-    height: 90px;
-    background-color: white;
-    margin: 20px auto;
-    border-radius: 15px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-    transition: box-shadow 0.3s;
     justify-content: space-between;
     align-items: center;
+    padding: 15px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 15px;
+    background-color: #fff;
+    margin: 15px;
 }
 
 .questName {
-    margin: 20px;
     display: flex;
-    justify-content: center;
     align-items: center;
 }
-#img {
-    width: 60px;
+
+#questDescription {
+    margin: 0;
 }
-#qusetDescription {
-    margin-bottom: 0;
-    margin-left: 10px;
-    font-weight: bold;
+
+#quest-img {
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
 }
+
 .highlight {
-    color: #3cbc83;
+    font-weight: 800;
+    color: #62bd95;
 }
-#button {
-    margin: 8px;
-    padding-top: 5px;
-    width: 150px;
+
+.quest-button {
+    padding: 5px 10px;
+    background-color: #62bd95;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.quest-button.orange-button {
+    background-color: #ff851b; /* 주황색 */
+}
+
+.quest-button.gray-button {
+    background-color: #ccc; /* 회색 */
+    cursor: not-allowed;
+}
+
+.quest-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
 }
 </style>
