@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="walk-info-box">
+        <div class="walk-info-box" @click="goToWalk">
             <img src="@/assets/home/gowalk-icon.png">
         </div>
         <p class="calorie-info">오늘 아직 산책을 안했어요 :(</p>
@@ -15,7 +15,9 @@ data(){
     }
 },
 methods: {
-    
+    goToWalk(){
+        this.$router.push("/walk");
+    }
 }
 }
 </script>

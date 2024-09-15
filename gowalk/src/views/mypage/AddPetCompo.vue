@@ -1,12 +1,12 @@
 <template>
     <div class="dog-add-container">
         <header class="header">
-            <button class="back-button" @click="$router.go(-1)">←</button>
+            <button class="back-button" @click="$router.go(-1)">〈</button>
             <h2>강아지 추가</h2>
-            >
+            <p></p>
         </header>
 
-        <div class="form-group">
+        <div class="name-group">
             <div class="profile-picture-wrapper">
                 <img :src="computedProfilePictureUrl" alt="Dog Picture" class="profile-picture" />
                 <label class="upload-icon">
@@ -20,7 +20,29 @@
         <form @submit.prevent="submitDogInfo">
             <div class="form-group">
                 <label for="breedId">견종</label>
-                <input v-model="breedId" type="text" id="breedId" placeholder="선택해 주세요" required />
+                <input
+                    v-model="selectedBreedName"
+                    type="text"
+                    id="breedId"
+                    placeholder="선택해 주세요"
+                    readonly
+                    @click="openBreedModal"
+                />
+            </div>
+            <div v-if="showBreedModal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-top">
+                        <span class="close" @click="closeBreedModal">&times;</span>
+                        <h2>견종 선택</h2>
+                    </div>
+                    <div class="modal-list">
+                        <ul>
+                            <li v-for="breed in breeds" :key="breed.id" @click="selectBreed(breed)">
+                                {{ breed.name }}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
 
             <div class="form-group">
@@ -66,6 +88,9 @@ import axios from "@/axios";
 export default {
     data() {
         return {
+            breeds: [],
+            showBreedModal: false,
+            selectedBreedName: "",
             name: "",
             breedId: "",
             dateOfBirth: "",
@@ -84,6 +109,28 @@ export default {
         },
     },
     methods: {
+        openBreedModal() {
+            this.showBreedModal = true;
+            this.fetchBreeds();
+        },
+        closeBreedModal() {
+            this.showBreedModal = false;
+        },
+        fetchBreeds() {
+            axios
+                .get("/api/mypage/pets/breeds")
+                .then((response) => {
+                    this.breeds = response.data;
+                })
+                .catch((error) => {
+                    console.error("견종 리스트 가져오기 실패:", error);
+                });
+        },
+        selectBreed(breed) {
+            this.selectedBreedName = breed.name;
+            this.breedId = breed.id;
+            this.closeBreedModal();
+        },
         onFileChange(event) {
             this.profilePictureFile = event.target.files[0];
             if (this.profilePictureFile) {
@@ -204,27 +251,40 @@ export default {
 }
 
 .form-group {
+    display: flex;
     margin-bottom: 20px;
 }
 
-.form-group label {
-    display: block;
-    margin-bottom: 5px;
-    text-align: left;
-}
-
-.form-group input {
-    width: 100%;
+.dog-name-input {
+    width: 50%;
     padding: 10px;
     box-sizing: border-box;
     border: 1px solid #ccc;
-    border-radius: 15px;
+    border-radius: 50px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+.form-group label {
+    display: flex;
+    margin-bottom: 5px;
+    width: 30%;
+    text-align: left;
+    align-items: center;
+}
+
+.form-group input {
+    width: 70%;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 50px;
     text-align: center;
 }
 
 .gender-buttons,
 .neutered-buttons {
     display: flex;
+    width: 70%;
     justify-content: space-around;
 }
 
@@ -247,7 +307,8 @@ export default {
 }
 
 .submit-button {
-    width: 100%;
+    width: 95%;
+    max-width: 570px;
     padding: 15px;
     background-color: #4caf50;
     color: white;
@@ -258,12 +319,82 @@ export default {
     position: fixed;
     left: 50%;
     transform: translateX(-50%);
-    bottom: 20px;
+    bottom: 70px;
     font-weight: 700;
 }
 
 .submit-button:hover {
     background-color: #45a049;
     box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.25);
+}
+
+.modal {
+    display: block;
+    position: fixed;
+    z-index: 1200;
+    height: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 0;
+    width: 100%;
+    max-width: 600px;
+    background-color: rgb(0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.4);
+}
+.modal-top {
+    position: sticky; /* 스크롤 시 상단에 고정 */
+    top: 0; /* 상단에 붙임 */
+    background: white; /* 배경색 지정 */
+    padding: 10px 0; /* 패딩 조정 */
+    border-bottom: 1px solid #ccc; /* 하단 경계선 */
+    z-index: 0; /* 다른 내용물 위에 렌더링 */
+}
+.modal-content {
+    margin: 10% auto; /* 상단 여백 */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 90%; /* 너비 조정 */
+    max-height: 80vh; /* 뷰포트 높이의 70%를 최대 높이로 설정 */
+    overflow-y: auto; /* 내용이 넘칠 경우 스크롤 */
+    background-color: #fefefe;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-list {
+    overflow: hidden;
+    overflow-y: auto; /* 내용이 넘칠 경우 스크롤 */
+
+    height: calc(100% - 60px); /* modal-top 높이만큼 빼줌 */
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+    padding-right: 5%;
+}
+
+ul li {
+    padding: 10px;
+    cursor: pointer;
+}
+
+ul li:hover {
+    background-color: #ddd;
 }
 </style>

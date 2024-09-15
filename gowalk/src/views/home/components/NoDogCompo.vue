@@ -16,7 +16,7 @@ data(){
 },
 methods: {
     goToRegisterDog(){
-        this.$router.push("/mypage")
+        this.$router.push("/mypage/addDog");
     }
 }
 }
