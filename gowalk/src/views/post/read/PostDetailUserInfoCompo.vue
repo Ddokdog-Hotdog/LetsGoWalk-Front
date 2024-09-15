@@ -6,7 +6,7 @@
         <div class="post-detail-userinfo-compo-info">
         <div>{{ computedUserInfo.nickname }}</div>
         <div class="post-detail-userinfo-compo-info-detail">
-            <div>{{ postCreatedAt }}</div>
+            <div>{{ formattedPostCreatedAt }}</div>
             <div>❤️ {{ likesCount }}</div>
         </div>
         </div>
@@ -40,6 +40,19 @@ export default {
         displayedImage() {
             // 이미지 경로가 없을 경우 기본 이미지를 사용합니다.
             return this.computedUserInfo.profileImage;
+        },
+        formattedPostCreatedAt() {
+            if (!this.postCreatedAt) return '';
+            const date = new Date(this.postCreatedAt);
+            return date.toLocaleString('ko-KR', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: false
+            });
         }
     },
     methods: {
