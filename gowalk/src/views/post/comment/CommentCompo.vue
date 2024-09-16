@@ -1,9 +1,4 @@
 <template>
-    <!-- <div>
-        <comment-top-compo :comment-count="comments.length" />
-        <comment-list-compo :comments="internalComments" />
-        <comment-input-compo :postid="postid" @comment-added="handleNewComment" />
-    </div> -->
     <div>
         <comment-top-compo :comment-count="internalComments.length" />
         <comment-list-compo :comments="internalComments" />
@@ -31,44 +26,27 @@ export default {
     },
     data() {
         return {
-            internalComments: [...this.comments],
+            internalComments: [],
         };
     },
-    // methods: {
-    //     handleNewComment(newComment) {
-    //         // this.internalComments.push(newComment);
-    //         this.internalComments = [...this.internalComments, newComment];
-    //         this.$emit('update-comment-count', this.internalComments.length);
-
-    //     }
-    // },
+    created() {
+        this.initializeComments();
+    },
     methods: {
-        //     handleNewComment(newComment) {
-        //     console.log('Received new comment:', newComment);
-        //     if (!this.internalComments) {
-        //         this.internalComments = [];
-        //     }
-        //     this.internalComments.push(newComment);
-        //     console.log('Updated comments:', this.internalComments);
-        //     this.$emit('update-comment-count', this.internalComments.length);
-        // }
-        // handleNewComment(newComment) {
-        //     // 기존 배열에 새 댓글을 추가하는 대신 새 배열을 생성합니다
-            
-        //     this.internalComments = [...this.internalComments, newComment];
-        //     this.$emit('update-comment-count', this.internalComments.length);
-        // }
+        initializeComments() {
+            this.internalComments = Array.isArray(this.comments) ? [...this.comments] : [];
+        },
         handleNewComment(newComment) {
-            this.internalComments.push(newComment); // 댓글 추가
+            // 서버에서 받은 댓글 데이터를 internalComments 배열에 추가
+            this.internalComments.push(newComment);
+            console.log("newComment : "+ newComment.nickname)
+            
             this.$emit('update-comment-count', this.internalComments.length);
-            this.$nextTick(() => {
-                this.internalComments = [...this.internalComments]; // 변경을 강제로 감지
-            });
-        }
+        },
     },
     watch: {
         comments(newValue) {
-            this.internalComments = [...newValue];
+            this.internalComments = Array.isArray(newValue) ? [...newValue] : [];
         }
     }
 }
