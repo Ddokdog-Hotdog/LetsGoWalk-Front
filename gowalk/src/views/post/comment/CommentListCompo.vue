@@ -12,12 +12,15 @@
                     </div>
                     <div>{{ comment.content }}</div>
                     <div class="comment-list-compo-container-count" v-if="!comment.commentsId">
-                        <div>
-                            <img :src="commentSrc" alt="comments">
+                        <div v-if="!comment.commentsId">
+                            <img :src="commentSrc" alt="comments" @click="showReplyInput(comment.id)">
                         </div>
                         <div>{{ comment.count }}</div>
                     </div>
-                    <comment-list-compo v-if="comment.children && comment.children.length" :comments="comment.children"/>
+                    <!-- 답글 입력 폼 -->
+                    <!-- 조건부 렌더링으로 답글 입력 필드 표시 -->
+                    <comment-input-compo v-if="activeReplyId === comment.id" :postId="postId" :parent-comment-id="comment.id" @comment-added="handleNewComment" />
+                    <comment-list-compo v-if="comment.children && comment.children.length" :comments="comment.children" :postId="postId" />
                 </div>
             </div>
         </div>
@@ -26,20 +29,35 @@
 </template>
 
 <script>
+import CommentInputCompo from './CommentInputCompo.vue'; // 올바른 경로로 import 확인
+
 export default {
     name: "CommentListCompo",
+    components: {
+        CommentInputCompo,
+    },
     props: {
         comments: {
             type: Array,
             default: () => []
-        }
+        },
+        postId: Number,
     },
     data() {
         return {
             commentSrc: require("@/assets/postListCompo/comment.png"),
-            defaultProfileUrl: require("@/assets/icon/default-dog-icon.png")
+            defaultProfileUrl: require("@/assets/icon/default-dog-icon.png"),
+            activeReplyId: null, // 활성화된 답글 입력 필드의 댓글 ID
         };
     },
+    // created() {
+    //     this.localComments = [...this.comments]; // 초기 로컬 상태 설정
+    // },
+    // watch: {
+    //     comments(newVal) {
+    //         this.localComments = [...newVal]; // prop 업데이트 시 로컬 상태도 업데이트
+    //     }
+    // },
     methods: {
         handleImageError(event) {
             event.target.src = this.defaultProfileUrl;
@@ -54,7 +72,23 @@ export default {
             const formatted = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')} ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
             return formatted;
         },
-        
+        showReplyInput(commentId) {
+            this.activeReplyId = commentId; // 답글 입력 필드 활성화
+        },
+        handleNewComment(newComment) {
+            // 새 댓글 또는 답글을 comments 배열에 추가하는 로직
+            // this.localComments.push(newComment);
+            // this.activeReplyId = null;
+            let parentComment = this.comments.find(comment => comment.id === this.activeReplyId);
+            if (parentComment) {
+                if (!parentComment.children) {
+                    this.$set(parentComment, 'children', []);
+                }
+                parentComment.children.push(newComment);
+                this.$set(this.comments, this.comments.indexOf(parentComment), parentComment);
+            }
+            this.activeReplyId = null; // Hide the input after submitting
+        },
     }
 }
 </script>
@@ -95,6 +129,6 @@ export default {
     margin: 0 4px 0 0;
 }
 .is-reply {
-    margin-left: 70px;
+    margin-left: 20px;
 }
 </style>

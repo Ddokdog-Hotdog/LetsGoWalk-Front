@@ -20,10 +20,11 @@ export default {
         }
     },
     props: {
-        postid: {
+        postId: {
             type: Number,
             required: true
         },
+        parentCommentId: Number,
     },
     methods: {
         submitComment() {
@@ -32,9 +33,9 @@ export default {
                 return;
             }
             const payload = {
-                postid: this.postid,
+                postId: this.postId,
                 contents: this.newComment,
-                commentsid: null, // 댓글의 경우 null, 답글의 경우 해당 댓글의 ID
+                commentsid: this.parentCommentId, // 댓글의 경우 null, 답글의 경우 해당 댓글의 ID
                 createdAt: new Date().toISOString(),
                 };
             axios.post('/api/comment/write', payload)

@@ -1,8 +1,8 @@
 <template>
     <div>
         <comment-top-compo :comment-count="internalComments.length" />
-        <comment-list-compo :comments="internalComments" />
-        <comment-input-compo :postid="postid" @comment-added="handleNewComment" />
+        <comment-list-compo :comments="internalComments" :postId="postId" />
+        <comment-input-compo :postId="postId" @comment-added="handleNewComment" />
     </div>
 </template>
 
@@ -22,7 +22,7 @@ export default {
             type: Array,
             default: () => []
         },
-        postid: Number,
+        postId: Number,
     },
     data() {
         return {
