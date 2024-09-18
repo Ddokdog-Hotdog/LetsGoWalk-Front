@@ -14,7 +14,7 @@
                 <button
                     class="quest-button"
                     :class="getButtonClass(quest)"
-                    :disabled="quest.isCompleted && quest.reward"
+                    :disabled="(quest.isCompleted && quest.reward) || isProcessing"
                     @click="handleQuestButtonClick(quest)"
                 >
                     {{ getButtonLabel(quest) }}
@@ -26,11 +26,13 @@
 
 <script>
 import axios from "@/axios";
+//import { debounce } from "lodash";
 
 export default {
     data() {
         return {
             quests: [],
+            isProcessing: false,
         };
     },
     methods: {
@@ -72,13 +74,30 @@ export default {
             if (quest.completed === true && quest.reward === true) return "gray-button";
             return "yellow-button";
         },
-        handleQuestButtonClick(quest) {
-            if (quest.completed === true && quest.reward === false) {
-                return this.claimReward(quest);
-            } else if (quest.completed === false && quest.questId === 2) {
-                return this.$router.push("/walk");
-            } else if (quest.completed === false && quest.questId === 3) {
-                return this.$router.push("/post/1");
+
+        async handleQuestButtonClick(quest) {
+            if (quest.isProcessing) {
+                console.log("이미 처리 중입니다.");
+                return;
+            }
+            this.$set(quest, "isProcessing", true); // Vue의 반응성 시스템을 사용하여 상태를 업데이트
+            const originalRewardState = quest.reward;
+            try {
+                if (quest.completed && !quest.reward) {
+                    //quest.reward = true;
+                    await this.claimReward(quest);
+                    window.location.reload();
+                } else if (!quest.completed && quest.questId === 2) {
+                    this.$router.push("/walk");
+                } else if (!quest.completed && quest.questId === 3) {
+                    this.$router.push("/post/1");
+                }
+                this.fetchQuests(); // 상태를 서버에서 최신으로 업데이트
+            } catch (error) {
+                console.error("퀘스트 처리 중 오류가 발생했습니다:", error);
+                quest.reward = originalRewardState;
+            } finally {
+                this.$set(quest, "isProcessing", false); // 처리 완료 후 상태를 재설정
             }
         },
         completeQuest(questId) {
@@ -99,9 +118,9 @@ export default {
                 console.error("Error claiming reward:", error.response);
             }
         },
-        claimReward(quest) {
+        async claimReward(quest) {
             try {
-                const response = axios.put("/api/quests", null, {
+                const response = await axios.put("/api/quests", null, {
                     params: {
                         questId: quest.questId,
                         memberId: this.$store.state.memberId,
@@ -112,7 +131,7 @@ export default {
                     },
                 });
                 console.log("Reward claimed:", response.data);
-                this.fetchQuests(); // 퀘스트 상태를 업데이트
+                //this.fetchQuests(); // 퀘스트 상태를 업데이트
             } catch (error) {
                 console.error("Error claiming reward:", error.response);
             }
@@ -191,6 +210,11 @@ export default {
 
 .quest-button:disabled {
     background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.quest-button.is-processing {
+    background-color: #ccc; /* 처리 중일 때 회색으로 표시 */
     cursor: not-allowed;
 }
 </style>

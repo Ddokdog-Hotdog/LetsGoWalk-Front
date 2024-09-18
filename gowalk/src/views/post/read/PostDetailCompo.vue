@@ -10,7 +10,7 @@
         <post-detail-image-compo :images="postDetail.imgList" />
         <post-detail-content-compo :content="postDetail.contents" />
         <post-detail-good-compo :is-liked="isLiked" :likes-count="likesCount" @toggle-like="toggleLike" />
-        <comment-compo :comments="postDetail.comments" :postid="postId" />
+        <comment-compo :comments="postDetail.comments" :postId="postId" />
     </div>
 </template>
 
@@ -35,7 +35,8 @@ export default {
         CommentCompo,
     },
     props: {
-        postId: Number
+        postId: Number,
+        
     },
     data() {
         return {

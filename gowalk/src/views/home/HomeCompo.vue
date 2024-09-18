@@ -72,6 +72,7 @@ import TodayNoWalkCompo from "@/views/home/components/TodayNoWalkCompo.vue";
 import NoDogCompo from "@/views/home/components/NoDogCompo.vue";
 import CarouselCompo from "@/views/home/components/CarouselCompo.vue";
 import axios from "@/axios.js"; 
+import { mapActions } from "vuex";
 
 export default {
     data() {
@@ -83,7 +84,19 @@ export default {
         };
     },
     mounted: async function(){
-        
+        const now = new Date();
+        const today = {
+            memberId: 0,
+            year: now.getFullYear(),
+            month: now.getMonth() + 1,
+            day: now.getDate(),
+        };
+        await this.fetchDailyWalks(today);
+        await new Promise((resolve) => setTimeout(resolve, 1));
+        if(this.$store.getters["walkStore/dailyWalks"].length > 0){
+            // 산책 여부 체크
+            this.todayWalk = true;
+        } 
         // 메인 화면 게시글 최신 3개글 가져오기
         await axios.get("/api/post/board/1?page=0&size=3").then((response) => {
             console.log("게시글 목록");
@@ -91,7 +104,8 @@ export default {
             this.posts = [...response.data];
         }).catch((error) => {
             console.log(error);
-        });        
+        });
+        
 
         // 강아지 여부 체크
         await axios.get("/api/mypage/pets").then((response) => {
@@ -101,16 +115,15 @@ export default {
             if(response.data.length >= 1){
                 this.haveDog = true;
             }
-            if(this.$store.getters["walkStore/dailyWalks"] > 0){
-                // 산책 여부 체크
-                this.todayWalk = true;
-            }
         }).catch((error) => {
             console.log(error);
         })
+
+
         console.log("isLogined : ", this.isLogined);
         console.log("havedog : ", this.haveDog);
         console.log("todayWalk : ", this.todayWalk);
+        
 
     },
     components: {
@@ -135,7 +148,8 @@ export default {
         },
         goToWrite(){
             this.$router.push("/post/write");
-        }
+        },
+        ...mapActions("walkStore", ["fetchDailyWalks"]),
     },
     filters: {
         day(value) {
