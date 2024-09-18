@@ -1,6 +1,10 @@
 <template>
     <div class="mypage-container">
-        <h1>마이페이지</h1>
+        <div class="header">
+            <button class="back-button" @click="$router.go(-1)">〈</button>
+            <strong><h3>마이페이지</h3></strong>
+            <p></p>
+        </div>
         <div class="top">
             <div class="user-profile">
                 <img :src="computedProfilePictureUrl" alt="Profile" />
@@ -13,7 +17,7 @@
                 <img src="@/assets/quest/point.png" id="point" />
                 <p>보유 포인트</p>
                 <p class="point-value">{{ memberInfo.point }}P</p>
-                <button class="history-button">내역보기</button>
+                <button @click="goToPoint" class="history-button">내역보기</button>
             </div>
         </div>
         <div class="middle">
@@ -23,7 +27,7 @@
             </div>
             <div class="pet-profile">
                 <div v-if="pets && pets.length > 0" class="petEntity">
-                    <div v-for="pet in pets" :key="pet.petId" class="pet">
+                    <div v-for="pet in pets" :key="pet.petId" class="pet" @click="navigateToPetProfile(pet.petId)">
                         <img :src="pet.profileImageUrl || defaultPetImageUrl" alt="Pet" />
                         <p>{{ pet.name }}</p>
                     </div>
@@ -88,6 +92,13 @@ export default {
         goToAddDog() {
             this.$router.push("/mypage/addDog"); // /profile 경로로 이동
         },
+        goToPoint() {
+            this.$router.push("/mypage/point");
+        },
+        navigateToPetProfile(petId) {
+            // petId를 URL에 파라미터로 전달하여 해당 반려동물 프로필 페이지로 이동
+            this.$router.push({ name: "DogProfile", params: { petId } });
+        },
     },
 };
 </script>
@@ -100,10 +111,13 @@ export default {
     background-color: #f9f9f9;
     height: 100%;
 }
-h1 {
-    text-align: center;
-    font-size: 24px;
-    margin-bottom: 20px;
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 10px;
 }
 .top {
     display: flex;
