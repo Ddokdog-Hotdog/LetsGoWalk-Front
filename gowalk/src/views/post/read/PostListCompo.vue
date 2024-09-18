@@ -2,7 +2,12 @@
     <div class="postList" ref="scrollContainer">
         <div class="post-list-compo" v-for="post in posts" :key="post.id" @click="navigateToDetail(post.postid)">
             <div>
-                <img :src="postListProfileSrc" alt="Profile Image" class="postListCompoProfile" />
+                <!-- 항상 첫 번째 이미지를 표시 -->
+                <img 
+                    :src="post.img" 
+                    alt="Post Image" 
+                    class="postListCompoProfile" 
+                />
             </div>
             <div class="post-list-compo-detail">
                 <h3>{{ post.title }}</h3>
@@ -137,7 +142,7 @@ export default {
 .post-list-compo {
     display: flex;
     position: relative;
-    margin: 2%;
+    margin: 4% 2% 4% 2%;
     width: 100%;
     height: 65px;
 }
@@ -160,5 +165,9 @@ export default {
 .post-list {
     overflow: auto;
     height: calc(100vh - 100px); /* Adjust height as needed */
+}
+.postListCompoProfile{
+    width: 82px;
+    height: 80px;
 }
 </style>
