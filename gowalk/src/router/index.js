@@ -4,11 +4,11 @@ import VueRouter from "vue-router";
 import MainCompo from "@/components/layout/MainCompo";
 
 import PageNotFoundCompo from "@/components/exception/PageNotFoundCompo.vue";
-import mypageRoute from "./mypageRoute";
-import questRoute from "./questRoute";
 import homeRoute from "./homeRoute";
+import mypageRoute from "./mypageRoute";
 import notificationRoute from "./notificationRoute";
 import postRoute from "./postRoute";
+import questRoute from "./questRoute";
 import shopRoute from "./shopRoute";
 import walkRoute from "./walkRoute";
 
@@ -103,7 +103,17 @@ router.beforeEach((to, from, next) => {
         next(false);
     } else {
         store.commit("showLoginModal", false);
-        next();
+        // next();
+        // 페이지 이동 시마다 알림 상태 확인
+        store.dispatch('fetchNotifications')
+            .then(() => {
+                console.log('Notifications checked.');
+                next(); // 알림 상태 확인 후 페이지 이동
+            })
+            .catch(error => {
+                console.error('Error checking notifications:', error);
+                next(); // 오류가 발생해도 페이지 이동은 진행
+            });
     }
 });
 

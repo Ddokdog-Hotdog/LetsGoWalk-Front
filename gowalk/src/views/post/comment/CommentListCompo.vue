@@ -11,7 +11,7 @@
                         <div class="comment-list-userinfo-createdAt">{{ formatDate(comment.createdAt) }}</div>
                     </div>
                     <div>{{ comment.content }}</div>
-                    <div class="comment-list-compo-container-count" v-if="!comment.commentsId">
+                    <div class="comment-list-compo-container-count" v-if="!comment.commentsId && !comment.parentCommentId">
                         <div v-if="!comment.commentsId">
                             <img :src="commentSrc" alt="comments" @click="showReplyInput(comment.id)">
                         </div>
@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import CommentInputCompo from './CommentInputCompo.vue'; // 올바른 경로로 import 확인
+import CommentInputCompo from './CommentInputCompo.vue';
 
 export default {
     name: "CommentListCompo",
@@ -48,16 +48,8 @@ export default {
             commentSrc: require("@/assets/postListCompo/comment.png"),
             defaultProfileUrl: require("@/assets/icon/default-dog-icon.png"),
             activeReplyId: null, // 활성화된 답글 입력 필드의 댓글 ID
-        };
+        }
     },
-    // created() {
-    //     this.localComments = [...this.comments]; // 초기 로컬 상태 설정
-    // },
-    // watch: {
-    //     comments(newVal) {
-    //         this.localComments = [...newVal]; // prop 업데이트 시 로컬 상태도 업데이트
-    //     }
-    // },
     methods: {
         handleImageError(event) {
             event.target.src = this.defaultProfileUrl;
@@ -76,18 +68,17 @@ export default {
             this.activeReplyId = commentId; // 답글 입력 필드 활성화
         },
         handleNewComment(newComment) {
-            // 새 댓글 또는 답글을 comments 배열에 추가하는 로직
-            // this.localComments.push(newComment);
-            // this.activeReplyId = null;
             let parentComment = this.comments.find(comment => comment.id === this.activeReplyId);
             if (parentComment) {
                 if (!parentComment.children) {
                     this.$set(parentComment, 'children', []);
                 }
                 parentComment.children.push(newComment);
-                this.$set(this.comments, this.comments.indexOf(parentComment), parentComment);
+                // 시간순으로 정렬
+                parentComment.children.sort((a, b) => new Date(new Date(a.createdAt) - b.createdAt));
+                this.$set(this.comments, this.comments.indexOf(parentComment), {...parentComment});
             }
-            this.activeReplyId = null; // Hide the input after submitting
+            this.activeReplyId = null;
         },
     }
 }
