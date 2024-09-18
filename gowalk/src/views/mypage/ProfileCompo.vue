@@ -42,10 +42,12 @@
 
             <div class="form-group">
                 <label for="phoneNumber">전화번호</label>
-                <input v-model="phoneNumber" type="tel" id="phoneNumber" placeholder="010-1234-1234" required />
+                <input v-model="phoneNumber" type="tel" id="phoneNumber" placeholder="01012345678" required />
             </div>
 
-            <button type="submit" class="submit-button">완료</button>
+            <div class="form-bottom">
+                <button type="submit" class="submit-button">추가하기</button>
+            </div>
         </form>
     </div>
 </template>
@@ -104,7 +106,7 @@ export default {
             }
         },
         validatePhoneNumber() {
-            const phoneRegex = /^010-\d{3,4}-\d{4}$/; // 전화번호 형식: 010-0000-0000 또는 010-000-0000
+            const phoneRegex = /^010-?\d{3,4}-?\d{4}$/;
             this.phoneNumberError = !phoneRegex.test(this.phoneNumber);
         },
         onFileChange(event) {
@@ -134,7 +136,7 @@ export default {
                 return;
             }
             if (this.phoneNumberError) {
-                alert("전화번호 형식이 올바르지 않습니다. 예: 010-0000-0000");
+                alert("전화번호 형식이 올바르지 않습니다. 예: 01012345678");
                 return;
             }
 
@@ -186,8 +188,13 @@ export default {
 </script>
 
 <style scoped>
+input::placeholder {
+    color: #ccc; /* 연한 회색 */
+    opacity: 1; /* 플레이스홀더 텍스트의 투명도 조정 (기본값은 브라우저에 따라 다를 수 있음) */
+}
+
 .profile-edit-container {
-    padding: 20px;
+    padding: 30px 20px;
     max-width: 600px;
     margin: 0 auto;
     height: 100%;
@@ -294,9 +301,17 @@ export default {
     border: #fff;
 }
 
+.form-bottom {
+    padding-top: 50px;
+    height: auto;
+    text-align: center;
+    justify-content: space-around;
+}
+
 .submit-button {
     width: 95%;
     max-width: 570px;
+    margin: 0 auto;
     padding: 15px;
     background-color: #4caf50;
     color: white;
@@ -304,9 +319,7 @@ export default {
     border-radius: 50px;
     font-size: 1em;
     cursor: pointer;
-    position: fixed;
-    left: 50%;
-    transform: translateX(-50%);
+    position: sticky;
     bottom: 70px;
     font-weight: 700;
 }

@@ -2,7 +2,7 @@
     <div class="dog-add-container">
         <header class="header">
             <button class="back-button" @click="$router.go(-1)">〈</button>
-            <h2>강아지 추가</h2>
+            <h3>강아지 등록</h3>
             <p></p>
         </header>
 
@@ -34,10 +34,11 @@
                     <div class="modal-top">
                         <span class="close" @click="closeBreedModal">&times;</span>
                         <h2>견종 선택</h2>
+                        <input v-model="breedSearch" type="text" placeholder="견종 검색" class="breed-search-input" />
                     </div>
                     <div class="modal-list">
                         <ul>
-                            <li v-for="breed in breeds" :key="breed.id" @click="selectBreed(breed)">
+                            <li v-for="breed in filteredBreeds" :key="breed.id" @click="selectBreed(breed)">
                                 {{ breed.name }}
                             </li>
                         </ul>
@@ -77,7 +78,9 @@
                 <input v-model="weight" type="number" id="weight" placeholder="0.0" step="0.1" required />
             </div>
 
-            <button type="submit" class="submit-button">추가하기</button>
+            <div class="form-bottom">
+                <button type="submit" class="submit-button">추가하기</button>
+            </div>
         </form>
     </div>
 </template>
@@ -99,6 +102,7 @@ export default {
             neutering: null,
             profilePictureUrl: "",
             profilePictureFile: null,
+            breedSearch: "", // 검색어 저장을 위한 데이터
         };
     },
     computed: {
@@ -106,6 +110,18 @@ export default {
             return this.profilePictureUrl && this.profilePictureUrl !== ""
                 ? this.profilePictureUrl
                 : require("@/assets/login/dog-profile.png");
+        },
+        filteredBreeds() {
+            const filtered = this.breeds.filter((breed) =>
+                breed.name.toLowerCase().includes(this.breedSearch.toLowerCase())
+            );
+            console.log("Filtered Breeds:", filtered); // 필터링 결과 로깅
+            return filtered;
+        },
+    },
+    watch: {
+        breedSearch(newSearch) {
+            this.fetchBreeds(newSearch); // 검색어가 변경될 때마다 실행
         },
     },
     methods: {
@@ -116,9 +132,9 @@ export default {
         closeBreedModal() {
             this.showBreedModal = false;
         },
-        fetchBreeds() {
+        fetchBreeds(search = "") {
             axios
-                .get("/api/mypage/pets/breeds")
+                .get(`/api/mypage/pets/breeds`, { params: { search } })
                 .then((response) => {
                     this.breeds = response.data;
                 })
@@ -126,6 +142,7 @@ export default {
                     console.error("견종 리스트 가져오기 실패:", error);
                 });
         },
+
         selectBreed(breed) {
             this.selectedBreedName = breed.name;
             this.breedId = breed.id;
@@ -177,8 +194,14 @@ export default {
 </script>
 
 <style scoped>
+input::placeholder {
+    color: #ccc; /* 연한 회색 */
+    opacity: 1; /* 플레이스홀더 텍스트의 투명도 조정 (기본값은 브라우저에
+따라 다를 수 있음) */
+}
+
 .dog-add-container {
-    padding: 20px;
+    padding: 30px 20px;
     max-width: 600px;
     margin: 0 auto;
     height: 100%;
@@ -306,9 +329,17 @@ export default {
     font-weight: 700;
 }
 
+.form-bottom {
+    padding-top: 50px;
+    height: auto;
+    text-align: center;
+    justify-content: space-around;
+}
+
 .submit-button {
     width: 95%;
     max-width: 570px;
+    margin: 0 auto;
     padding: 15px;
     background-color: #4caf50;
     color: white;
@@ -316,9 +347,7 @@ export default {
     border-radius: 50px;
     font-size: 1em;
     cursor: pointer;
-    position: fixed;
-    left: 50%;
-    transform: translateX(-50%);
+    position: sticky;
     bottom: 70px;
     font-weight: 700;
 }
@@ -396,5 +425,15 @@ ul li {
 
 ul li:hover {
     background-color: #ddd;
+}
+
+.breed-search-input {
+    width: 90%; /* 전체 너비 대비 비율 조정 */
+    padding: 10px;
+    margin: 10px auto; /* 중앙 정렬 */
+    display: block; /* 블록 레벨 요소로 만들어 너비 조절을 용이하게 함 */
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    outline: none; /* 포커스 시 외곽선 제거 */
 }
 </style>
